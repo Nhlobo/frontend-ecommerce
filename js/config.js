@@ -15,7 +15,7 @@ const getBackendUrl = () => {
     
     // For production (GitHub Pages), use your deployed backend URL
     // UPDATE THIS with your actual backend URL!
-    return 'https://premium-hair-backend.onrender.com';
+    return 'https://backend-ecommerce-ps2d.onrender.com/';
 };
 
 const BACKEND_URL = getBackendUrl();
