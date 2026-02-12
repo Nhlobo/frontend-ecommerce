@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Premium Hair Wigs & Extensions - Your premier destination for luxury hair wigs, extensions, and accessories. CIPC & VAT Registered. Based in Protea Glen, Soweto, Johannesburg.">
+    <meta name="keywords" content="hair wigs, hair extensions, luxury wigs, clip-in extensions, lace front wigs, South Africa, Soweto, Johannesburg">
+    <meta name="author" content="Premium Hair Wigs & Extensions Pty (Ltd)">
+    <title>Premium Hair Wigs & Extensions - Luxury Hair Products | Soweto, Johannesburg</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Page Loader -->
+    <div id="pageLoader" class="page-loader">
+        <div class="loader-content">
+            <div class="loader-logo">
+                <img src="assets/images/logo.png" alt="Company Logo" style="max-width: 200px; height: auto;" onerror="this.style.display='none';">
+            </div>
+            <div class="loader-spinner"></div>
+            <p class="loader-text">Loading your perfect look...</p>
+        </div>
+    </div>
+
+    <div class="banner">
+        Free Shipping on Orders Above R1,500
+    </div>
+
+    <!-- Navigation -->
+    <nav>
+        <!-- Logo (User will upload) -->
+        <div class="logo">
+            <img 
+                src="assets/images/logo.png" 
+                alt="Company Logo" 
+                class="logo-image"
+                onerror="this.style.display='none';">
+        </div>
+
+        <!-- Mobile Menu Toggle -->
+        <div class="hamburger" id="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+
+        <!-- Navigation Links -->
+        <ul class="nav-links" id="navLinks">
+            <li><a href="#" onclick="navigateTo('home'); return false;">Home</a></li>
+            <li><a href="#" onclick="navigateTo('shop'); return false;">Shop</a></li>
+            <li><a href="#" onclick="navigateTo('about'); return false;">About Us</a></li>
+            <li><a href="#" onclick="navigateTo('sale'); return false;">Sale</a></li>
+            <li><a href="#" onclick="navigateTo('contact'); return false;">Contact</a></li>
+        </ul>
+
+        <!-- Auth Area (Login/Logout) -->
+        <div class="nav-actions">
+            <div id="authArea"></div>
+        </div>
+    </nav>
+
+    <div id="homePage" class="page active">
+        <section class="hero">
+            <h1>Transform Your Look with Premium Hair</h1>
+            <p>Discover our exclusive collection of luxury wigs and extensions</p>
+            <button class="btn btn-primary" onclick="navigateTo('shop')">Shop Now</button>
+        </section>
+
+        <section class="deals-banner">
+            <p>Hurry! Sale ends in:</p>
+            <div class="countdown" id="countdown">23:59:59</div>
+        </section>
+
+        <section>
+            <div class="container">
+                <h2 class="section-title">Featured Products</h2>
+                <div class="product-grid" id="featuredProducts">
+                </div>
+            </div>
+        </section>
+
+        <section class="features-modern">
+            <div class="container">
+                <h2 class="section-title">Our Commitment to Excellence</h2>
+                <div class="features-grid">
+                    <div class="modern-feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-gem"></i>
+                        </div>
+                        <h3>Premium Quality</h3>
+                        <p>100% authentic human hair products sourced responsibly and crafted with care</p>
+                    </div>
+                    <div class="modern-feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-shipping-fast"></i>
+                        </div>
+                        <h3>Fast Delivery</h3>
+                        <p>2-5 business days nationwide delivery with real-time tracking</p>
+                    </div>
+                    <div class="modern-feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-undo-alt"></i>
+                        </div>
+                        <h3>Easy Returns</h3>
+                        <p>7-day hassle-free return policy for your peace of mind</p>
+                    </div>
+                    <div class="modern-feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-lock"></i>
+                        </div>
+                        <h3>Secure Payment</h3>
+                        <p>PayFast integration ensuring safe and encrypted transactions</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div id="shopPage" class="page">
+        <section>
+            <div class="container">
+                <h2 class="section-title">Shop All Products</h2>
+                
+                <div class="filters">
+                    <button class="filter-btn active" data-category="all" onclick="filterProducts('all')">All</button>
+                    <button class="filter-btn" data-category="wigs" onclick="filterProducts('wigs')">Wigs</button>
+                    <button class="filter-btn" data-category="extensions" onclick="filterProducts('extensions')">Extensions</button>
+                    <button class="filter-btn" data-category="accessories" onclick="filterProducts('accessories')">Accessories</button>
+                </div>
+                
+                <div class="product-grid" id="allProducts">
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div id="salePage" class="page">
+        <section>
+            <div class="container">
+                <h2 class="section-title">🔥 Sale Items - Up to 20% OFF</h2>
+                <div class="deals-banner">
+                    <p>Limited time offers! Don't miss out!</p>
+                    <div class="countdown" id="saleCountdown">23:59:59</div>
+                </div>
+                <div class="product-grid" id="saleProducts">
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div id="aboutPage" class="page">
+        <section>
+            <div class="container">
+                <h2 class="section-title">About Us</h2>
+                <div class="about-section">
+                    <h2>Welcome to Premium Hair Wigs & Extensions</h2>
+                    <p>
+                        Premium Hair Wigs & Extensions Pty (Ltd) is your premier destination for high-quality hair wigs, extensions, 
+                        and accessories. Based in the heart of Protea Glen, Soweto, Johannesburg, we pride ourselves on offering 
+                        authentic, luxurious hair products that help you look and feel your best.
+                    </p>
+                    
+                    <h2>Our Story</h2>
+                    <p>
+                        Founded with a passion for empowering individuals through beautiful hair, we have grown to become one of 
+                        Gauteng's most trusted providers of premium hair products. Our commitment to quality, customer satisfaction, 
+                        and authenticity sets us apart in the industry.
+                    </p>
+                    
+                    <h2>Our Commitment</h2>
+                    <p>
+                        We are CIPC and VAT registered, ensuring complete transparency and compliance with South African business 
+                        regulations. We are also POPIA compliant, safeguarding your personal information at every step.
+                    </p>
+                    
+                    <h2>Quality Assurance</h2>
+                    <p>
+                        All our products are made from 100% authentic human hair, sourced responsibly and crafted with care. 
+                        We offer a 7-day return policy and provide fast delivery within 2-5 business days across South Africa.
+                    </p>
+                    
+                    <h2>Customer First</h2>
+                    <p>
+                        Your satisfaction is our priority. We offer free shipping on orders above R1,500, secure PayFast payment 
+                        integration, and dedicated customer support to assist you at every stage of your shopping journey.
+                    </p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div id="productDetailPage" class="page">
+        <section>
+            <div class="container">
+                <div class="product-detail">
+                    <img id="productDetailImage" class="product-detail-image" src="" alt="Product">
+                    <div class="product-detail-info">
+                        <h1 id="productDetailName">Product Name</h1>
+                        <span class="category" id="productDetailCategory">Category</span>
+                        <p class="price" id="productDetailPrice">R0.00</p>
+                        <p class="description" id="productDetailDescription">Product description...</p>
+                        <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+                            <button class="btn btn-primary" onclick="addProductToCart()">Add to Cart</button>
+                            <button class="btn btn-secondary" onclick="addToWishlist(state.currentProduct.id)">Add to Wishlist</button>
+                        </div>
+                        <div style="margin-top: 2rem;">
+                            <button class="btn btn-outline" onclick="navigateTo('shop')">← Back to Shop</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div id="cartPage" class="page">
+        <section>
+            <div class="container">
+                <h2 class="section-title">Shopping Cart</h2>
+                <div class="checkout-container">
+                    <div>
+                        <div class="cart-items" id="cartItems">
+                        </div>
+                    </div>
+                    <div>
+                        <div class="cart-summary">
+                            <h3>Order Summary</h3>
+                            <div class="summary-row">
+                                <span>Subtotal:</span>
+                                <span id="cartSubtotal">R0.00</span>
+                            </div>
+                            <div class="summary-row">
+                                <span>VAT (15%):</span>
+                                <span id="cartVat">R0.00</span>
+                            </div>
+                            <div class="summary-row">
+                                <span>Shipping:</span>
+                                <span id="cartShipping">FREE</span>
+                            </div>
+                            <div class="summary-row total">
+                                <span>Total:</span>
+                                <span id="cartTotal">R0.00</span>
+                            </div>
+                            <button class="btn btn-primary" style="width: 100%; margin-top: 1rem;" onclick="navigateTo('checkout')">
+                                Proceed to Checkout
+                            </button>
+                            <button class="btn btn-outline" style="width: 100%; margin-top: 0.5rem;" onclick="navigateTo('shop')">
+                                Continue Shopping
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div id="checkoutPage" class="page">
+        <section>
+            <div class="container">
+                <h2 class="section-title">Checkout</h2>
+                <div class="checkout-container">
+                    <div class="checkout-form">
+                        <form id="checkoutForm">
+                            <h2>Shipping Information</h2>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="checkoutName">Full Name *</label>
+                                    <input type="text" id="checkoutName" name="name" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="checkoutEmail">Email *</label>
+                                    <input type="email" id="checkoutEmail" name="email" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="checkoutPhone">Phone Number *</label>
+                                <input type="tel" id="checkoutPhone" name="phone" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="checkoutAddress">Address *</label>
+                                <input type="text" id="checkoutAddress" name="address" required>
+                            </div>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="checkoutCity">City *</label>
+                                    <input type="text" id="checkoutCity" name="city" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="checkoutProvince">Province *</label>
+                                    <select id="checkoutProvince" name="province" required>
+                                        <option value="">Select Province</option>
+                                        <option value="Gauteng">Gauteng</option>
+                                        <option value="Western Cape">Western Cape</option>
+                                        <option value="KwaZulu-Natal">KwaZulu-Natal</option>
+                                        <option value="Eastern Cape">Eastern Cape</option>
+                                        <option value="Limpopo">Limpopo</option>
+                                        <option value="Mpumalanga">Mpumalanga</option>
+                                        <option value="North West">North West</option>
+                                        <option value="Free State">Free State</option>
+                                        <option value="Northern Cape">Northern Cape</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="checkoutPostalCode">Postal Code *</label>
+                                <input type="text" id="checkoutPostalCode" name="postalCode" required>
+                            </div>
+                            
+                            <h2 style="margin-top: 2rem;">Payment Method</h2>
+                            <div class="form-group">
+                                <label for="paymentMethod">Payment Method *</label>
+                                <select id="paymentMethod" name="paymentMethod" required>
+                                    <option value="">Select Payment Method</option>
+                                    <option value="payfast">PayFast</option>
+                                    <option value="credit-card">Credit Card</option>
+                                    <option value="debit-card">Debit Card</option>
+                                    <option value="eft">EFT</option>
+                                </select>
+                            </div>
+                            
+                            <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1.5rem;">
+                                Place Order
+                            </button>
+                        </form>
+                    </div>
+                    
+                    <div>
+                        <div class="cart-summary">
+                            <h3>Order Summary</h3>
+                            <div class="summary-row">
+                                <span>Subtotal:</span>
+                                <span id="checkoutSubtotal">R0.00</span>
+                            </div>
+                            <div class="summary-row">
+                                <span>VAT (15%):</span>
+                                <span id="checkoutVat">R0.00</span>
+                            </div>
+                            <div class="summary-row">
+                                <span>Shipping:</span>
+                                <span id="checkoutShipping">FREE</span>
+                            </div>
+                            <div class="summary-row total">
+                                <span>Total:</span>
+                                <span id="checkoutTotal">R0.00</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div id="ordersPage" class="page">
+        <section>
+            <div class="container">
+                <h2 class="section-title">My Orders</h2>
+                <div class="orders-list" id="ordersList">
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div id="trackPage" class="page">
+        <section>
+            <div class="container">
+                <h2 class="section-title">Track Your Order</h2>
+                <div class="tracking-form">
+                    <form id="trackOrderForm">
+                        <div class="form-group">
+                            <label for="trackOrderNumber">Order Number</label>
+                            <input type="text" id="trackOrderNumber" placeholder="Enter your order number" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="width: 100%;">Track Order</button>
+                    </form>
+                </div>
+                <div class="tracking-results" id="trackingResults">
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div id="wishlistPage" class="page">
+        <section>
+            <div class="container">
+                <h2 class="section-title">My Wishlist</h2>
+                <div class="product-grid" id="wishlistItems">
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div id="contactPage" class="page">
+        <section>
+            <div class="container">
+                <h2 class="section-title">Contact Us</h2>
+                <div class="contact-container">
+                    <div class="contact-form">
+                        <h2>Send Us a Message</h2>
+                        <form id="contactForm">
+                            <div class="form-group">
+                                <label for="contactName">Name *</label>
+                                <input type="text" id="contactName" name="name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="contactEmail">Email *</label>
+                                <input type="email" id="contactEmail" name="email" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="contactSubject">Subject *</label>
+                                <input type="text" id="contactSubject" name="subject" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="contactMessage">Message *</label>
+                                <textarea id="contactMessage" name="message" required></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary" style="width: 100%;">Send Message</button>
+                        </form>
+                    </div>
+                    
+                    <div class="contact-info">
+                        <h2>Get In Touch</h2>
+                        
+                        <div class="contact-info-item">
+                            <h3>📍 Address</h3>
+                            <p>123 Luxury Lane<br>Protea Glen, Soweto<br>Johannesburg, Gauteng<br>1818, South Africa</p>
+                        </div>
+                        
+                        <div class="contact-info-item">
+                            <h3>📞 Phone</h3>
+                            <p>+27 71 555 1234</p>
+                        </div>
+                        
+                        <div class="contact-info-item">
+                            <h3>✉️ Email</h3>
+                            <p>info@premiumhairsa.co.za<br>support@premiumhairsa.co.za</p>
+                        </div>
+                        
+                        <div class="contact-info-item">
+                            <h3>🕒 Business Hours</h3>
+                            <p>Monday - Friday: 09:00 - 18:00<br>Saturday: 09:00 - 14:00<br>Sunday: Closed<br>Public Holidays: Closed</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('loginModal')">&times;</span>
+            <h2>Login to Your Account</h2>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="loginEmail">Email</label>
+                    <input type="email" id="loginEmail" required>
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">Password</label>
+                    <input type="password" id="loginPassword" required>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Login</button>
+            </form>
+            <div class="modal-footer">
+                <p>Don't have an account? <a href="#" onclick="switchModal('loginModal', 'registerModal'); return false;">Sign up here</a></p>
+            </div>
+        </div>
+    </div>
+
+    <div id="registerModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('registerModal')">&times;</span>
+            <h2>Create an Account</h2>
+            <form id="registerForm">
+                <div class="form-group">
+                    <label for="registerName">Full Name</label>
+                    <input type="text" id="registerName" required>
+                </div>
+                <div class="form-group">
+                    <label for="registerEmail">Email</label>
+                    <input type="email" id="registerEmail" required>
+                </div>
+                <div class="form-group">
+                    <label for="registerPassword">Password</label>
+                    <input type="password" id="registerPassword" required>
+                </div>
+                <div class="form-group">
+                    <label for="registerConfirmPassword">Confirm Password</label>
+                    <input type="password" id="registerConfirmPassword" required>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Sign Up</button>
+            </form>
+            <div class="modal-footer">
+                <p>Already have an account? <a href="#" onclick="switchModal('registerModal', 'loginModal'); return false;">Login here</a></p>
+            </div>
+        </div>
+    </div>
+
+    <div id="successModal" class="modal">
+        <div class="modal-content" style="text-align: center;">
+            <span class="close-modal" onclick="closeModal('successModal')">&times;</span>
+            <div style="font-size: 4rem; color: var(--success); margin-bottom: 1rem;">✓</div>
+            <p>Thank you for your order. You will receive a confirmation email shortly.</p>
+            <p style="margin-top: 1rem;">Redirecting to orders page...</p>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Premium Hair Wigs & Extensions</h3>
+                <p>Premium Hair Wigs & Extensions Pty (Ltd)</p>
+                <p>CIPC & VAT Registered</p>
+                <p>POPIA Compliant</p>
+                <div class="social-links">
+                    <a href="https://facebook.com/premiumhairsa" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://instagram.com/premiumhairsa" target="_blank"><i class="fab fa-instagram"></i></a>
+                    <a href="https://twitter.com/premiumhairsa" target="_blank"><i class="fab fa-twitter"></i></a>
+                    <a href="https://wa.me/27715551234" target="_blank"><i class="fab fa-whatsapp"></i></a>
+                </div>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="#" onclick="navigateTo('shop'); return false;">Shop All</a></li>
+                    <li><a href="#" onclick="navigateTo('sale'); return false;">Sale</a></li>
+                    <li><a href="#" onclick="navigateTo('track'); return false;">Track Order</a></li>
+                    <li><a href="#" onclick="navigateTo('about'); return false;">About Us</a></li>
+                    <li><a href="#" onclick="navigateTo('contact'); return false;">Contact</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Customer Service</h3>
+                <ul>
+                    <li><a href="#">Shipping Information</a></li>
+                    <li><a href="#">Returns & Exchanges</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Terms & Conditions</a></li>
+                    <li><a href="#">FAQ</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Contact Us</h3>
+                <p>📍 123 Luxury Lane, Protea Glen<br>Soweto, Johannesburg, Gauteng, 1818</p>
+                <p>📞 +27 71 555 1234</p>
+                <p>✉️ info@premiumhairsa.co.za</p>
+                <p><strong>Hours:</strong><br>Mon-Fri: 09:00-18:00<br>Sat: 09:00-14:00</p>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Newsletter</h3>
+                <form class="newsletter-form" id="newsletterForm">
+                    <input type="email" id="newsletterEmail" placeholder="Your email" required>
+                    <button type="submit" class="btn btn-primary">Subscribe</button>
+                </form>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>&copy; 2024 Premium Hair Wigs & Extensions Pty (Ltd). All rights reserved. | CIPC Registered | VAT Registered | POPIA Compliant</p>
+        </div>
+    </footer>
+
+    <script src="js/config.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
