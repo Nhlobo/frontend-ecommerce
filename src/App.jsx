@@ -10,7 +10,7 @@ import './styles/App.css'
 
 function App() {
   return (
-    <Router>
+    <Router basename="/frontend-ecommerce">
       <div className="app">
         <Header />
         <main className="main-content">

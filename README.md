@@ -77,7 +77,25 @@ The frontend connects to the backend API. The API URL is automatically configure
 
 You can override this by setting the `VITE_API_URL` environment variable or update `src/config.js` directly.
 
-## 🌐 Deployment to Render
+## 🌐 Deployment
+
+This app is deployed to GitHub Pages at: https://nhlobo.github.io/frontend-ecommerce/
+
+### Deploy Process
+1. Push changes to main branch
+2. GitHub Actions will automatically build and deploy
+3. Wait 2-3 minutes for deployment
+
+### Local Development
+```bash
+npm install
+npm run dev
+```
+
+### Backend API
+Connected to: https://backend-ecommerce-3-2jsk.onrender.com
+
+## 🌐 Alternative Deployment to Render
 
 ### Step 1: Push to GitHub
 
