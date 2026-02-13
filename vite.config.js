@@ -6,7 +6,8 @@ export default defineConfig({
   base: '/frontend-ecommerce/',
   build: {
     outDir: 'dist',
-    assetsDir: 'assets'
+    assetsDir: 'assets',
+    sourcemap: false
   },
   server: {
     port: 3001,
