@@ -1,6 +1,22 @@
+# Node modules
 node_modules/
-dist/
-.env
-.env.local
-*.log
+
+# Operating System
 .DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# Build files (if you add a build step later)
+dist/
+build/

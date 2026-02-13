@@ -1,22 +1,23 @@
 {
-  "name": "premium-hair-frontend",
+  "name": "premium-hair-ecommerce-frontend",
   "version": "1.0.0",
-  "description": "Customer-facing e-commerce frontend for Premium Hair Wigs & Extensions",
-  "private": true,
+  "description": "Customer-facing storefront for Premium Hair Wigs & Extensions E-commerce Platform",
+  "main": "index.html",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview",
-    "start": "vite preview --host 0.0.0.0 --port $PORT"
+    "serve": "npx http-server -p 8000 -c-1",
+    "dev": "npx http-server -p 8000 -c-1 -o"
   },
-  "dependencies": {
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-router-dom": "^6.20.1",
-    "axios": "^1.6.2"
-  },
+  "keywords": ["ecommerce", "storefront", "frontend", "hair-wigs"],
+  "author": "Premium Hair Wigs & Extensions Pty (Ltd)",
+  "license": "PROPRIETARY",
   "devDependencies": {
-    "@vitejs/plugin-react": "^4.2.1",
-    "vite": "^5.0.8"
+    "http-server": "^14.1.1"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Nhlobo/frontend-ecommerce.git"
   }
 }
