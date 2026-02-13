@@ -73,9 +73,9 @@ npm run preview
 The frontend connects to the backend API. The API URL is automatically configured:
 
 - **Development (localhost):** `http://localhost:3000`
-- **Production:** `https://backend-ecommerce-1-xp4b.onrender.com`
+- **Production:** `https://backend-ecommerce-3-2jsk.onrender.com`
 
-You can override this by setting the `VITE_API_URL` environment variable.
+You can override this by setting the `VITE_API_URL` environment variable or update `src/config.js` directly.
 
 ## 🌐 Deployment to Render
 
