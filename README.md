@@ -75,15 +75,7 @@ The frontend connects to the backend API. The API URL is automatically configure
 - **Development (localhost):** `http://localhost:3000`
 - **Production:** `https://backend-ecommerce-3-2jsk.onrender.com`
 
-You can override this by setting the `VITE_API_URL` environment variable.
-
-## Backend Configuration
-
-The frontend connects to the backend API at:
-- Production: `https://backend-ecommerce-3-2jsk.onrender.com`
-- Development: `http://localhost:3000`
-
-To change the backend URL, update `src/config.js`.
+You can override this by setting the `VITE_API_URL` environment variable or update `src/config.js` directly.
 
 ## 🌐 Deployment to Render
 
