@@ -909,17 +909,12 @@
             // Remove HTML special characters
             sanitized = sanitized.replace(/[<>"'`]/g, '');
             
-            // Remove dangerous protocols
-            sanitized = sanitized.replace(/\b(javascript|data|vbscript):/gi, '');
+            // Remove dangerous protocols in one comprehensive pass
+            sanitized = sanitized.replace(/\b(?:javascript|data|vbscript|file|about):/gi, '');
             
-            // Remove event handlers - use multiple passes to ensure complete removal
-            // First pass: remove "on" + word + spaces + "=" or "("
-            while (/\bon\w+\s*[=(]/i.test(sanitized)) {
-                sanitized = sanitized.replace(/\bon\w+\s*[=(]/gi, '');
-            }
-            
-            // Second pass: remove any remaining onclick, onload, etc patterns
-            sanitized = sanitized.replace(/\b(on\w+)\b/gi, '');
+            // Remove all event handler patterns in a comprehensive way
+            // This removes the entire "onXXX" word to prevent partial matches
+            sanitized = sanitized.replace(/\bon[a-z]+(?:\s*[=(])?/gi, '');
             
             // Encode ampersands
             sanitized = sanitized.replace(/&/g, '&amp;');
