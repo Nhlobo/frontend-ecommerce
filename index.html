@@ -25,6 +25,7 @@
             </div>
             <div class="loader-spinner"></div>
             <p class="loader-text">Loading your perfect look...</p>
+            <div class="loader-progress"><div class="loader-progress-bar"></div></div>
         </div>
     </div>
 
@@ -61,6 +62,14 @@
 
         <!-- Auth Area (Login/Logout) -->
         <div class="nav-actions">
+            <a href="#" class="nav-icon-btn" onclick="navigateTo('wishlist'); return false;" title="Wishlist">
+                <i class="fas fa-heart"></i>
+                <span class="icon-badge" id="wishlistBadge" style="display:none;">0</span>
+            </a>
+            <a href="#" class="nav-icon-btn" onclick="navigateTo('cart'); return false;" title="Cart">
+                <i class="fas fa-shopping-bag"></i>
+                <span class="icon-badge" id="cartBadge" style="display:none;">0</span>
+            </a>
             <div id="authArea"></div>
         </div>
     </nav>
@@ -205,12 +214,47 @@
                         <span class="category" id="productDetailCategory">Category</span>
                         <p class="price" id="productDetailPrice">R0.00</p>
                         <p class="description" id="productDetailDescription">Product description...</p>
-                        <div style="display: flex; gap: 1rem; margin-top: 2rem;">
-                            <button class="btn btn-primary" onclick="addProductToCart()">Add to Cart</button>
-                            <button class="btn btn-secondary" onclick="addToWishlist(state.currentProduct.id)">Add to Wishlist</button>
+                        
+                        <div class="product-options">
+                            <div class="option-group" id="colorOptionGroup">
+                                <label>Color</label>
+                                <div class="color-options" id="productColors">
+                                    <div class="color-swatch active" style="background:#1B1B1B;" data-color="Natural Black" title="Natural Black" onclick="selectColor(this)"></div>
+                                    <div class="color-swatch" style="background:#3B2314;" data-color="Dark Brown" title="Dark Brown" onclick="selectColor(this)"></div>
+                                    <div class="color-swatch" style="background:#8B4513;" data-color="Medium Brown" title="Medium Brown" onclick="selectColor(this)"></div>
+                                    <div class="color-swatch" style="background:#D4A76A;" data-color="Honey Blonde" title="Honey Blonde" onclick="selectColor(this)"></div>
+                                    <div class="color-swatch" style="background:#B22222;" data-color="Burgundy" title="Burgundy" onclick="selectColor(this)"></div>
+                                </div>
+                                <span class="selected-option-label" id="selectedColorLabel">Natural Black</span>
+                            </div>
+                            <div class="option-group" id="sizeOptionGroup">
+                                <label>Length (inches)</label>
+                                <div class="size-options" id="productSizes">
+                                    <button type="button" class="size-btn" data-size="10" onclick="selectSize(this)">10"</button>
+                                    <button type="button" class="size-btn" data-size="12" onclick="selectSize(this)">12"</button>
+                                    <button type="button" class="size-btn active" data-size="14" onclick="selectSize(this)">14"</button>
+                                    <button type="button" class="size-btn" data-size="16" onclick="selectSize(this)">16"</button>
+                                    <button type="button" class="size-btn" data-size="18" onclick="selectSize(this)">18"</button>
+                                    <button type="button" class="size-btn" data-size="20" onclick="selectSize(this)">20"</button>
+                                    <button type="button" class="size-btn" data-size="22" onclick="selectSize(this)">22"</button>
+                                </div>
+                            </div>
+                            <div class="option-group">
+                                <label>Quantity</label>
+                                <div class="quantity-control">
+                                    <button type="button" class="qty-btn" onclick="changeDetailQty(-1)">−</button>
+                                    <input type="text" class="qty-value" id="detailQty" value="1" readonly>
+                                    <button type="button" class="qty-btn" onclick="changeDetailQty(1)">+</button>
+                                </div>
+                            </div>
                         </div>
-                        <div style="margin-top: 2rem;">
-                            <button class="btn btn-outline" onclick="navigateTo('shop')">← Back to Shop</button>
+                        
+                        <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
+                            <button class="btn btn-primary" onclick="addProductToCart()"><i class="fas fa-shopping-bag"></i> Add to Cart</button>
+                            <button class="btn btn-secondary" onclick="addToWishlist(state.currentProduct.id)"><i class="fas fa-heart"></i> Wishlist</button>
+                        </div>
+                        <div style="margin-top: 1.5rem;">
+                            <button class="btn btn-outline" onclick="navigateTo('shop')"><i class="fas fa-arrow-left"></i> Back to Shop</button>
                         </div>
                     </div>
                 </div>
@@ -503,15 +547,21 @@
     <div id="loginModal" class="modal">
         <div class="modal-content">
             <span class="close-modal" onclick="closeModal('loginModal')">&times;</span>
-            <h2>Login to Your Account</h2>
+            <div class="modal-header-icon"><i class="fas fa-lock"></i></div>
+            <h2>Welcome Back</h2>
+            <p class="modal-subtitle">Login to your account</p>
             <form id="loginForm">
                 <div class="form-group">
-                    <label for="loginEmail">Email</label>
-                    <input type="email" id="loginEmail" required>
+                    <label for="loginEmail"><i class="fas fa-envelope"></i> Email</label>
+                    <input type="email" id="loginEmail" placeholder="Enter your email" required>
                 </div>
                 <div class="form-group">
-                    <label for="loginPassword">Password</label>
-                    <input type="password" id="loginPassword" required>
+                    <label for="loginPassword"><i class="fas fa-key"></i> Password</label>
+                    <input type="password" id="loginPassword" placeholder="Enter your password" required>
+                </div>
+                <div class="form-options">
+                    <label class="remember-me"><input type="checkbox"> Remember me</label>
+                    <a href="forgot-password.html" class="forgot-link">Forgot Password?</a>
                 </div>
                 <button type="submit" class="btn btn-primary" style="width: 100%;">Login</button>
             </form>
@@ -524,25 +574,41 @@
     <div id="registerModal" class="modal">
         <div class="modal-content">
             <span class="close-modal" onclick="closeModal('registerModal')">&times;</span>
+            <div class="modal-header-icon"><i class="fas fa-user-plus"></i></div>
             <h2>Create an Account</h2>
+            <p class="modal-subtitle">Join us for exclusive deals</p>
             <form id="registerForm">
                 <div class="form-group">
-                    <label for="registerName">Full Name</label>
-                    <input type="text" id="registerName" required>
+                    <label for="registerName"><i class="fas fa-user"></i> Full Name</label>
+                    <input type="text" id="registerName" placeholder="Enter your full name" required>
                 </div>
                 <div class="form-group">
-                    <label for="registerEmail">Email</label>
-                    <input type="email" id="registerEmail" required>
+                    <label for="registerEmail"><i class="fas fa-envelope"></i> Email</label>
+                    <input type="email" id="registerEmail" placeholder="Enter your email" required>
                 </div>
                 <div class="form-group">
-                    <label for="registerPassword">Password</label>
-                    <input type="password" id="registerPassword" required>
+                    <label for="registerPhone"><i class="fas fa-phone"></i> Phone Number</label>
+                    <input type="tel" id="registerPhone" placeholder="+27 71 555 1234">
                 </div>
                 <div class="form-group">
-                    <label for="registerConfirmPassword">Confirm Password</label>
-                    <input type="password" id="registerConfirmPassword" required>
+                    <label for="registerPassword"><i class="fas fa-key"></i> Password</label>
+                    <input type="password" id="registerPassword" placeholder="Min 8 characters" required oninput="checkPasswordStrength(this.value)">
+                    <div class="password-strength" id="passwordStrength">
+                        <div class="strength-bar"><div class="strength-fill" id="strengthFill"></div></div>
+                        <span class="strength-text" id="strengthText"></span>
+                    </div>
                 </div>
-                <button type="submit" class="btn btn-primary" style="width: 100%;">Sign Up</button>
+                <div class="form-group">
+                    <label for="registerConfirmPassword"><i class="fas fa-check-double"></i> Confirm Password</label>
+                    <input type="password" id="registerConfirmPassword" placeholder="Re-enter password" required>
+                </div>
+                <div class="form-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="registerTerms" required>
+                        I agree to the <a href="#" onclick="navigateTo('terms'); closeModal('registerModal'); return false;">Terms & Conditions</a> and <a href="#" onclick="navigateTo('privacy'); closeModal('registerModal'); return false;">Privacy Policy</a>
+                    </label>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Create Account</button>
             </form>
             <div class="modal-footer">
                 <p>Already have an account? <a href="#" onclick="switchModal('registerModal', 'loginModal'); return false;">Login here</a></p>

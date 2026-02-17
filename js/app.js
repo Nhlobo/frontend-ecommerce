@@ -144,9 +144,9 @@ function init() {
             const pageLoader = document.getElementById('pageLoader');
             if (pageLoader) {
                 pageLoader.classList.add('hidden');
-                setTimeout(() => pageLoader.remove(), 500);
+                setTimeout(() => pageLoader.remove(), 600);
             }
-        }, 500);
+        }, 2000);
         
         console.log('App initialized successfully');
     } catch (error) {
@@ -227,20 +227,22 @@ function setupEventListeners() {
 async function loadProducts() {
     try {
         state.isLoading = true;
-        const products = await apiService.getAllProducts();
-        state.products = products;
+        // Show skeleton loaders immediately
         renderFeaturedProducts();
         renderAllProducts();
         renderSaleProducts();
+        
+        const products = await apiService.getAllProducts();
+        state.products = products;
     } catch (error) {
         console.error('Failed to load products:', error);
         // Use fallback products if API fails
         state.products = getFallbackProducts();
+    } finally {
+        state.isLoading = false;
         renderFeaturedProducts();
         renderAllProducts();
         renderSaleProducts();
-    } finally {
-        state.isLoading = false;
     }
 }
 
@@ -325,23 +327,27 @@ function renderAuth() {
         // Show user info with dropdown
         authArea.innerHTML = `
             <div class="user-info" style="display: flex;">
-                <span id="userName">${state.user.name || state.user.email}</span>
                 <div class="user-menu">
-                    <i class="fas fa-user icon-btn"></i>
+                    <button class="nav-icon-btn" title="Account" style="font-size:1.1rem;">
+                        <i class="fas fa-user-circle"></i>
+                    </button>
                     <div class="user-dropdown">
-                        <a href="#" onclick="navigateTo('orders'); return false;">My Orders</a>
-                        <a href="#" onclick="navigateTo('wishlist'); return false;">Wishlist</a>
-                        <a href="#" onclick="navigateTo('cart'); return false;">Cart</a>
-                        <button onclick="handleLogout()">Logout</button>
+                        <div class="user-dropdown-header">
+                            <span>${state.user.name || state.user.email}</span>
+                        </div>
+                        <a href="#" onclick="navigateTo('orders'); return false;"><i class="fas fa-box"></i> My Orders</a>
+                        <a href="#" onclick="navigateTo('wishlist'); return false;"><i class="fas fa-heart"></i> Wishlist</a>
+                        <a href="#" onclick="navigateTo('cart'); return false;"><i class="fas fa-shopping-bag"></i> Cart</a>
+                        <button onclick="handleLogout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
                     </div>
                 </div>
             </div>
         `;
     } else {
-        // Show login/signup buttons
+        // Show compact login/signup buttons
         authArea.innerHTML = `
             <div class="auth-buttons">
-                <button class="btn btn-outline" onclick="openModal('loginModal')">Login</button>
+                <button class="btn btn-outline" onclick="openModal('loginModal')"><i class="fas fa-sign-in-alt"></i> Login</button>
                 <button class="btn btn-primary" onclick="openModal('registerModal')">Sign Up</button>
             </div>
         `;
@@ -538,6 +544,17 @@ function viewProduct(productId) {
         document.getElementById('productDetailPrice').textContent = `${APP_CONFIG.currency}${product.price.toFixed(2)}`;
         document.getElementById('productDetailDescription').textContent = product.description || 'No description available';
         document.getElementById('productDetailCategory').textContent = product.category || 'Uncategorized';
+        
+        // Reset quantity
+        const qtyInput = document.getElementById('detailQty');
+        if (qtyInput) qtyInput.value = '1';
+        
+        // Show/hide color and size options based on category
+        const colorGroup = document.getElementById('colorOptionGroup');
+        const sizeGroup = document.getElementById('sizeOptionGroup');
+        const isAccessory = product.category === 'accessories';
+        if (colorGroup) colorGroup.style.display = isAccessory ? 'none' : 'block';
+        if (sizeGroup) sizeGroup.style.display = isAccessory ? 'none' : 'block';
     }
     
     navigateTo('product-detail');
@@ -545,13 +562,73 @@ function viewProduct(productId) {
 
 function addProductToCart() {
     if (state.currentProduct) {
-        addToCart(state.currentProduct.id);
+        const qty = parseInt(document.getElementById('detailQty').value) || 1;
+        const product = state.currentProduct;
+        const existingItem = state.cart.find(item => item.id === product.id);
+        
+        if (existingItem) {
+            existingItem.quantity += qty;
+        } else {
+            state.cart.push({ ...product, quantity: qty });
+        }
+        
+        saveCart();
+        updateCartBadge();
+        showNotification(`${product.name} (x${qty}) added to cart`, 'success');
     }
+}
+
+// Product detail controls
+function changeDetailQty(delta) {
+    const input = document.getElementById('detailQty');
+    if (!input) return;
+    let val = parseInt(input.value) || 1;
+    val = Math.max(1, val + delta);
+    input.value = val;
+}
+
+function selectColor(el) {
+    document.querySelectorAll('#productColors .color-swatch').forEach(s => s.classList.remove('active'));
+    el.classList.add('active');
+    const label = document.getElementById('selectedColorLabel');
+    if (label) label.textContent = el.getAttribute('data-color');
+}
+
+function selectSize(el) {
+    document.querySelectorAll('#productSizes .size-btn').forEach(s => s.classList.remove('active'));
+    el.classList.add('active');
+}
+
+// Password strength checker for registration
+function checkPasswordStrength(password) {
+    const fill = document.getElementById('strengthFill');
+    const text = document.getElementById('strengthText');
+    if (!fill || !text) return;
+    
+    let score = 0;
+    if (password.length >= 8) score++;
+    if (/[A-Z]/.test(password)) score++;
+    if (/[a-z]/.test(password)) score++;
+    if (/[0-9]/.test(password)) score++;
+    if (/[^A-Za-z0-9]/.test(password)) score++;
+    
+    const levels = [
+        { width: '0%', color: '#eee', label: '' },
+        { width: '20%', color: '#dc3545', label: 'Very Weak' },
+        { width: '40%', color: '#fd7e14', label: 'Weak' },
+        { width: '60%', color: '#ffc107', label: 'Fair' },
+        { width: '80%', color: '#28a745', label: 'Strong' },
+        { width: '100%', color: '#20c997', label: 'Very Strong' }
+    ];
+    
+    fill.style.width = levels[score].width;
+    fill.style.background = levels[score].color;
+    text.textContent = levels[score].label;
+    text.style.color = levels[score].color;
 }
 
 function filterProducts(category) {
     state.currentFilter = category;
-    renderAllProducts();
     
     // Update filter button states
     document.querySelectorAll('.filter-btn').forEach(btn => {
@@ -560,6 +637,8 @@ function filterProducts(category) {
             btn.classList.add('active');
         }
     });
+    
+    renderAllProducts();
 }
 
 function searchProducts(query) {
@@ -594,10 +673,16 @@ function removeFromCart(productId) {
 }
 
 function updateCartQuantity(productId, quantity) {
+    const qty = parseInt(quantity);
+    if (qty < 1) {
+        removeFromCart(productId);
+        return;
+    }
     const item = state.cart.find(item => item.id === productId);
     if (item) {
-        item.quantity = Math.max(1, parseInt(quantity));
+        item.quantity = qty;
         saveCart();
+        updateCartBadge();
         renderCart();
     }
 }
@@ -645,8 +730,12 @@ function renderCart() {
                 <p class="price">${APP_CONFIG.currency}${item.price.toFixed(2)}</p>
             </div>
             <div class="cart-item-controls">
-                <input type="number" min="1" value="${item.quantity}" onchange="updateCartQuantity(${item.id}, this.value)">
-                <button class="btn btn-danger" onclick="removeFromCart(${item.id})">Remove</button>
+                <div class="quantity-control">
+                    <button type="button" class="qty-btn" onclick="updateCartQuantity(${item.id}, ${item.quantity - 1})">−</button>
+                    <input type="text" class="qty-value" value="${item.quantity}" readonly>
+                    <button type="button" class="qty-btn" onclick="updateCartQuantity(${item.id}, ${item.quantity + 1})">+</button>
+                </div>
+                <button class="btn btn-danger" onclick="removeFromCart(${item.id})" title="Remove"><i class="fas fa-trash-alt"></i></button>
             </div>
         </div>
     `).join('');
@@ -965,7 +1054,7 @@ function switchModal(closeId, openId) {
 // Constants for notification behavior
 const NOTIFICATION_PERSISTENT = 0;
 
-function showNotification(message, type = 'info', duration = 3000, action = null) {
+function showNotification(message, type = 'info', duration = 5000, action = null) {
     // Remove existing notifications
     document.querySelectorAll('.notification').forEach(n => n.remove());
     
@@ -1020,18 +1109,26 @@ function showNotification(message, type = 'info', duration = 3000, action = null
     
     notification.appendChild(content);
     
+    // Add progress bar for auto-dismiss
+    if (duration > 0) {
+        const progressBar = document.createElement('div');
+        progressBar.className = 'notification-progress';
+        progressBar.innerHTML = `<div class="notification-progress-bar" style="animation-duration:${duration}ms;"></div>`;
+        notification.appendChild(progressBar);
+    }
+    
     notification.style.cssText = `
         position: fixed;
         top: 100px;
         right: 20px;
         min-width: 300px;
-        max-width: 400px;
+        max-width: 420px;
         background: ${colors[type]};
         color: white;
-        border-radius: 8px;
-        box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+        border-radius: 10px;
+        box-shadow: 0 8px 30px rgba(0,0,0,0.2);
         z-index: 10000;
-        animation: slideIn 0.3s ease;
+        animation: slideIn 0.4s ease;
         overflow: hidden;
     `;
     
@@ -1040,8 +1137,8 @@ function showNotification(message, type = 'info', duration = 3000, action = null
     // Auto-dismiss if duration > 0 (use NOTIFICATION_PERSISTENT for persistent notifications)
     if (duration > 0) {
         setTimeout(() => {
-            notification.style.animation = 'slideOut 0.3s ease';
-            setTimeout(() => notification.remove(), 300);
+            notification.style.animation = 'slideOut 0.4s ease forwards';
+            setTimeout(() => notification.remove(), 400);
         }, duration);
     }
 }
