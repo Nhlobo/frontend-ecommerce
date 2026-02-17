@@ -1087,9 +1087,7 @@ function switchModal(closeId, openId) {
 }
 
 // ========== Notification System ==========
-// ========== Notification System ==========
-// Constants for notification behavior
-const NOTIFICATION_PERSISTENT = 0;
+// NOTIFICATION_PERSISTENT is defined in utils.js
 
 function showNotification(message, type = 'info', duration = 5000, action = null) {
     // Remove existing notifications
