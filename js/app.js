@@ -18,6 +18,7 @@ let state = {
 
 // Initialize API Service
 let apiService = null;
+let authService = null;
 
 // Session timeout configuration - 30 minutes based on industry standard for e-commerce security
 // This balances user convenience with security best practices
@@ -113,6 +114,10 @@ function init() {
     try {
         // Initialize API service
         apiService = new APIService({ API_CONFIG, APP_CONFIG, BUSINESS_INFO });
+        
+        // Initialize Auth service
+        authService = new AuthService(apiService, SECURITY_CONFIG);
+        window.Auth = authService; // Make Auth globally available
         
         // Monitor network status
         window.addEventListener('online', handleOnline);
@@ -363,11 +368,14 @@ async function handleLogin(e) {
     
     const email = document.getElementById('loginEmail').value;
     const password = document.getElementById('loginPassword').value;
+    const rememberMe = document.getElementById('modalRememberMe')?.checked || false;
     
     try {
-        const response = await apiService.login({ email, password });
-        state.user = response.user;
-        localStorage.setItem('user', JSON.stringify(response.user));
+        // Use authService for proper token management
+        const response = await authService.login({ email, password, rememberMe });
+        
+        // Update state - authService handles token storage
+        state.user = authService.getCurrentUser();
         
         closeModal('loginModal');
         renderAuth();
@@ -394,11 +402,14 @@ async function handleRegister(e) {
     submitBtn.classList.add('btn-loading');
     submitBtn.disabled = true;
     
-    const name = document.getElementById('registerName').value;
+    const fullName = document.getElementById('registerName').value;
     const email = document.getElementById('registerEmail').value;
+    const phone = document.getElementById('registerPhone')?.value || '';
     const password = document.getElementById('registerPassword').value;
     const confirmPassword = document.getElementById('registerConfirmPassword').value;
+    const agreeTerms = document.getElementById('registerTerms')?.checked || false;
     
+    // Validate passwords match
     if (password !== confirmPassword) {
         showNotification('Passwords do not match', 'error');
         submitBtn.classList.remove('btn-loading');
@@ -406,10 +417,26 @@ async function handleRegister(e) {
         return;
     }
     
+    // Validate terms acceptance
+    if (!agreeTerms) {
+        showNotification('You must agree to the Terms & Conditions', 'error');
+        submitBtn.classList.remove('btn-loading');
+        submitBtn.disabled = false;
+        return;
+    }
+    
     try {
-        const response = await apiService.register({ name, email, password });
-        state.user = response.user;
-        localStorage.setItem('user', JSON.stringify(response.user));
+        // Use authService for proper token management
+        const response = await authService.register({ 
+            fullName, 
+            email, 
+            password,
+            phone,
+            newsletter: false // Can add checkbox for this in modal if needed
+        });
+        
+        // Update state - authService handles token storage
+        state.user = authService.getCurrentUser();
         
         closeModal('registerModal');
         renderAuth();
@@ -429,14 +456,24 @@ async function handleRegister(e) {
     }
 }
 
-function handleLogout() {
-    apiService.logout();
-    state.user = null;
-    state.wishlist = [];
-    localStorage.removeItem('wishlist');
-    renderAuth();
-    showNotification('Logged out successfully', 'success');
-    navigateTo('home');
+async function handleLogout() {
+    try {
+        // Use authService for proper logout
+        await authService.logout();
+        state.user = null;
+        state.wishlist = [];
+        localStorage.removeItem('wishlist');
+        renderAuth();
+        showNotification('Logged out successfully', 'success');
+        navigateTo('home');
+    } catch (error) {
+        console.error('Logout error:', error);
+        // Even if API call fails, clear local session
+        authService.clearSession();
+        state.user = null;
+        renderAuth();
+        navigateTo('home');
+    }
 }
 
 // ========== Product Rendering ==========
@@ -1050,9 +1087,7 @@ function switchModal(closeId, openId) {
 }
 
 // ========== Notification System ==========
-// ========== Notification System ==========
-// Constants for notification behavior
-const NOTIFICATION_PERSISTENT = 0;
+// NOTIFICATION_PERSISTENT constant defined in utils.js is used for persistent notifications
 
 function showNotification(message, type = 'info', duration = 5000, action = null) {
     // Remove existing notifications

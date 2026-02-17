@@ -365,6 +365,39 @@
                 grid-template-columns: 1fr;
             }
         }
+        
+        /* Change Password Modal Styles */
+        .error-message {
+            color: #dc3545;
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+            display: none;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #333;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
     </style>
 </head>
 <body>
@@ -641,7 +674,7 @@
                         <div class="section-card">
                             <h2><i class="fas fa-lock"></i> Password & Security</h2>
                             <p style="margin-bottom: 1.5rem;">Keep your account secure by using a strong password</p>
-                            <button class="btn btn-secondary">
+                            <button class="btn btn-secondary" onclick="openChangePasswordModal()">
                                 <i class="fas fa-key"></i> Change Password
                             </button>
                         </div>
@@ -650,6 +683,70 @@
             </div>
         </div>
     </section>
+
+    <!-- Change Password Modal -->
+    <div id="changePasswordModal" class="modal" style="display: none;">
+        <div class="modal-content" style="max-width: 500px;">
+            <span class="close-modal" onclick="closeChangePasswordModal()">&times;</span>
+            <h2 style="margin-bottom: 1.5rem;"><i class="fas fa-key"></i> Change Password</h2>
+            <form id="changePasswordForm" onsubmit="handleChangePassword(event)">
+                <div class="form-group">
+                    <label for="currentPassword">Current Password *</label>
+                    <input 
+                        type="password" 
+                        id="currentPassword" 
+                        name="currentPassword" 
+                        placeholder="Enter current password"
+                        required
+                    >
+                    <div class="error-message" id="currentPasswordError"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="newPassword">New Password *</label>
+                    <input 
+                        type="password" 
+                        id="newPassword" 
+                        name="newPassword" 
+                        placeholder="Enter new password"
+                        required
+                        oninput="updatePasswordStrength(this.value)"
+                    >
+                    <div class="password-strength-container" id="strengthContainer" style="display:none; margin-top: 0.5rem;">
+                        <div style="height: 4px; background: #e0e0e0; border-radius: 2px;">
+                            <div id="strengthBar" style="height: 100%; border-radius: 2px; transition: all 0.3s;"></div>
+                        </div>
+                        <small id="strengthText" style="font-size: 0.8rem; margin-top: 0.25rem; display: block;"></small>
+                    </div>
+                    <div class="error-message" id="newPasswordError"></div>
+                    <small style="color: #666; font-size: 0.85rem;">
+                        Must contain at least 8 characters, including uppercase, lowercase, number and special character
+                    </small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="confirmNewPassword">Confirm New Password *</label>
+                    <input 
+                        type="password" 
+                        id="confirmNewPassword" 
+                        name="confirmNewPassword" 
+                        placeholder="Confirm new password"
+                        required
+                    >
+                    <div class="error-message" id="confirmNewPasswordError"></div>
+                </div>
+                
+                <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+                    <button type="submit" class="btn btn-primary" style="flex: 1;" id="changePasswordBtn">
+                        Change Password
+                    </button>
+                    <button type="button" class="btn btn-secondary" style="flex: 1;" onclick="closeChangePasswordModal()">
+                        Cancel
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
 
     <footer>
         <div class="footer-content">
@@ -714,7 +811,9 @@
     <script src="js/security.js"></script>
     <script src="js/validation.js"></script>
     <script src="js/utils.js"></script>
+    <script src="js/api.js"></script>
     <script src="js/auth.js"></script>
+    <script src="js/app.js"></script>
     <script src="js/user.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -917,6 +1016,122 @@
 
         // Uncomment to generate mock data for testing
         // generateMockOrders();
+
+        // Change Password Modal Functions
+        function openChangePasswordModal() {
+            document.getElementById('changePasswordModal').style.display = 'flex';
+        }
+
+        function closeChangePasswordModal() {
+            document.getElementById('changePasswordModal').style.display = 'none';
+            document.getElementById('changePasswordForm').reset();
+            // Clear any error messages
+            ['currentPassword', 'newPassword', 'confirmNewPassword'].forEach(field => {
+                const errorEl = document.getElementById(field + 'Error');
+                if (errorEl) errorEl.style.display = 'none';
+            });
+            // Hide strength indicator
+            document.getElementById('strengthContainer').style.display = 'none';
+        }
+
+        function updatePasswordStrength(password) {
+            const strengthContainer = document.getElementById('strengthContainer');
+            const strengthBar = document.getElementById('strengthBar');
+            const strengthText = document.getElementById('strengthText');
+            
+            if (!password) {
+                strengthContainer.style.display = 'none';
+                return;
+            }
+            
+            strengthContainer.style.display = 'block';
+            
+            // Use the validatePasswordStrength function from security.js
+            if (typeof validatePasswordStrength === 'function') {
+                const result = validatePasswordStrength(password);
+                const strength = result.strength;
+                
+                if (strength === 'weak') {
+                    strengthBar.style.width = '33%';
+                    strengthBar.style.background = '#dc3545';
+                    strengthText.textContent = 'Weak';
+                    strengthText.style.color = '#dc3545';
+                } else if (strength === 'medium') {
+                    strengthBar.style.width = '66%';
+                    strengthBar.style.background = '#ffc107';
+                    strengthText.textContent = 'Medium';
+                    strengthText.style.color = '#ffc107';
+                } else {
+                    strengthBar.style.width = '100%';
+                    strengthBar.style.background = '#28a745';
+                    strengthText.textContent = 'Strong';
+                    strengthText.style.color = '#28a745';
+                }
+            }
+        }
+
+        async function handleChangePassword(event) {
+            event.preventDefault();
+            
+            // Clear previous errors
+            ['currentPassword', 'newPassword', 'confirmNewPassword'].forEach(field => {
+                const errorEl = document.getElementById(field + 'Error');
+                if (errorEl) {
+                    errorEl.textContent = '';
+                    errorEl.style.display = 'none';
+                }
+            });
+            
+            const currentPassword = document.getElementById('currentPassword').value;
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmNewPassword = document.getElementById('confirmNewPassword').value;
+            
+            // Validate new password
+            if (typeof validatePasswordStrength === 'function') {
+                const validation = validatePasswordStrength(newPassword);
+                if (!validation.isValid) {
+                    const errorEl = document.getElementById('newPasswordError');
+                    errorEl.textContent = validation.errors.join('. ');
+                    errorEl.style.display = 'block';
+                    return;
+                }
+            }
+            
+            // Validate passwords match
+            if (newPassword !== confirmNewPassword) {
+                const errorEl = document.getElementById('confirmNewPasswordError');
+                errorEl.textContent = 'Passwords do not match';
+                errorEl.style.display = 'block';
+                return;
+            }
+            
+            // Show loading state
+            const submitBtn = document.getElementById('changePasswordBtn');
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Changing...';
+            
+            try {
+                // Use authService to change password
+                if (typeof window.Auth !== 'undefined' && window.Auth.changePassword) {
+                    await window.Auth.changePassword(currentPassword, newPassword);
+                    
+                    // Show success message
+                    alert('Password changed successfully!');
+                    closeChangePasswordModal();
+                } else {
+                    throw new Error('Authentication service not available');
+                }
+            } catch (error) {
+                // Show error message
+                const errorEl = document.getElementById('currentPasswordError');
+                errorEl.textContent = error.message || 'Failed to change password. Please try again.';
+                errorEl.style.display = 'block';
+            } finally {
+                // Reset button state
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = 'Change Password';
+            }
+        }
     </script>
 </body>
 </html>
