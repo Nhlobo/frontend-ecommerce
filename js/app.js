@@ -129,6 +129,9 @@ function init() {
         
         // Setup event listeners
         setupEventListeners();
+
+        // Support deep links like index.html#shop or index.html#contact
+        window.addEventListener('hashchange', handleHashNavigation);
         
         // Render initial UI
         renderAuth();
@@ -136,8 +139,8 @@ function init() {
         updateWishlistBadge();
         startCountdown();
         
-        // Show home page by default
-        navigateTo('home');
+        // Show page based on hash (fallback to home)
+        handleHashNavigation();
         
         // Hide page loader after initialization
         setTimeout(() => {
@@ -153,6 +156,23 @@ function init() {
         console.error('Initialization error:', error);
         showNotification('Failed to initialize app', 'error');
     }
+}
+
+function getPageFromHash() {
+    const rawHash = window.location.hash.replace('#', '').trim().toLowerCase();
+    if (!rawHash) return 'home';
+
+    const pageAliases = {
+        'product': 'product-detail',
+        'product-detail': 'product-detail'
+    };
+
+    return pageAliases[rawHash] || rawHash;
+}
+
+function handleHashNavigation() {
+    const requestedPage = getPageFromHash();
+    navigateTo(requestedPage, false);
 }
 
 // ========== Event Listeners Setup ==========
@@ -245,7 +265,7 @@ async function loadProducts() {
 }
 
 // ========== Navigation ==========
-function navigateTo(page) {
+function navigateTo(page, updateHash = true) {
     // Close mobile menu
     const navLinks = document.getElementById('navLinks');
     if (navLinks) {
@@ -289,6 +309,14 @@ function navigateTo(page) {
         if (pageElement) {
             pageElement.classList.add('active');
             state.currentPage = page;
+
+            // Keep URL in sync for direct links/bookmarks
+            if (updateHash) {
+                const nextHash = page === 'home' ? '' : `#${page}`;
+                if (window.location.hash !== nextHash) {
+                    window.history.replaceState(null, '', `${window.location.pathname}${nextHash}`);
+                }
+            }
             
             // Render page-specific content
             if (page === 'cart') renderCart();
@@ -299,6 +327,8 @@ function navigateTo(page) {
             // Scroll to top
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
+    } else if (page !== 'home') {
+        navigateTo('home', updateHash);
     }
 }
 
