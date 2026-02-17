@@ -18,6 +18,7 @@ let state = {
 
 // Initialize API Service
 let apiService = null;
+let authService = null;
 
 // Session timeout configuration - 30 minutes based on industry standard for e-commerce security
 // This balances user convenience with security best practices
@@ -113,6 +114,10 @@ function init() {
     try {
         // Initialize API service
         apiService = new APIService({ API_CONFIG, APP_CONFIG, BUSINESS_INFO });
+        
+        // Initialize Auth service
+        authService = new AuthService(apiService, SECURITY_CONFIG);
+        window.Auth = authService; // Make Auth globally available
         
         // Monitor network status
         window.addEventListener('online', handleOnline);

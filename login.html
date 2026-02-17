@@ -865,40 +865,28 @@
                     const sanitizedEmail = sanitizeInput(email);
                     const sanitizedPassword = password; // Don't sanitize password content
 
-                    // Call auth API if available
-                    let result;
-                    if (typeof window.Auth !== 'undefined' && window.Auth.login) {
-                        result = await window.Auth.login({
-                            email: sanitizedEmail,
-                            password: sanitizedPassword,
-                            rememberMe: rememberMe,
-                            csrfToken: csrfToken
-                        });
-                    } else {
-                        // Mock login for demo
-                        result = await mockLogin(sanitizedEmail, sanitizedPassword, rememberMe);
+                    // Call auth API - ensure Auth service is available
+                    if (typeof window.Auth === 'undefined' || !window.Auth.login) {
+                        throw new Error('Authentication service not available. Please refresh the page.');
                     }
 
-                    if (result.success) {
-                        // Reset attempts on successful login
-                        resetLoginAttempts();
-                        
-                        // Store user data
-                        localStorage.setItem('user', JSON.stringify(result.user));
-                        if (rememberMe) {
-                            localStorage.setItem('rememberMe', 'true');
-                        }
+                    const result = await window.Auth.login({
+                        email: sanitizedEmail,
+                        password: sanitizedPassword,
+                        rememberMe: rememberMe
+                    });
 
-                        // Show success message
-                        alert('Login successful! Welcome back.');
-                        
-                        // Redirect
-                        setTimeout(() => {
-                            window.location.href = 'index.html';
-                        }, 1000);
-                    } else {
-                        throw new Error(result.message || 'Login failed');
-                    }
+                    // AuthService handles token and user data storage internally
+                    // Reset attempts on successful login
+                    resetLoginAttempts();
+
+                    // Show success message
+                    alert('Login successful! Welcome back.');
+                    
+                    // Redirect
+                    setTimeout(() => {
+                        window.location.href = 'index.html';
+                    }, 1000);
                 } catch (error) {
                     // Increment attempts
                     loginState.loginAttempts++;
@@ -918,32 +906,6 @@
                     loginButton.classList.remove('loading');
                     loginButton.disabled = false;
                 }
-            }
-
-            // Mock login function
-            async function mockLogin(email, password, rememberMe) {
-                // Simulate API call
-                return new Promise((resolve) => {
-                    setTimeout(() => {
-                        // Demo: accept any email/password for testing
-                        if (email && password.length >= 8) {
-                            resolve({
-                                success: true,
-                                user: {
-                                    id: 1,
-                                    name: email.split('@')[0],
-                                    email: email,
-                                    rememberMe: rememberMe
-                                }
-                            });
-                        } else {
-                            resolve({
-                                success: false,
-                                message: 'Invalid email or password'
-                            });
-                        }
-                    }, 1000);
-                });
             }
 
             // Handle social login

@@ -567,6 +567,15 @@
         </div>
     </footer>
 
+    <!-- External JavaScript Files -->
+    <script src="js/config.js"></script>
+    <script src="js/security.js"></script>
+    <script src="js/validation.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/app.js"></script>
+
     <script>
         // Generate CSRF token
         function generateCSRFToken() {
@@ -775,24 +784,37 @@
                     submitBtn.disabled = true;
                     submitBtn.classList.add('loading');
                     
-                    // Simulate API call
-                    setTimeout(() => {
-                        const userData = {
-                            fullName,
-                            email,
-                            phone,
-                            newsletter,
-                            registeredAt: new Date().toISOString()
-                        };
-                        
-                        // Store user data (in production, this would be sent to backend)
-                        localStorage.setItem('user', JSON.stringify(userData));
-                        localStorage.setItem('isLoggedIn', 'true');
-                        
-                        // Show success and redirect
-                        alert('Registration successful! Welcome to Premium Hair Wigs & Extensions.');
-                        window.location.href = 'index.html';
-                    }, 2000);
+                    // Call backend API for registration
+                    (async function() {
+                        try {
+                            // Ensure Auth service is available
+                            if (typeof window.Auth === 'undefined' || !window.Auth.register) {
+                                throw new Error('Authentication service not available. Please refresh the page.');
+                            }
+
+                            const userData = {
+                                fullName,
+                                email,
+                                password,
+                                phone,
+                                newsletter
+                            };
+                            
+                            const result = await window.Auth.register(userData);
+                            
+                            // AuthService handles token and user data storage internally
+                            // Show success and redirect
+                            alert('Registration successful! Welcome to Premium Hair Wigs & Extensions.');
+                            window.location.href = 'index.html';
+                        } catch (error) {
+                            // Show error message
+                            alert(error.message || 'Registration failed. Please try again.');
+                            
+                            // Re-enable submit button
+                            submitBtn.disabled = false;
+                            submitBtn.classList.remove('loading');
+                        }
+                    })();
                 }
             });
 
