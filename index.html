@@ -63,14 +63,14 @@
         <div class="nav-actions">
             <!-- Cart Icon with Badge -->
             <div class="nav-icon-container">
-                <i class="fas fa-shopping-cart icon-btn" onclick="navigateTo('cart')"></i>
-                <span id="cartBadge" class="badge">0</span>
+                <i class="fas fa-shopping-cart icon-btn" onclick="navigateTo('cart')" role="button" tabindex="0" aria-label="Shopping Cart" onkeydown="if(event.key==='Enter'||event.key===' '){navigateTo('cart');event.preventDefault();}"></i>
+                <span id="cartBadge" class="badge" aria-live="polite">0</span>
             </div>
             
             <!-- Wishlist Icon with Badge -->
             <div class="nav-icon-container">
-                <i class="fas fa-heart icon-btn" onclick="navigateTo('wishlist')"></i>
-                <span id="wishlistBadge" class="badge">0</span>
+                <i class="fas fa-heart icon-btn" onclick="navigateTo('wishlist')" role="button" tabindex="0" aria-label="Wishlist" onkeydown="if(event.key==='Enter'||event.key===' '){navigateTo('wishlist');event.preventDefault();}"></i>
+                <span id="wishlistBadge" class="badge" aria-live="polite">0</span>
             </div>
             
             <!-- Auth Area -->
