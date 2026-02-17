@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Unsubscribe from Newsletter - Manage your newsletter preferences">
+    <meta name="author" content="Premium Hair Wigs & Extensions Pty (Ltd)">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Unsubscribe - Premium Hair Wigs & Extensions</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="components.css">
+    <link rel="stylesheet" href="responsive.css">
+    
+    <style>
+        .unsubscribe-page {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 2rem 1rem;
+        }
+        
+        .unsubscribe-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            padding: 3rem 2rem;
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+        }
+        
+        .unsubscribe-icon {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 1.5rem;
+            border-radius: 50%;
+            background: #fff3e0;
+            color: #f57c00;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+        }
+        
+        .unsubscribe-card h1 {
+            font-family: var(--font-heading);
+            font-size: 2rem;
+            color: var(--dark);
+            margin-bottom: 1rem;
+        }
+        
+        .unsubscribe-card p {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 2rem;
+        }
+        
+        .unsubscribe-form {
+            margin-bottom: 2rem;
+        }
+        
+        .unsubscribe-form input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            font-family: var(--font-body);
+        }
+        
+        .unsubscribe-form input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(139, 69, 19, 0.1);
+        }
+        
+        .unsubscribe-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .unsubscribe-actions .btn {
+            width: 100%;
+        }
+        
+        .feedback-note {
+            background: #f8f9fa;
+            border-left: 4px solid var(--primary);
+            padding: 1rem;
+            margin-top: 2rem;
+            text-align: left;
+            border-radius: 6px;
+        }
+        
+        .feedback-note strong {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--dark);
+        }
+
+        .success-state {
+            color: #2e7d32;
+        }
+
+        .success-state .unsubscribe-icon {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+    </style>
+</head>
+<body>
+    <div class="unsubscribe-page">
+        <div class="unsubscribe-card">
+            <div class="unsubscribe-icon">
+                <i class="fas fa-envelope-open"></i>
+            </div>
+            
+            <div id="unsubscribeContent">
+                <h1>Sorry to See You Go!</h1>
+                <p>We're sorry to hear you want to unsubscribe from our newsletter. Please enter your email address below to confirm.</p>
+                
+                <form class="unsubscribe-form" id="unsubscribeForm">
+                    <input 
+                        type="email" 
+                        name="email" 
+                        placeholder="Enter your email address" 
+                        required
+                        id="unsubscribeEmail">
+                    <div class="unsubscribe-actions">
+                        <button type="submit" class="btn btn-primary">
+                            Unsubscribe
+                        </button>
+                        <a href="index.html" class="btn btn-secondary">
+                            Keep Subscription
+                        </a>
+                    </div>
+                </form>
+                
+                <div class="feedback-note">
+                    <strong>Help us improve!</strong>
+                    <p style="margin: 0; font-size: 0.9rem; color: #666;">
+                        We'd love to hear why you're leaving. Your feedback helps us serve you better.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/config.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/newsletter.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.getElementById('unsubscribeForm');
+            const content = document.getElementById('unsubscribeContent');
+            const emailInput = document.getElementById('unsubscribeEmail');
+
+            // Pre-fill email from URL parameter if present
+            const urlParams = new URLSearchParams(window.location.search);
+            const email = urlParams.get('email');
+            if (email) {
+                emailInput.value = email;
+            }
+
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                
+                const submitBtn = form.querySelector('button[type="submit"]');
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'Unsubscribing...';
+
+                const result = await newsletterService.unsubscribe(emailInput.value);
+
+                if (result.success) {
+                    // Remove subscription flag
+                    localStorage.removeItem('newsletter_subscribed');
+
+                    content.innerHTML = `
+                        <div class="success-state">
+                            <div class="unsubscribe-icon">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <h1>You've Been Unsubscribed</h1>
+                            <p>You will no longer receive newsletter emails from us. We're sorry to see you go!</p>
+                            <div class="unsubscribe-actions">
+                                <a href="shop.html" class="btn btn-primary">Continue Shopping</a>
+                                <a href="index.html" class="btn btn-secondary">Go to Home</a>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    alert(result.message);
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Unsubscribe';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
