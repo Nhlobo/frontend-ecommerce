@@ -42,6 +42,8 @@ const API_CONFIG = {
         forgotPassword: `${BACKEND_URL}/api/auth/forgot-password`,
         resetPassword: `${BACKEND_URL}/api/auth/reset-password`,
         changePassword: `${BACKEND_URL}/api/user/change-password`,
+        verifyEmail: `${BACKEND_URL}/api/auth/verify-email`,
+        resendVerification: `${BACKEND_URL}/api/auth/resend-verification`,
         
         // Orders
         orders: `${BACKEND_URL}/api/orders`,
@@ -71,10 +73,16 @@ const API_CONFIG = {
         // Reviews
         reviews: `${BACKEND_URL}/api/reviews`,
         addReview: `${BACKEND_URL}/api/reviews/add`,
+        productReviews: (id) => `${BACKEND_URL}/api/reviews/product/${id}`,
+        submitReview: `${BACKEND_URL}/api/reviews`,
+        helpfulReview: (id) => `${BACKEND_URL}/api/reviews/${id}/helpful`,
         
         // Contact & Newsletter
         contact: `${BACKEND_URL}/api/contact`,
-        newsletter: `${BACKEND_URL}/api/newsletter`
+        newsletter: `${BACKEND_URL}/api/newsletter`,
+        newsletterSubscribe: `${BACKEND_URL}/api/newsletter/subscribe`,
+        newsletterVerify: (token) => `${BACKEND_URL}/api/newsletter/verify/${token}`,
+        newsletterUnsubscribe: `${BACKEND_URL}/api/newsletter/unsubscribe`
     }
 };
 

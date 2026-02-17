@@ -141,6 +141,12 @@ function init() {
         updateWishlistBadge();
         startCountdown();
         
+        // Show email verification banner if needed
+        if (typeof EmailVerificationService !== 'undefined') {
+            const emailVerificationService = new EmailVerificationService();
+            emailVerificationService.showVerificationBanner();
+        }
+        
         // Show home page by default
         navigateTo('home');
         
