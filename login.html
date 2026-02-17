@@ -636,15 +636,6 @@
                 isLocked: false
             };
 
-            // Initialize on page load
-            document.addEventListener('DOMContentLoaded', function() {
-                initializeAuthService();
-                initializeSecurity();
-                initializeLoginForm();
-                loadLoginState();
-                checkIfAlreadyLoggedIn();
-            });
-
             // Initialize Auth Service
             function initializeAuthService() {
                 if (typeof APIService !== 'undefined' && typeof AuthService !== 'undefined' && typeof API_CONFIG !== 'undefined' && typeof SECURITY_CONFIG !== 'undefined') {
@@ -666,6 +657,15 @@
                     document.getElementById('csrfToken').value = token;
                 }
             }
+
+            // Initialize on page load
+            document.addEventListener('DOMContentLoaded', function() {
+                initializeAuthService();
+                initializeSecurity();
+                initializeLoginForm();
+                loadLoginState();
+                checkIfAlreadyLoggedIn();
+            });
 
             // Simple token generation fallback
             function generateSimpleToken() {

@@ -368,7 +368,7 @@ async function handleLogin(e) {
     
     const email = document.getElementById('loginEmail').value;
     const password = document.getElementById('loginPassword').value;
-    const rememberMe = e.target.querySelector('input[type="checkbox"]')?.checked || false;
+    const rememberMe = document.getElementById('modalRememberMe')?.checked || false;
     
     try {
         // Use authService for proper token management
@@ -1087,7 +1087,7 @@ function switchModal(closeId, openId) {
 }
 
 // ========== Notification System ==========
-// NOTIFICATION_PERSISTENT is defined in utils.js
+// NOTIFICATION_PERSISTENT constant defined in utils.js is used for persistent notifications
 
 function showNotification(message, type = 'info', duration = 5000, action = null) {
     // Remove existing notifications
