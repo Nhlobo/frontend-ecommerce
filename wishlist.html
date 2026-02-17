@@ -1,0 +1,1036 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="My Wishlist - Save your favorite hair wigs and extensions for later">
+    <meta name="keywords" content="wishlist, saved products, hair wigs, hair extensions">
+    <meta name="author" content="Premium Hair Wigs & Extensions Pty (Ltd)">
+    <title>My Wishlist - Premium Hair Wigs & Extensions</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="components.css">
+    <link rel="stylesheet" href="responsive.css">
+    
+    <style>
+        .wishlist-page {
+            background: #f8f9fa;
+            min-height: 100vh;
+            padding: 2rem 0 4rem;
+        }
+        
+        .wishlist-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+        
+        .page-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .page-header h1 {
+            font-family: var(--font-heading);
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .page-header p {
+            color: #666;
+            font-size: 1.1rem;
+        }
+        
+        .wishlist-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding: 1.25rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .wishlist-count {
+            font-size: 1.1rem;
+            color: #666;
+        }
+        
+        .wishlist-count strong {
+            color: var(--primary);
+            font-size: 1.3rem;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            border: none;
+        }
+        
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: var(--secondary);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(139, 69, 19, 0.3);
+        }
+        
+        .btn-outline {
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            background: transparent;
+        }
+        
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+        
+        .wishlist-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        .wishlist-item {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+        }
+        
+        .wishlist-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+        
+        .wishlist-item-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            z-index: 2;
+        }
+        
+        .stock-badge {
+            padding: 0.35rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .stock-badge.in-stock {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+        
+        .stock-badge.low-stock {
+            background: #fff3e0;
+            color: #e65100;
+        }
+        
+        .stock-badge.out-of-stock {
+            background: #ffebee;
+            color: #c62828;
+        }
+        
+        .remove-btn {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            width: 35px;
+            height: 35px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 2;
+            transition: all 0.3s ease;
+            border: none;
+        }
+        
+        .remove-btn:hover {
+            background: var(--error);
+            color: white;
+            transform: scale(1.1);
+        }
+        
+        .wishlist-item-image {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            cursor: pointer;
+        }
+        
+        .wishlist-item-content {
+            padding: 1.25rem;
+        }
+        
+        .item-category {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background: #f0f0f0;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            color: #666;
+            margin-bottom: 0.75rem;
+        }
+        
+        .item-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+        
+        .item-title:hover {
+            color: var(--primary);
+        }
+        
+        .item-rating {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.75rem;
+        }
+        
+        .stars {
+            color: #ffc107;
+            font-size: 0.9rem;
+        }
+        
+        .rating-text {
+            color: #666;
+            font-size: 0.85rem;
+        }
+        
+        .item-price {
+            display: flex;
+            align-items: baseline;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+        
+        .current-price {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        
+        .original-price {
+            font-size: 1.1rem;
+            color: #999;
+            text-decoration: line-through;
+        }
+        
+        .item-actions {
+            display: flex;
+            gap: 0.75rem;
+        }
+        
+        .item-actions .btn {
+            flex: 1;
+            justify-content: center;
+            padding: 0.75rem;
+            font-size: 0.9rem;
+        }
+        
+        .empty-wishlist {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .empty-icon {
+            font-size: 5rem;
+            color: #ddd;
+            margin-bottom: 1.5rem;
+        }
+        
+        .empty-wishlist h2 {
+            font-family: var(--font-heading);
+            font-size: 2rem;
+            color: var(--dark);
+            margin-bottom: 1rem;
+        }
+        
+        .empty-wishlist p {
+            color: #666;
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+        
+        .recommendations {
+            margin-top: 4rem;
+        }
+        
+        .section-title {
+            font-family: var(--font-heading);
+            font-size: 2rem;
+            text-align: center;
+            margin-bottom: 2rem;
+            color: var(--primary);
+        }
+        
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+        }
+        
+        .product-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+        
+        .product-card-image {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+        }
+        
+        .product-card-content {
+            padding: 1.25rem;
+        }
+        
+        .product-card-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+        
+        .product-card-price {
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+        
+        .share-wishlist-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .share-wishlist-modal.active {
+            display: flex;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            max-width: 500px;
+            width: 90%;
+            position: relative;
+        }
+        
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: none;
+            background: #f0f0f0;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.3s ease;
+        }
+        
+        .modal-close:hover {
+            background: var(--error);
+            color: white;
+        }
+        
+        .modal-title {
+            font-family: var(--font-heading);
+            font-size: 1.75rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+        }
+        
+        .share-options {
+            display: grid;
+            gap: 1rem;
+        }
+        
+        .share-option {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .share-option:hover {
+            border-color: var(--primary);
+            background: #fff8f0;
+        }
+        
+        .share-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+        }
+        
+        .share-icon.whatsapp {
+            background: #25D366;
+        }
+        
+        .share-icon.facebook {
+            background: #1877F2;
+        }
+        
+        .share-icon.email {
+            background: #6c757d;
+        }
+        
+        .share-icon.copy {
+            background: var(--primary);
+        }
+        
+        .share-text {
+            flex: 1;
+        }
+        
+        .share-text strong {
+            display: block;
+            margin-bottom: 0.25rem;
+            color: #333;
+        }
+        
+        .share-text span {
+            font-size: 0.85rem;
+            color: #666;
+        }
+        
+        @media (max-width: 968px) {
+            .wishlist-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
+            
+            .product-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .wishlist-actions {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .action-buttons {
+                width: 100%;
+                flex-direction: column;
+            }
+            
+            .action-buttons .btn {
+                width: 100%;
+            }
+        }
+        
+        @media (max-width: 640px) {
+            .wishlist-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .product-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="banner">
+        Free Shipping on Orders Above R1,500
+    </div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="logo">
+            <a href="index.html">
+                <img src="assets/images/logo.png" alt="Company Logo" class="logo-image" onerror="this.style.display='none';">
+            </a>
+        </div>
+
+        <div class="hamburger" id="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+
+        <ul class="nav-links" id="navLinks">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="shop.html">Shop</a></li>
+            <li><a href="index.html#about">About Us</a></li>
+            <li><a href="index.html#sale">Sale</a></li>
+            <li><a href="index.html#contact">Contact</a></li>
+        </ul>
+
+        <div class="nav-actions">
+            <a href="cart.html" class="nav-icon">
+                <i class="fas fa-shopping-cart"></i>
+                <span class="cart-badge" id="cartCount">0</span>
+            </a>
+            <a href="wishlist.html" class="nav-icon active">
+                <i class="fas fa-heart"></i>
+            </a>
+            <div id="authArea"></div>
+        </div>
+    </nav>
+
+    <main class="wishlist-page">
+        <div class="wishlist-container">
+            <div class="page-header">
+                <h1><i class="fas fa-heart" style="color: var(--primary);"></i> My Wishlist</h1>
+                <p>Save your favorite products for later</p>
+            </div>
+
+            <!-- Wishlist Actions -->
+            <div class="wishlist-actions" id="wishlistActionsBar" style="display: none;">
+                <div class="wishlist-count">
+                    You have <strong id="wishlistCountText">0</strong> items in your wishlist
+                </div>
+                <div class="action-buttons">
+                    <button class="btn btn-primary" onclick="addAllToCart()">
+                        <i class="fas fa-shopping-cart"></i>
+                        Add All to Cart
+                    </button>
+                    <button class="btn btn-outline" onclick="openShareModal()">
+                        <i class="fas fa-share-alt"></i>
+                        Share Wishlist
+                    </button>
+                    <button class="btn btn-secondary" onclick="clearWishlist()">
+                        <i class="fas fa-trash-alt"></i>
+                        Clear All
+                    </button>
+                </div>
+            </div>
+
+            <!-- Wishlist Grid -->
+            <div class="wishlist-grid" id="wishlistGrid">
+                <!-- Wishlist items will be loaded here -->
+            </div>
+
+            <!-- Empty State -->
+            <div class="empty-wishlist" id="emptyWishlist" style="display: none;">
+                <div class="empty-icon">
+                    <i class="far fa-heart"></i>
+                </div>
+                <h2>Your Wishlist is Empty</h2>
+                <p>
+                    Start adding products you love to your wishlist.<br>
+                    Browse our collection and save your favorites for later!
+                </p>
+                <a href="shop.html" class="btn btn-primary">
+                    <i class="fas fa-shopping-bag"></i>
+                    Continue Shopping
+                </a>
+            </div>
+
+            <!-- Recommendations -->
+            <div class="recommendations" id="recommendations">
+                <h2 class="section-title">You May Also Like</h2>
+                <div class="product-grid" id="recommendedProducts">
+                    <!-- Recommended products will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Share Wishlist Modal -->
+    <div class="share-wishlist-modal" id="shareModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeShareModal()">
+                <i class="fas fa-times"></i>
+            </button>
+            <h2 class="modal-title">Share Your Wishlist</h2>
+            <div class="share-options">
+                <div class="share-option" onclick="shareVia('whatsapp')">
+                    <div class="share-icon whatsapp">
+                        <i class="fab fa-whatsapp"></i>
+                    </div>
+                    <div class="share-text">
+                        <strong>WhatsApp</strong>
+                        <span>Share via WhatsApp</span>
+                    </div>
+                </div>
+                <div class="share-option" onclick="shareVia('facebook')">
+                    <div class="share-icon facebook">
+                        <i class="fab fa-facebook-f"></i>
+                    </div>
+                    <div class="share-text">
+                        <strong>Facebook</strong>
+                        <span>Share on Facebook</span>
+                    </div>
+                </div>
+                <div class="share-option" onclick="shareVia('email')">
+                    <div class="share-icon email">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <div class="share-text">
+                        <strong>Email</strong>
+                        <span>Share via email</span>
+                    </div>
+                </div>
+                <div class="share-option" onclick="shareVia('copy')">
+                    <div class="share-icon copy">
+                        <i class="fas fa-link"></i>
+                    </div>
+                    <div class="share-text">
+                        <strong>Copy Link</strong>
+                        <span>Copy wishlist link to clipboard</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Premium Hair Wigs & Extensions</h3>
+                <p>Premium Hair Wigs & Extensions Pty (Ltd)</p>
+                <p>CIPC & VAT Registered</p>
+                <p>POPIA Compliant</p>
+                <div class="social-links">
+                    <a href="https://facebook.com/premiumhairsa" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://instagram.com/premiumhairsa" target="_blank"><i class="fab fa-instagram"></i></a>
+                    <a href="https://twitter.com/premiumhairsa" target="_blank"><i class="fab fa-twitter"></i></a>
+                    <a href="https://wa.me/27715551234" target="_blank"><i class="fab fa-whatsapp"></i></a>
+                </div>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="shop.html">Shop All</a></li>
+                    <li><a href="index.html#sale">Sale</a></li>
+                    <li><a href="index.html#track">Track Order</a></li>
+                    <li><a href="index.html#about">About Us</a></li>
+                    <li><a href="index.html#contact">Contact</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Customer Service</h3>
+                <ul>
+                    <li><a href="#">Shipping Information</a></li>
+                    <li><a href="#">Returns & Exchanges</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Terms & Conditions</a></li>
+                    <li><a href="#">FAQ</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Contact Us</h3>
+                <p>📍 123 Luxury Lane, Protea Glen<br>Soweto, Johannesburg, Gauteng, 1818</p>
+                <p>📞 +27 71 555 1234</p>
+                <p>✉️ info@premiumhairsa.co.za</p>
+                <p><strong>Hours:</strong><br>Mon-Fri: 09:00-18:00<br>Sat: 09:00-14:00</p>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>&copy; 2024 Premium Hair Wigs & Extensions Pty (Ltd). All rights reserved. | CIPC Registered | VAT Registered | POPIA Compliant</p>
+        </div>
+    </footer>
+
+    <script src="js/config.js"></script>
+    <script src="js/security.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/cart.js"></script>
+    <script src="js/wishlist.js"></script>
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            loadWishlist();
+            loadRecommendations();
+            updateCartCount();
+            
+            // Mobile menu toggle
+            const hamburger = document.getElementById('hamburger');
+            const navLinks = document.getElementById('navLinks');
+            if (hamburger) {
+                hamburger.addEventListener('click', () => {
+                    navLinks.classList.toggle('active');
+                });
+            }
+        });
+
+        function loadWishlist() {
+            const wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+            const grid = document.getElementById('wishlistGrid');
+            const emptyState = document.getElementById('emptyWishlist');
+            const actionsBar = document.getElementById('wishlistActionsBar');
+            const countText = document.getElementById('wishlistCountText');
+            
+            if (wishlist.length === 0) {
+                grid.style.display = 'none';
+                emptyState.style.display = 'block';
+                actionsBar.style.display = 'none';
+                return;
+            }
+            
+            grid.style.display = 'grid';
+            emptyState.style.display = 'none';
+            actionsBar.style.display = 'flex';
+            countText.textContent = wishlist.length;
+            
+            grid.innerHTML = wishlist.map((item, index) => {
+                const stockStatus = getStockStatus(item.id);
+                const rating = generateRating();
+                
+                return `
+                    <div class="wishlist-item">
+                        <button class="remove-btn" onclick="removeFromWishlist(${index})" title="Remove from wishlist">
+                            <i class="fas fa-times"></i>
+                        </button>
+                        <div class="wishlist-item-badge">
+                            <span class="stock-badge ${stockStatus.class}">${stockStatus.text}</span>
+                        </div>
+                        <img src="${sanitizeInput(item.image)}" 
+                             alt="${sanitizeInput(item.name)}" 
+                             class="wishlist-item-image"
+                             onclick="goToProduct('${item.id}')">
+                        <div class="wishlist-item-content">
+                            <span class="item-category">${sanitizeInput(item.category || 'Product')}</span>
+                            <h3 class="item-title" onclick="goToProduct('${item.id}')">${sanitizeInput(item.name)}</h3>
+                            <div class="item-rating">
+                                <div class="stars">${rating.stars}</div>
+                                <span class="rating-text">${rating.score} (${rating.reviews})</span>
+                            </div>
+                            <div class="item-price">
+                                <span class="current-price">R${formatPrice(item.price)}</span>
+                                ${item.originalPrice ? `<span class="original-price">R${formatPrice(item.originalPrice)}</span>` : ''}
+                            </div>
+                            <div class="item-actions">
+                                <button class="btn btn-primary" onclick="quickAddToCart(${index})" ${stockStatus.class === 'out-of-stock' ? 'disabled' : ''}>
+                                    <i class="fas fa-shopping-cart"></i>
+                                    Add to Cart
+                                </button>
+                                <button class="btn btn-outline" onclick="goToProduct('${item.id}')">
+                                    <i class="fas fa-eye"></i>
+                                    View
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function removeFromWishlist(index) {
+            const wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+            const item = wishlist[index];
+            
+            wishlist.splice(index, 1);
+            localStorage.setItem('wishlist', JSON.stringify(wishlist));
+            
+            showToast('success', `${item.name} removed from wishlist`);
+            loadWishlist();
+        }
+
+        function quickAddToCart(index) {
+            const wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+            const item = wishlist[index];
+            
+            const cartItem = {
+                id: item.id,
+                name: item.name,
+                price: item.price,
+                image: item.image,
+                quantity: 1,
+                category: item.category
+            };
+            
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            
+            const existingIndex = cart.findIndex(cartItem => cartItem.id === item.id);
+            if (existingIndex > -1) {
+                cart[existingIndex].quantity += 1;
+            } else {
+                cart.push(cartItem);
+            }
+            
+            localStorage.setItem('cart', JSON.stringify(cart));
+            updateCartCount();
+            showToast('success', `${item.name} added to cart`);
+        }
+
+        function addAllToCart() {
+            const wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+            
+            if (wishlist.length === 0) {
+                showToast('error', 'Your wishlist is empty');
+                return;
+            }
+            
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            let addedCount = 0;
+            
+            wishlist.forEach(item => {
+                const stockStatus = getStockStatus(item.id);
+                if (stockStatus.class !== 'out-of-stock') {
+                    const existingIndex = cart.findIndex(cartItem => cartItem.id === item.id);
+                    if (existingIndex > -1) {
+                        cart[existingIndex].quantity += 1;
+                    } else {
+                        cart.push({
+                            id: item.id,
+                            name: item.name,
+                            price: item.price,
+                            image: item.image,
+                            quantity: 1,
+                            category: item.category
+                        });
+                    }
+                    addedCount++;
+                }
+            });
+            
+            localStorage.setItem('cart', JSON.stringify(cart));
+            updateCartCount();
+            showToast('success', `${addedCount} items added to cart`);
+        }
+
+        function clearWishlist() {
+            if (!confirm('Are you sure you want to clear your entire wishlist?')) {
+                return;
+            }
+            
+            localStorage.removeItem('wishlist');
+            loadWishlist();
+            showToast('success', 'Wishlist cleared');
+        }
+
+        function goToProduct(productId) {
+            window.location.href = `product.html?id=${productId}`;
+        }
+
+        function openShareModal() {
+            document.getElementById('shareModal').classList.add('active');
+        }
+
+        function closeShareModal() {
+            document.getElementById('shareModal').classList.remove('active');
+        }
+
+        function shareVia(platform) {
+            const wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+            const itemNames = wishlist.map(item => item.name).join(', ');
+            const text = `Check out my wishlist from Premium Hair Wigs & Extensions: ${itemNames}`;
+            const url = window.location.href;
+            
+            let shareUrl = '';
+            
+            switch(platform) {
+                case 'whatsapp':
+                    shareUrl = `https://wa.me/?text=${encodeURIComponent(text + ' ' + url)}`;
+                    window.open(shareUrl, '_blank');
+                    break;
+                case 'facebook':
+                    shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`;
+                    window.open(shareUrl, '_blank');
+                    break;
+                case 'email':
+                    shareUrl = `mailto:?subject=My Wishlist&body=${encodeURIComponent(text + '\n\n' + url)}`;
+                    window.location.href = shareUrl;
+                    break;
+                case 'copy':
+                    navigator.clipboard.writeText(url).then(() => {
+                        showToast('success', 'Link copied to clipboard!');
+                    }).catch(() => {
+                        showToast('error', 'Failed to copy link');
+                    });
+                    break;
+            }
+            
+            closeShareModal();
+        }
+
+        function loadRecommendations() {
+            const recommendedGrid = document.getElementById('recommendedProducts');
+            
+            // Sample recommended products
+            const recommended = [
+                { id: 'prod-001', name: 'Premium Luxury Hair Wig', price: 2500, image: 'https://placehold.co/300x300?text=Product+1' },
+                { id: 'prod-002', name: 'Curly Lace Front Wig', price: 2800, image: 'https://placehold.co/300x300?text=Product+2' },
+                { id: 'prod-003', name: 'Brazilian Wave Wig', price: 3200, image: 'https://placehold.co/300x300?text=Product+3' },
+                { id: 'prod-004', name: 'Clip-In Extensions', price: 1500, image: 'https://placehold.co/300x300?text=Product+4' }
+            ];
+            
+            recommendedGrid.innerHTML = recommended.map(product => `
+                <div class="product-card" onclick="window.location.href='product.html?id=${product.id}'">
+                    <img src="${product.image}" alt="${product.name}" class="product-card-image">
+                    <div class="product-card-content">
+                        <div class="product-card-title">${product.name}</div>
+                        <div class="product-card-price">R${formatPrice(product.price)}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function getStockStatus(productId) {
+            // Simulate stock status
+            const random = Math.random();
+            if (random > 0.8) {
+                return { class: 'out-of-stock', text: 'Out of Stock' };
+            } else if (random > 0.6) {
+                return { class: 'low-stock', text: 'Low Stock' };
+            }
+            return { class: 'in-stock', text: 'In Stock' };
+        }
+
+        function generateRating() {
+            const score = (Math.random() * 1.5 + 3.5).toFixed(1);
+            const reviews = Math.floor(Math.random() * 200) + 10;
+            const fullStars = Math.floor(score);
+            const hasHalf = score % 1 >= 0.5;
+            
+            let stars = '';
+            for (let i = 0; i < fullStars; i++) {
+                stars += '<i class="fas fa-star"></i>';
+            }
+            if (hasHalf) {
+                stars += '<i class="fas fa-star-half-alt"></i>';
+            }
+            const emptyStars = 5 - fullStars - (hasHalf ? 1 : 0);
+            for (let i = 0; i < emptyStars; i++) {
+                stars += '<i class="far fa-star"></i>';
+            }
+            
+            return { stars, score, reviews: reviews + ' reviews' };
+        }
+
+        function formatPrice(price) {
+            return parseFloat(price).toFixed(2);
+        }
+
+        function sanitizeInput(input) {
+            const div = document.createElement('div');
+            div.textContent = input;
+            return div.innerHTML;
+        }
+
+        function updateCartCount() {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const count = cart.reduce((sum, item) => sum + item.quantity, 0);
+            const badge = document.getElementById('cartCount');
+            if (badge) {
+                badge.textContent = count;
+            }
+        }
+
+        function showToast(type, message) {
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            
+            const icons = {
+                success: 'fa-check-circle',
+                error: 'fa-exclamation-circle',
+                warning: 'fa-exclamation-triangle',
+                info: 'fa-info-circle'
+            };
+            
+            toast.innerHTML = `
+                <div class="toast-icon">
+                    <i class="fas ${icons[type]}"></i>
+                </div>
+                <div class="toast-content">
+                    <div class="toast-message">${message}</div>
+                </div>
+            `;
+            
+            let container = document.querySelector('.toast-container');
+            if (!container) {
+                container = document.createElement('div');
+                container.className = 'toast-container';
+                document.body.appendChild(container);
+            }
+            
+            container.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.animation = 'slideOutRight 0.3s forwards';
+                setTimeout(() => toast.remove(), 300);
+            }, 4000);
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('shareModal').addEventListener('click', (e) => {
+            if (e.target.id === 'shareModal') {
+                closeShareModal();
+            }
+        });
+    </script>
+</body>
+</html>

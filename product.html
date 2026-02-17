@@ -1,0 +1,1371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Premium Hair Product Details - View product specifications, images, and customer reviews">
+    <meta name="keywords" content="hair wigs, hair extensions, product details, buy hair products">
+    <meta name="author" content="Premium Hair Wigs & Extensions Pty (Ltd)">
+    <title>Product Details - Premium Hair Wigs & Extensions</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="components.css">
+    <link rel="stylesheet" href="responsive.css">
+    
+    <style>
+        .product-page {
+            background: #f8f9fa;
+            padding: 2rem 0 4rem;
+        }
+        
+        .breadcrumb {
+            max-width: 1200px;
+            margin: 0 auto 2rem;
+            padding: 0 1rem;
+            display: flex;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        .breadcrumb a {
+            color: var(--primary);
+        }
+        
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+        
+        .product-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+        
+        .product-main {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-bottom: 3rem;
+        }
+        
+        .product-gallery {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .main-image-container {
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            background: #f8f9fa;
+        }
+        
+        .main-image {
+            width: 100%;
+            height: 600px;
+            object-fit: cover;
+            cursor: zoom-in;
+            transition: transform 0.3s ease;
+        }
+        
+        .sale-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: var(--error);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        
+        .thumbnail-nav {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.75rem;
+        }
+        
+        .thumbnail {
+            border-radius: 8px;
+            overflow: hidden;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: border-color 0.3s ease;
+        }
+        
+        .thumbnail:hover,
+        .thumbnail.active {
+            border-color: var(--primary);
+        }
+        
+        .thumbnail img {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+        }
+        
+        .product-info {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        
+        .product-header h1 {
+            font-family: var(--font-heading);
+            font-size: 2rem;
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+        }
+        
+        .product-meta {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        .product-sku {
+            color: #999;
+        }
+        
+        .rating {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .stars {
+            color: #ffc107;
+            font-size: 1.1rem;
+        }
+        
+        .review-count {
+            color: #666;
+        }
+        
+        .review-count:hover {
+            color: var(--primary);
+            text-decoration: underline;
+        }
+        
+        .product-price {
+            display: flex;
+            align-items: baseline;
+            gap: 1rem;
+        }
+        
+        .current-price {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        
+        .original-price {
+            font-size: 1.5rem;
+            color: #999;
+            text-decoration: line-through;
+        }
+        
+        .save-amount {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background: #e8f5e9;
+            color: #2e7d32;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+        
+        .stock-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        
+        .stock-status.in-stock {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+        
+        .stock-status.low-stock {
+            background: #fff3e0;
+            color: #e65100;
+        }
+        
+        .stock-status.out-of-stock {
+            background: #ffebee;
+            color: #c62828;
+        }
+        
+        .product-description {
+            line-height: 1.8;
+            color: #666;
+        }
+        
+        .product-options {
+            display: grid;
+            gap: 1.25rem;
+        }
+        
+        .option-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: #333;
+        }
+        
+        .color-swatches {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+        
+        .color-swatch {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .color-swatch:hover {
+            transform: scale(1.1);
+        }
+        
+        .color-swatch.selected {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px white, 0 0 0 4px var(--primary);
+        }
+        
+        .option-group select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 0.95rem;
+        }
+        
+        .quantity-selector {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .quantity-input {
+            display: flex;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+        
+        .quantity-input button {
+            width: 40px;
+            height: 40px;
+            background: #f8f9fa;
+            border: none;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        
+        .quantity-input button:hover {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .quantity-input input {
+            width: 60px;
+            text-align: center;
+            border: none;
+            font-weight: 600;
+        }
+        
+        .action-buttons {
+            display: grid;
+            gap: 1rem;
+        }
+        
+        .btn {
+            padding: 1rem 2rem;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            cursor: pointer;
+            border: none;
+        }
+        
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: var(--secondary);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(139, 69, 19, 0.3);
+        }
+        
+        .btn-outline {
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            background: transparent;
+        }
+        
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .share-buttons {
+            display: flex;
+            gap: 0.75rem;
+            padding-top: 1rem;
+            border-top: 1px solid #e0e0e0;
+        }
+        
+        .share-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .share-btn.whatsapp {
+            background: #25D366;
+            color: white;
+        }
+        
+        .share-btn.facebook {
+            background: #1877F2;
+            color: white;
+        }
+        
+        .share-btn.twitter {
+            background: #1DA1F2;
+            color: white;
+        }
+        
+        .share-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        
+        .product-tabs {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-bottom: 3rem;
+        }
+        
+        .tab-nav {
+            display: flex;
+            gap: 2rem;
+            border-bottom: 2px solid #e0e0e0;
+            margin-bottom: 2rem;
+        }
+        
+        .tab-button {
+            padding: 1rem 0;
+            font-weight: 600;
+            color: #666;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            margin-bottom: -2px;
+            transition: all 0.3s ease;
+        }
+        
+        .tab-button.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .specifications-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .specifications-table tr {
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .specifications-table td {
+            padding: 1rem;
+        }
+        
+        .specifications-table td:first-child {
+            font-weight: 600;
+            color: #333;
+            width: 200px;
+        }
+        
+        .specifications-table td:last-child {
+            color: #666;
+        }
+        
+        .reviews-section {
+            display: grid;
+            gap: 2rem;
+        }
+        
+        .reviews-summary {
+            display: grid;
+            grid-template-columns: 200px 1fr;
+            gap: 2rem;
+            padding: 2rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        
+        .overall-rating {
+            text-align: center;
+        }
+        
+        .overall-rating-number {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        
+        .rating-bars {
+            display: grid;
+            gap: 0.5rem;
+        }
+        
+        .rating-bar {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .rating-bar-stars {
+            width: 80px;
+            font-size: 0.85rem;
+            color: #666;
+        }
+        
+        .rating-bar-fill {
+            flex: 1;
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .rating-bar-fill-inner {
+            height: 100%;
+            background: #ffc107;
+            border-radius: 4px;
+        }
+        
+        .rating-bar-count {
+            width: 40px;
+            text-align: right;
+            font-size: 0.85rem;
+            color: #666;
+        }
+        
+        .reviews-filters {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .reviews-filters select {
+            padding: 0.5rem 1rem;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-family: inherit;
+        }
+        
+        .review-item {
+            padding: 1.5rem;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+        
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+        
+        .reviewer-info {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .reviewer-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+        
+        .review-date {
+            color: #999;
+            font-size: 0.85rem;
+        }
+        
+        .review-text {
+            color: #666;
+            line-height: 1.6;
+        }
+        
+        .related-products {
+            margin-top: 3rem;
+        }
+        
+        .section-title {
+            font-family: var(--font-heading);
+            font-size: 2rem;
+            text-align: center;
+            margin-bottom: 2rem;
+            color: var(--primary);
+        }
+        
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+        }
+        
+        .product-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+        
+        .product-card-image {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+        }
+        
+        .product-card-content {
+            padding: 1.25rem;
+        }
+        
+        .product-card-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .product-card-price {
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+        
+        @media (max-width: 968px) {
+            .product-main {
+                grid-template-columns: 1fr;
+            }
+            
+            .main-image {
+                height: 400px;
+            }
+            
+            .product-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .reviews-summary {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 640px) {
+            .product-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="banner">
+        Free Shipping on Orders Above R1,500
+    </div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="logo">
+            <a href="index.html">
+                <img src="assets/images/logo.png" alt="Company Logo" class="logo-image" onerror="this.style.display='none';">
+            </a>
+        </div>
+
+        <div class="hamburger" id="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+
+        <ul class="nav-links" id="navLinks">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="shop.html">Shop</a></li>
+            <li><a href="index.html#about">About Us</a></li>
+            <li><a href="index.html#sale">Sale</a></li>
+            <li><a href="index.html#contact">Contact</a></li>
+        </ul>
+
+        <div class="nav-actions">
+            <a href="cart.html" class="nav-icon">
+                <i class="fas fa-shopping-cart"></i>
+                <span class="cart-badge" id="cartCount">0</span>
+            </a>
+            <a href="wishlist.html" class="nav-icon">
+                <i class="fas fa-heart"></i>
+            </a>
+            <div id="authArea"></div>
+        </div>
+    </nav>
+
+    <main class="product-page">
+        <!-- Breadcrumb -->
+        <div class="breadcrumb">
+            <a href="index.html">Home</a>
+            <span>/</span>
+            <a href="shop.html">Shop</a>
+            <span>/</span>
+            <span id="breadcrumbCategory">Category</span>
+            <span>/</span>
+            <span id="breadcrumbProduct">Product</span>
+        </div>
+
+        <div class="product-container">
+            <!-- Product Main Section -->
+            <div class="product-main">
+                <!-- Product Gallery -->
+                <div class="product-gallery">
+                    <div class="main-image-container">
+                        <img src="https://placehold.co/600x600?text=Product+Image" alt="Product" class="main-image" id="mainImage">
+                        <div class="sale-badge" id="saleBadge" style="display: none;">20% OFF</div>
+                    </div>
+                    <div class="thumbnail-nav" id="thumbnailNav">
+                        <div class="thumbnail active" onclick="changeImage(0)">
+                            <img src="https://placehold.co/150x150?text=Image+1" alt="Thumbnail 1">
+                        </div>
+                        <div class="thumbnail" onclick="changeImage(1)">
+                            <img src="https://placehold.co/150x150?text=Image+2" alt="Thumbnail 2">
+                        </div>
+                        <div class="thumbnail" onclick="changeImage(2)">
+                            <img src="https://placehold.co/150x150?text=Image+3" alt="Thumbnail 3">
+                        </div>
+                        <div class="thumbnail" onclick="changeImage(3)">
+                            <img src="https://placehold.co/150x150?text=Image+4" alt="Thumbnail 4">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product Info -->
+                <div class="product-info">
+                    <div class="product-header">
+                        <h1 id="productTitle">Premium Luxury Hair Wig</h1>
+                        <div class="product-meta">
+                            <span class="product-sku">SKU: <span id="productSku">WIG-001</span></span>
+                            <div class="rating">
+                                <div class="stars">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star-half-alt"></i>
+                                </div>
+                                <a href="#reviews" class="review-count">4.5 (125 reviews)</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="product-pricing">
+                        <div class="product-price">
+                            <span class="current-price" id="currentPrice">R2,500.00</span>
+                            <span class="original-price" id="originalPrice" style="display: none;">R3,125.00</span>
+                            <span class="save-amount" id="saveAmount" style="display: none;">Save R625.00</span>
+                        </div>
+                        <div class="stock-status in-stock" id="stockStatus">
+                            <i class="fas fa-check-circle"></i>
+                            <span>In Stock</span>
+                        </div>
+                    </div>
+
+                    <div class="product-description" id="productDescription">
+                        <p>Experience luxury with our premium human hair wig. Made from 100% authentic virgin hair, 
+                        this wig offers natural movement, exceptional comfort, and a flawless look. Perfect for any 
+                        occasion, our wigs are designed to boost your confidence and enhance your natural beauty.</p>
+                    </div>
+
+                    <div class="product-options">
+                        <div class="option-group">
+                            <label>Length / Size</label>
+                            <select id="lengthSelector">
+                                <option value="12">12 inches</option>
+                                <option value="14">14 inches</option>
+                                <option value="16" selected>16 inches</option>
+                                <option value="18">18 inches</option>
+                                <option value="20">20 inches</option>
+                                <option value="22">22 inches</option>
+                            </select>
+                        </div>
+
+                        <div class="option-group">
+                            <label>Color</label>
+                            <div class="color-swatches">
+                                <div class="color-swatch selected" style="background: #1B1B1B;" title="Natural Black" onclick="selectColor(this, 'Natural Black')"></div>
+                                <div class="color-swatch" style="background: #3B2820;" title="Dark Brown" onclick="selectColor(this, 'Dark Brown')"></div>
+                                <div class="color-swatch" style="background: #704214;" title="Medium Brown" onclick="selectColor(this, 'Medium Brown')"></div>
+                                <div class="color-swatch" style="background: #B5651D;" title="Light Brown" onclick="selectColor(this, 'Light Brown')"></div>
+                                <div class="color-swatch" style="background: linear-gradient(135deg, #1B1B1B 50%, #704214 50%);" title="Ombre" onclick="selectColor(this, 'Ombre')"></div>
+                            </div>
+                        </div>
+
+                        <div class="option-group">
+                            <label>Quantity</label>
+                            <div class="quantity-selector">
+                                <div class="quantity-input">
+                                    <button type="button" onclick="decreaseQuantity()"><i class="fas fa-minus"></i></button>
+                                    <input type="number" id="quantity" value="1" min="1" max="10" readonly>
+                                    <button type="button" onclick="increaseQuantity()"><i class="fas fa-plus"></i></button>
+                                </div>
+                                <span style="color: #666; font-size: 0.9rem;">Maximum 10 items</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="action-buttons">
+                        <button class="btn btn-primary" onclick="addToCart()">
+                            <i class="fas fa-shopping-cart"></i>
+                            Add to Cart
+                        </button>
+                        <button class="btn btn-outline" onclick="addToWishlist()">
+                            <i class="fas fa-heart"></i>
+                            Add to Wishlist
+                        </button>
+                    </div>
+
+                    <div class="share-buttons">
+                        <span style="color: #666; font-weight: 600;">Share:</span>
+                        <a href="#" class="share-btn whatsapp" onclick="shareProduct('whatsapp')" title="Share on WhatsApp">
+                            <i class="fab fa-whatsapp"></i>
+                        </a>
+                        <a href="#" class="share-btn facebook" onclick="shareProduct('facebook')" title="Share on Facebook">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="share-btn twitter" onclick="shareProduct('twitter')" title="Share on Twitter">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product Tabs -->
+            <div class="product-tabs">
+                <div class="tab-nav">
+                    <div class="tab-button active" onclick="switchTab('specifications')">Specifications</div>
+                    <div class="tab-button" onclick="switchTab('reviews')">Reviews (125)</div>
+                    <div class="tab-button" onclick="switchTab('shipping')">Shipping & Returns</div>
+                </div>
+
+                <!-- Specifications Tab -->
+                <div class="tab-content active" id="specifications-tab">
+                    <table class="specifications-table">
+                        <tr>
+                            <td>Hair Type</td>
+                            <td>100% Virgin Human Hair</td>
+                        </tr>
+                        <tr>
+                            <td>Texture</td>
+                            <td>Straight (Can be curled or styled)</td>
+                        </tr>
+                        <tr>
+                            <td>Cap Construction</td>
+                            <td>Lace Front with Adjustable Straps</td>
+                        </tr>
+                        <tr>
+                            <td>Hair Length</td>
+                            <td>Available in 12-22 inches</td>
+                        </tr>
+                        <tr>
+                            <td>Hair Density</td>
+                            <td>150% (Natural density)</td>
+                        </tr>
+                        <tr>
+                            <td>Color Options</td>
+                            <td>Natural Black, Dark Brown, Medium Brown, Light Brown, Ombre</td>
+                        </tr>
+                        <tr>
+                            <td>Material</td>
+                            <td>Premium Swiss Lace, Baby Hair</td>
+                        </tr>
+                        <tr>
+                            <td>Lifespan</td>
+                            <td>6-12 months with proper care</td>
+                        </tr>
+                        <tr>
+                            <td>Care Instructions</td>
+                            <td>Wash with sulfate-free shampoo, condition regularly, air dry preferred</td>
+                        </tr>
+                        <tr>
+                            <td>Origin</td>
+                            <td>Ethically sourced virgin hair</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <!-- Reviews Tab -->
+                <div class="tab-content" id="reviews-tab">
+                    <div class="reviews-section">
+                        <div class="reviews-summary">
+                            <div class="overall-rating">
+                                <div class="overall-rating-number">4.5</div>
+                                <div class="stars">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star-half-alt"></i>
+                                </div>
+                                <div style="color: #666; margin-top: 0.5rem;">125 reviews</div>
+                            </div>
+                            <div class="rating-bars">
+                                <div class="rating-bar">
+                                    <div class="rating-bar-stars">5 stars</div>
+                                    <div class="rating-bar-fill">
+                                        <div class="rating-bar-fill-inner" style="width: 70%"></div>
+                                    </div>
+                                    <div class="rating-bar-count">88</div>
+                                </div>
+                                <div class="rating-bar">
+                                    <div class="rating-bar-stars">4 stars</div>
+                                    <div class="rating-bar-fill">
+                                        <div class="rating-bar-fill-inner" style="width: 20%"></div>
+                                    </div>
+                                    <div class="rating-bar-count">25</div>
+                                </div>
+                                <div class="rating-bar">
+                                    <div class="rating-bar-stars">3 stars</div>
+                                    <div class="rating-bar-fill">
+                                        <div class="rating-bar-fill-inner" style="width: 8%"></div>
+                                    </div>
+                                    <div class="rating-bar-count">10</div>
+                                </div>
+                                <div class="rating-bar">
+                                    <div class="rating-bar-stars">2 stars</div>
+                                    <div class="rating-bar-fill">
+                                        <div class="rating-bar-fill-inner" style="width: 1%"></div>
+                                    </div>
+                                    <div class="rating-bar-count">1</div>
+                                </div>
+                                <div class="rating-bar">
+                                    <div class="rating-bar-stars">1 star</div>
+                                    <div class="rating-bar-fill">
+                                        <div class="rating-bar-fill-inner" style="width: 1%"></div>
+                                    </div>
+                                    <div class="rating-bar-count">1</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="reviews-filters">
+                            <select id="ratingFilter" onchange="filterReviews()">
+                                <option value="all">All Ratings</option>
+                                <option value="5">5 Stars</option>
+                                <option value="4">4 Stars</option>
+                                <option value="3">3 Stars</option>
+                                <option value="2">2 Stars</option>
+                                <option value="1">1 Star</option>
+                            </select>
+                            <select id="sortReviews" onchange="sortReviews()">
+                                <option value="recent">Most Recent</option>
+                                <option value="helpful">Most Helpful</option>
+                                <option value="rating-high">Highest Rated</option>
+                                <option value="rating-low">Lowest Rated</option>
+                            </select>
+                        </div>
+
+                        <div id="reviewsList">
+                            <div class="review-item">
+                                <div class="review-header">
+                                    <div class="reviewer-info">
+                                        <div class="reviewer-avatar">TM</div>
+                                        <div>
+                                            <div style="font-weight: 600;">Thandi Mkhize</div>
+                                            <div class="stars" style="font-size: 0.9rem;">
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="review-date">2 weeks ago</div>
+                                </div>
+                                <div class="review-text">
+                                    <strong>Absolutely amazing quality!</strong><br>
+                                    This wig exceeded my expectations. The hair is soft, natural-looking, and the lace 
+                                    melts perfectly into my skin. I've received so many compliments! Worth every rand.
+                                </div>
+                            </div>
+
+                            <div class="review-item">
+                                <div class="review-header">
+                                    <div class="reviewer-info">
+                                        <div class="reviewer-avatar">LN</div>
+                                        <div>
+                                            <div style="font-weight: 600;">Lerato Ndlovu</div>
+                                            <div class="stars" style="font-size: 0.9rem;">
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="far fa-star"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="review-date">1 month ago</div>
+                                </div>
+                                <div class="review-text">
+                                    <strong>Great product, fast delivery</strong><br>
+                                    Very happy with my purchase. The wig is beautiful and looks very natural. 
+                                    Delivery was quick. Only wish it came in more colors.
+                                </div>
+                            </div>
+
+                            <div class="review-item">
+                                <div class="review-header">
+                                    <div class="reviewer-info">
+                                        <div class="reviewer-avatar">NM</div>
+                                        <div>
+                                            <div style="font-weight: 600;">Nomsa Mokoena</div>
+                                            <div class="stars" style="font-size: 0.9rem;">
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="review-date">1 month ago</div>
+                                </div>
+                                <div class="review-text">
+                                    <strong>Perfect for everyday wear</strong><br>
+                                    I wear this wig daily and it still looks amazing after 2 months. Easy to maintain 
+                                    and style. Highly recommend!
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Shipping Tab -->
+                <div class="tab-content" id="shipping-tab">
+                    <h3 style="margin-bottom: 1rem;">Shipping Information</h3>
+                    <p style="line-height: 1.8; color: #666; margin-bottom: 1.5rem;">
+                        We offer nationwide delivery across South Africa:<br><br>
+                        <strong>Standard Shipping (5-7 business days):</strong> R150<br>
+                        <strong>Express Shipping (2-3 business days):</strong> R250<br>
+                        <strong>Free Shipping:</strong> On orders above R1,500<br><br>
+                        All orders are processed within 1-2 business days. You will receive a tracking number 
+                        once your order ships.
+                    </p>
+
+                    <h3 style="margin-bottom: 1rem; margin-top: 2rem;">Returns & Exchanges</h3>
+                    <p style="line-height: 1.8; color: #666;">
+                        We offer a 7-day return policy on all products. Items must be unused, in original 
+                        packaging, and in resalable condition. To initiate a return, please contact our 
+                        customer service team at support@premiumhairsa.co.za.<br><br>
+                        <strong>Note:</strong> Custom-colored or cut items cannot be returned for hygiene reasons.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Related Products -->
+            <div class="related-products">
+                <h2 class="section-title">You May Also Like</h2>
+                <div class="product-grid" id="relatedProducts">
+                    <!-- Related products will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Premium Hair Wigs & Extensions</h3>
+                <p>Premium Hair Wigs & Extensions Pty (Ltd)</p>
+                <p>CIPC & VAT Registered</p>
+                <p>POPIA Compliant</p>
+                <div class="social-links">
+                    <a href="https://facebook.com/premiumhairsa" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://instagram.com/premiumhairsa" target="_blank"><i class="fab fa-instagram"></i></a>
+                    <a href="https://twitter.com/premiumhairsa" target="_blank"><i class="fab fa-twitter"></i></a>
+                    <a href="https://wa.me/27715551234" target="_blank"><i class="fab fa-whatsapp"></i></a>
+                </div>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="shop.html">Shop All</a></li>
+                    <li><a href="index.html#sale">Sale</a></li>
+                    <li><a href="index.html#track">Track Order</a></li>
+                    <li><a href="index.html#about">About Us</a></li>
+                    <li><a href="index.html#contact">Contact</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Customer Service</h3>
+                <ul>
+                    <li><a href="#">Shipping Information</a></li>
+                    <li><a href="#">Returns & Exchanges</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Terms & Conditions</a></li>
+                    <li><a href="#">FAQ</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Contact Us</h3>
+                <p>📍 123 Luxury Lane, Protea Glen<br>Soweto, Johannesburg, Gauteng, 1818</p>
+                <p>📞 +27 71 555 1234</p>
+                <p>✉️ info@premiumhairsa.co.za</p>
+                <p><strong>Hours:</strong><br>Mon-Fri: 09:00-18:00<br>Sat: 09:00-14:00</p>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>&copy; 2024 Premium Hair Wigs & Extensions Pty (Ltd). All rights reserved. | CIPC Registered | VAT Registered | POPIA Compliant</p>
+        </div>
+    </footer>
+
+    <script src="js/config.js"></script>
+    <script src="js/security.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/products.js"></script>
+    <script src="js/cart.js"></script>
+    <script src="js/wishlist.js"></script>
+    <script>
+        let currentProduct = {
+            id: 'prod-001',
+            name: 'Premium Luxury Hair Wig',
+            sku: 'WIG-001',
+            price: 2500,
+            originalPrice: 3125,
+            category: 'Wigs',
+            images: [
+                'https://placehold.co/600x600?text=Product+Image+1',
+                'https://placehold.co/600x600?text=Product+Image+2',
+                'https://placehold.co/600x600?text=Product+Image+3',
+                'https://placehold.co/600x600?text=Product+Image+4'
+            ],
+            selectedColor: 'Natural Black',
+            selectedLength: '16'
+        };
+
+        window.addEventListener('DOMContentLoaded', () => {
+            loadProductFromURL();
+            loadRelatedProducts();
+            updateCartCount();
+            
+            // Mobile menu toggle
+            const hamburger = document.getElementById('hamburger');
+            const navLinks = document.getElementById('navLinks');
+            if (hamburger) {
+                hamburger.addEventListener('click', () => {
+                    navLinks.classList.toggle('active');
+                });
+            }
+            
+            // Add recently viewed
+            addToRecentlyViewed(currentProduct);
+        });
+
+        function loadProductFromURL() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const productId = urlParams.get('id');
+            
+            if (productId) {
+                // In a real app, fetch product data from API
+                // For now, use default data
+            }
+        }
+
+        function changeImage(index) {
+            const thumbnails = document.querySelectorAll('.thumbnail');
+            thumbnails.forEach((thumb, i) => {
+                thumb.classList.toggle('active', i === index);
+            });
+            
+            const mainImage = document.getElementById('mainImage');
+            mainImage.src = currentProduct.images[index];
+        }
+
+        function selectColor(element, color) {
+            document.querySelectorAll('.color-swatch').forEach(swatch => {
+                swatch.classList.remove('selected');
+            });
+            element.classList.add('selected');
+            currentProduct.selectedColor = color;
+        }
+
+        function increaseQuantity() {
+            const input = document.getElementById('quantity');
+            if (parseInt(input.value) < parseInt(input.max)) {
+                input.value = parseInt(input.value) + 1;
+            }
+        }
+
+        function decreaseQuantity() {
+            const input = document.getElementById('quantity');
+            if (parseInt(input.value) > parseInt(input.min)) {
+                input.value = parseInt(input.value) - 1;
+            }
+        }
+
+        function addToCart() {
+            const quantity = parseInt(document.getElementById('quantity').value);
+            const length = document.getElementById('lengthSelector').value;
+            
+            const cartItem = {
+                id: currentProduct.id,
+                name: currentProduct.name,
+                price: currentProduct.price,
+                image: currentProduct.images[0],
+                quantity: quantity,
+                color: currentProduct.selectedColor,
+                length: length + ' inches'
+            };
+            
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            
+            const existingIndex = cart.findIndex(item => 
+                item.id === cartItem.id && 
+                item.color === cartItem.color && 
+                item.length === cartItem.length
+            );
+            
+            if (existingIndex > -1) {
+                cart[existingIndex].quantity += quantity;
+            } else {
+                cart.push(cartItem);
+            }
+            
+            localStorage.setItem('cart', JSON.stringify(cart));
+            updateCartCount();
+            showToast('success', 'Product added to cart!');
+        }
+
+        function addToWishlist() {
+            let wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+            
+            if (!wishlist.find(item => item.id === currentProduct.id)) {
+                wishlist.push({
+                    id: currentProduct.id,
+                    name: currentProduct.name,
+                    price: currentProduct.price,
+                    image: currentProduct.images[0],
+                    category: currentProduct.category
+                });
+                localStorage.setItem('wishlist', JSON.stringify(wishlist));
+                showToast('success', 'Product added to wishlist!');
+            } else {
+                showToast('info', 'Product already in wishlist');
+            }
+        }
+
+        function shareProduct(platform) {
+            const url = window.location.href;
+            const text = `Check out ${currentProduct.name} at Premium Hair Wigs & Extensions`;
+            
+            let shareUrl = '';
+            
+            switch(platform) {
+                case 'whatsapp':
+                    shareUrl = `https://wa.me/?text=${encodeURIComponent(text + ' ' + url)}`;
+                    break;
+                case 'facebook':
+                    shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`;
+                    break;
+                case 'twitter':
+                    shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`;
+                    break;
+            }
+            
+            if (shareUrl) {
+                window.open(shareUrl, '_blank', 'width=600,height=400');
+            }
+            
+            return false;
+        }
+
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            event.target.classList.add('active');
+            document.getElementById(tabName + '-tab').classList.add('active');
+        }
+
+        function filterReviews() {
+            // Implement review filtering logic
+            showToast('info', 'Filtering reviews...');
+        }
+
+        function sortReviews() {
+            // Implement review sorting logic
+            showToast('info', 'Sorting reviews...');
+        }
+
+        function loadRelatedProducts() {
+            const relatedGrid = document.getElementById('relatedProducts');
+            
+            // Sample related products
+            const related = [
+                { id: 'prod-002', name: 'Curly Lace Front Wig', price: 2800, image: 'https://placehold.co/300x300?text=Product+2' },
+                { id: 'prod-003', name: 'Brazilian Wave Wig', price: 3200, image: 'https://placehold.co/300x300?text=Product+3' },
+                { id: 'prod-004', name: 'Clip-In Extensions', price: 1500, image: 'https://placehold.co/300x300?text=Product+4' },
+                { id: 'prod-005', name: 'Bob Style Wig', price: 2200, image: 'https://placehold.co/300x300?text=Product+5' }
+            ];
+            
+            relatedGrid.innerHTML = related.map(product => `
+                <div class="product-card" onclick="window.location.href='product.html?id=${product.id}'">
+                    <img src="${product.image}" alt="${product.name}" class="product-card-image">
+                    <div class="product-card-content">
+                        <div class="product-card-title">${product.name}</div>
+                        <div class="product-card-price">R${product.price.toFixed(2)}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function addToRecentlyViewed(product) {
+            let recent = JSON.parse(localStorage.getItem('recentlyViewed')) || [];
+            
+            recent = recent.filter(item => item.id !== product.id);
+            recent.unshift({
+                id: product.id,
+                name: product.name,
+                price: product.price,
+                image: product.images[0]
+            });
+            
+            if (recent.length > 10) {
+                recent = recent.slice(0, 10);
+            }
+            
+            localStorage.setItem('recentlyViewed', JSON.stringify(recent));
+        }
+
+        function updateCartCount() {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const count = cart.reduce((sum, item) => sum + item.quantity, 0);
+            const badge = document.getElementById('cartCount');
+            if (badge) {
+                badge.textContent = count;
+            }
+        }
+
+        function showToast(type, message) {
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            
+            const icons = {
+                success: 'fa-check-circle',
+                error: 'fa-exclamation-circle',
+                warning: 'fa-exclamation-triangle',
+                info: 'fa-info-circle'
+            };
+            
+            toast.innerHTML = `
+                <div class="toast-icon">
+                    <i class="fas ${icons[type]}"></i>
+                </div>
+                <div class="toast-content">
+                    <div class="toast-message">${message}</div>
+                </div>
+            `;
+            
+            let container = document.querySelector('.toast-container');
+            if (!container) {
+                container = document.createElement('div');
+                container.className = 'toast-container';
+                document.body.appendChild(container);
+            }
+            
+            container.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.animation = 'slideOutRight 0.3s forwards';
+                setTimeout(() => toast.remove(), 300);
+            }, 4000);
+        }
+    </script>
+</body>
+</html>
