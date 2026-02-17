@@ -61,6 +61,19 @@
 
         <!-- Auth Area (Login/Logout) -->
         <div class="nav-actions">
+            <!-- Cart Icon with Badge -->
+            <div class="nav-icon-container">
+                <i class="fas fa-shopping-cart icon-btn" onclick="navigateTo('cart')"></i>
+                <span id="cartBadge" class="badge">0</span>
+            </div>
+            
+            <!-- Wishlist Icon with Badge -->
+            <div class="nav-icon-container">
+                <i class="fas fa-heart icon-btn" onclick="navigateTo('wishlist')"></i>
+                <span id="wishlistBadge" class="badge">0</span>
+            </div>
+            
+            <!-- Auth Area -->
             <div id="authArea"></div>
         </div>
     </nav>
@@ -450,6 +463,96 @@
         </section>
     </div>
 
+    <!-- Shipping Information Page -->
+    <div id="shippingInfoPage" class="page">
+        <section>
+            <div class="container">
+                <h2 class="section-title">Shipping Information</h2>
+                <div class="info-content">
+                    <h3>Delivery Times</h3>
+                    <p>Standard delivery: 2-5 business days</p>
+                    <p>Express delivery: 1-2 business days</p>
+                    
+                    <h3>Shipping Costs</h3>
+                    <p>Free shipping on orders above R1,500</p>
+                    <p>Standard shipping: R50</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Returns & Exchanges Page -->
+    <div id="returnsPage" class="page">
+        <section>
+            <div class="container">
+                <h2 class="section-title">Returns & Exchanges</h2>
+                <div class="info-content">
+                    <h3>7-Day Return Policy</h3>
+                    <p>We offer a hassle-free 7-day return policy on all products.</p>
+                    
+                    <h3>How to Return</h3>
+                    <ol>
+                        <li>Contact us at support@premiumhairsa.co.za</li>
+                        <li>Pack the item securely in original packaging</li>
+                        <li>Ship back to our address</li>
+                    </ol>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Privacy Policy Page -->
+    <div id="privacyPage" class="page">
+        <section>
+            <div class="container">
+                <h2 class="section-title">Privacy Policy</h2>
+                <div class="info-content">
+                    <p>We are POPIA compliant and protect your personal information.</p>
+                    <h3>Information We Collect</h3>
+                    <p>Name, email, phone number, and shipping address.</p>
+                    
+                    <h3>How We Use Your Information</h3>
+                    <p>To process orders, communicate with you, and improve our services.</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Terms & Conditions Page -->
+    <div id="termsPage" class="page">
+        <section>
+            <div class="container">
+                <h2 class="section-title">Terms & Conditions</h2>
+                <div class="info-content">
+                    <h3>Use of Website</h3>
+                    <p>By using this website, you agree to these terms and conditions.</p>
+                    
+                    <h3>Product Information</h3>
+                    <p>We strive to ensure all product information is accurate.</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- FAQ Page -->
+    <div id="faqPage" class="page">
+        <section>
+            <div class="container">
+                <h2 class="section-title">Frequently Asked Questions</h2>
+                <div class="info-content">
+                    <h3>How do I track my order?</h3>
+                    <p>Use our Track Order page with your order number.</p>
+                    
+                    <h3>What payment methods do you accept?</h3>
+                    <p>We accept PayFast, credit/debit cards, and EFT.</p>
+                    
+                    <h3>Do you ship nationwide?</h3>
+                    <p>Yes, we ship to all provinces in South Africa.</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
     <div id="loginModal" class="modal">
         <div class="modal-content">
             <span class="close-modal" onclick="closeModal('loginModal')">&times;</span>
@@ -538,11 +641,11 @@
             <div class="footer-section">
                 <h3>Customer Service</h3>
                 <ul>
-                    <li><a href="#">Shipping Information</a></li>
-                    <li><a href="#">Returns & Exchanges</a></li>
-                    <li><a href="#">Privacy Policy</a></li>
-                    <li><a href="#">Terms & Conditions</a></li>
-                    <li><a href="#">FAQ</a></li>
+                    <li><a href="#" onclick="navigateTo('shippingInfo'); return false;">Shipping Information</a></li>
+                    <li><a href="#" onclick="navigateTo('returns'); return false;">Returns & Exchanges</a></li>
+                    <li><a href="#" onclick="navigateTo('privacy'); return false;">Privacy Policy</a></li>
+                    <li><a href="#" onclick="navigateTo('terms'); return false;">Terms & Conditions</a></li>
+                    <li><a href="#" onclick="navigateTo('faq'); return false;">FAQ</a></li>
                 </ul>
             </div>
             

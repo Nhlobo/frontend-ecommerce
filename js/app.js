@@ -280,7 +280,12 @@ function navigateTo(page) {
         'wishlist': 'wishlistPage',
         'contact': 'contactPage',
         'sale': 'salePage',
-        'product-detail': 'productDetailPage'
+        'product-detail': 'productDetailPage',
+        'shippingInfo': 'shippingInfoPage',
+        'returns': 'returnsPage',
+        'privacy': 'privacyPage',
+        'terms': 'termsPage',
+        'faq': 'faqPage'
     };
     
     const pageId = pageMap[page];

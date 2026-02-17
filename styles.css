@@ -190,6 +190,30 @@ nav {
     color: var(--primary);
 }
 
+.nav-icon-container {
+    position: relative;
+    display: inline-block;
+    margin-right: 1rem;
+    cursor: pointer;
+}
+
+.badge {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: var(--primary);
+    color: white;
+    font-size: 0.7rem;
+    font-weight: bold;
+    padding: 2px 6px;
+    border-radius: 50%;
+    min-width: 18px;
+    height: 18px;
+    display: none;
+    align-items: center;
+    justify-content: center;
+}
+
 .hamburger {
     display: none;
     flex-direction: column;
@@ -1518,4 +1542,41 @@ body.offline-mode::before {
     display: flex;
     gap: 1rem;
     justify-content: center;
+}
+
+/* ===== INFO CONTENT PAGES ===== */
+.info-content {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: var(--white);
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.info-content h3 {
+    color: var(--primary);
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+}
+
+.info-content h3:first-child {
+    margin-top: 0;
+}
+
+.info-content p {
+    line-height: 1.8;
+    margin-bottom: 1rem;
+    color: var(--text);
+}
+
+.info-content ol, .info-content ul {
+    margin-left: 2rem;
+    margin-bottom: 1rem;
+}
+
+.info-content li {
+    line-height: 1.8;
+    margin-bottom: 0.5rem;
 }
