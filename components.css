@@ -2022,3 +2022,68 @@
         font-size: 2rem;
     }
 }
+
+/* Stock Indicators */
+.stock-indicator {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+}
+
+.stock-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: all var(--transition-fast);
+}
+
+.stock-badge.in-stock {
+    background: #e8f5e9;
+    color: #2e7d32;
+}
+
+.stock-badge.low-stock {
+    background: #fff3e0;
+    color: #e65100;
+    animation: pulse-warning 2s ease-in-out infinite;
+}
+
+.stock-badge.out-of-stock {
+    background: #ffebee;
+    color: #c62828;
+}
+
+.stock-count {
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.stock-count.urgent {
+    color: #e65100;
+    font-weight: 600;
+}
+
+.notify-back-in-stock {
+    margin-top: 1rem;
+}
+
+.notify-back-in-stock .btn {
+    width: 100%;
+    max-width: 300px;
+}
+
+@keyframes pulse-warning {
+    0%, 100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(230, 81, 0, 0.4);
+    }
+    50% {
+        transform: scale(1.02);
+        box-shadow: 0 0 0 6px rgba(230, 81, 0, 0);
+    }
+}

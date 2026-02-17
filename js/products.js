@@ -399,6 +399,149 @@ class ProductService {
         this.cachedProducts = null;
         this.cacheTimestamp = null;
     }
+
+    /**
+     * Check product stock availability
+     */
+    async checkStock(productId, variantId = null) {
+        try {
+            const params = variantId ? `?variant=${variantId}` : '';
+            const response = await this.api.get(`${API_CONFIG.ENDPOINTS.productById(productId)}/stock${params}`);
+            
+            if (response.success) {
+                return {
+                    success: true,
+                    stock: response.stock
+                };
+            }
+
+            return {
+                success: false,
+                message: 'Failed to check stock'
+            };
+        } catch (error) {
+            console.error('Stock check error:', error);
+            return {
+                success: false,
+                message: error.message || 'Failed to check stock'
+            };
+        }
+    }
+
+    /**
+     * Get stock status and display information
+     */
+    getStockStatus(stock) {
+        if (!stock || stock <= 0) {
+            return {
+                status: 'out-of-stock',
+                badge: 'out-of-stock',
+                icon: 'times-circle',
+                text: 'Out of Stock',
+                available: false
+            };
+        }
+
+        if (stock <= 5) {
+            return {
+                status: 'low-stock',
+                badge: 'low-stock',
+                icon: 'exclamation-triangle',
+                text: `Only ${stock} left!`,
+                count: stock,
+                available: true,
+                urgent: true
+            };
+        }
+
+        return {
+            status: 'in-stock',
+            badge: 'in-stock',
+            icon: 'check-circle',
+            text: 'In Stock',
+            count: stock,
+            available: true
+        };
+    }
+
+    /**
+     * Render stock indicator HTML
+     */
+    renderStockIndicator(stock, containerId) {
+        const container = document.getElementById(containerId);
+        if (!container) return;
+
+        const stockInfo = this.getStockStatus(stock);
+        
+        container.innerHTML = `
+            <div class="stock-indicator">
+                <span class="stock-badge ${stockInfo.badge}">
+                    <i class="fas fa-${stockInfo.icon}"></i>
+                    ${stockInfo.text}
+                </span>
+                ${stockInfo.count && !stockInfo.urgent ? `<span class="stock-count">${stockInfo.count} available</span>` : ''}
+            </div>
+            ${!stockInfo.available ? `
+                <div class="notify-back-in-stock">
+                    <button class="btn btn-secondary" id="notifyMeBtn">
+                        <i class="fas fa-bell"></i> Notify When Available
+                    </button>
+                </div>
+            ` : ''}
+        `;
+
+        // Add notify button handler
+        if (!stockInfo.available) {
+            const notifyBtn = document.getElementById('notifyMeBtn');
+            if (notifyBtn) {
+                notifyBtn.addEventListener('click', () => {
+                    this.showNotifyDialog();
+                });
+            }
+        }
+    }
+
+    /**
+     * Show notify me dialog
+     */
+    showNotifyDialog() {
+        // Check if user is logged in
+        const user = this.getCurrentUser();
+        
+        if (!user) {
+            this.showToast('Please log in to set up stock notifications', 'info');
+            return;
+        }
+
+        this.showToast('You will be notified when this product is back in stock', 'success');
+        // In a real app, this would make an API call to register the notification
+    }
+
+    /**
+     * Get current user
+     */
+    getCurrentUser() {
+        const userStr = localStorage.getItem('user');
+        if (userStr) {
+            try {
+                return JSON.parse(userStr);
+            } catch (e) {
+                return null;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Show toast notification
+     */
+    showToast(message, type = 'info') {
+        if (typeof showToast === 'function') {
+            showToast(type, message);
+        } else {
+            console.log(`[${type.toUpperCase()}] ${message}`);
+        }
+    }
 }
 
 // Export for use in other modules

@@ -742,9 +742,8 @@
                             <span class="original-price" id="originalPrice" style="display: none;">R3,125.00</span>
                             <span class="save-amount" id="saveAmount" style="display: none;">Save R625.00</span>
                         </div>
-                        <div class="stock-status in-stock" id="stockStatus">
-                            <i class="fas fa-check-circle"></i>
-                            <span>In Stock</span>
+                        <div id="stockStatus">
+                            <!-- Stock indicator will be rendered here -->
                         </div>
                     </div>
 
@@ -1138,6 +1137,15 @@
             loadProductFromURL();
             loadRelatedProducts();
             updateCartCount();
+            
+            // Initialize stock indicator
+            if (typeof ProductService !== 'undefined') {
+                const apiService = new APIService();
+                const productService = new ProductService(apiService);
+                // For demo, show stock with random availability
+                const demoStock = Math.floor(Math.random() * 20);
+                productService.renderStockIndicator(demoStock, 'stockStatus');
+            }
             
             // Initialize reviews
             if (typeof ReviewsService !== 'undefined') {

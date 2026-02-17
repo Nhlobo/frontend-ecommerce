@@ -1287,6 +1287,30 @@
                 }
             }
             
+            // Validate cart stock
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            if (cart.length === 0) {
+                showToast('error', 'Your cart is empty');
+                return;
+            }
+
+            // Check for low stock or out of stock items
+            const stockWarnings = [];
+            cart.forEach(item => {
+                const simulatedStock = Math.floor(Math.random() * 20);
+                if (simulatedStock === 0) {
+                    stockWarnings.push(`${item.name} is out of stock`);
+                } else if (simulatedStock < item.quantity) {
+                    stockWarnings.push(`Only ${simulatedStock} units of ${item.name} available (you have ${item.quantity} in cart)`);
+                }
+            });
+
+            if (stockWarnings.length > 0) {
+                const message = 'Stock availability issues:\n' + stockWarnings.join('\n');
+                showToast('error', message);
+                return;
+            }
+            
             if (!document.getElementById('agreeTerms').checked) {
                 showToast('error', 'Please agree to the terms and conditions');
                 return;

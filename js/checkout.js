@@ -460,6 +460,71 @@ class CheckoutService {
             throw error;
         }
     }
+
+    /**
+     * Validate cart stock before checkout
+     */
+    async validateCartStock() {
+        const cartItems = this.cart.getItems();
+        
+        if (!cartItems || cartItems.length === 0) {
+            return {
+                success: false,
+                message: 'Your cart is empty'
+            };
+        }
+
+        const stockIssues = [];
+        
+        for (const item of cartItems) {
+            // In a real app, this would make an API call to check stock
+            // For demo purposes, we'll simulate stock checking
+            const availableStock = Math.floor(Math.random() * 20); // Simulated stock
+            
+            if (availableStock === 0) {
+                stockIssues.push({
+                    item,
+                    issue: 'out-of-stock',
+                    message: `${item.name} is currently out of stock`
+                });
+            } else if (item.quantity > availableStock) {
+                stockIssues.push({
+                    item,
+                    issue: 'insufficient-stock',
+                    availableStock,
+                    message: `Only ${availableStock} units of ${item.name} available (you have ${item.quantity} in cart)`
+                });
+            }
+        }
+
+        if (stockIssues.length > 0) {
+            return {
+                success: false,
+                issues: stockIssues,
+                message: 'Some items in your cart are no longer available or have insufficient stock'
+            };
+        }
+
+        return {
+            success: true,
+            message: 'All items are available'
+        };
+    }
+
+    /**
+     * Update cart based on stock validation results
+     */
+    updateCartForStockIssues(issues) {
+        issues.forEach(({ item, issue, availableStock }) => {
+            if (issue === 'out-of-stock') {
+                // Remove item from cart
+                this.cart.removeItem(item.id);
+            } else if (issue === 'insufficient-stock') {
+                // Update quantity to available stock
+                this.cart.updateQuantity(item.id, availableStock);
+            }
+        });
+    }
 }
 
 // Export for use in other modules
