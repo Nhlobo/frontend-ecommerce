@@ -590,16 +590,16 @@
     <div class="sale-container">
         <div class="sale-controls">
             <div class="sale-tabs">
-                <button class="sale-tab active" data-category="all" onclick="filterByCategory('all')">
+                <button class="sale-tab active" data-category="all" onclick="filterByCategory('all', event)">
                     All Sale Items
                 </button>
-                <button class="sale-tab" data-category="wigs" onclick="filterByCategory('wigs')">
+                <button class="sale-tab" data-category="wigs" onclick="filterByCategory('wigs', event)">
                     Wigs
                 </button>
-                <button class="sale-tab" data-category="extensions" onclick="filterByCategory('extensions')">
+                <button class="sale-tab" data-category="extensions" onclick="filterByCategory('extensions', event)">
                     Extensions
                 </button>
-                <button class="sale-tab" data-category="accessories" onclick="filterByCategory('accessories')">
+                <button class="sale-tab" data-category="accessories" onclick="filterByCategory('accessories', event)">
                     Accessories
                 </button>
             </div>
@@ -926,12 +926,16 @@
         }
 
         // Filter by category
-        function filterByCategory(category) {
+        function filterByCategory(category, event) {
             // Update active tab
             document.querySelectorAll('.sale-tab').forEach(tab => {
                 tab.classList.remove('active');
             });
-            event.target.classList.add('active');
+            if (event && event.target) {
+                event.target.classList.add('active');
+            } else {
+                document.querySelector(`[data-category="${category}"]`).classList.add('active');
+            }
 
             // Filter products
             if (category === 'all') {

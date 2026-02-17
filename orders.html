@@ -460,16 +460,16 @@
     <div class="orders-container">
         <div class="orders-controls">
             <div class="filter-tabs">
-                <button class="filter-tab active" data-status="all" onclick="filterOrders('all')">
+                <button class="filter-tab active" data-status="all" onclick="filterOrders('all', event)">
                     All Orders <span class="badge" id="badgeAll">0</span>
                 </button>
-                <button class="filter-tab" data-status="processing" onclick="filterOrders('processing')">
+                <button class="filter-tab" data-status="processing" onclick="filterOrders('processing', event)">
                     Processing <span class="badge" id="badgeProcessing">0</span>
                 </button>
-                <button class="filter-tab" data-status="completed" onclick="filterOrders('completed')">
+                <button class="filter-tab" data-status="completed" onclick="filterOrders('completed', event)">
                     Completed <span class="badge" id="badgeCompleted">0</span>
                 </button>
-                <button class="filter-tab" data-status="cancelled" onclick="filterOrders('cancelled')">
+                <button class="filter-tab" data-status="cancelled" onclick="filterOrders('cancelled', event)">
                     Cancelled <span class="badge" id="badgeCancelled">0</span>
                 </button>
             </div>
@@ -649,12 +649,16 @@
         }
 
         // Filter orders
-        function filterOrders(status) {
+        function filterOrders(status, event) {
             // Update active tab
             document.querySelectorAll('.filter-tab').forEach(tab => {
                 tab.classList.remove('active');
             });
-            event.target.classList.add('active');
+            if (event && event.target) {
+                event.target.classList.add('active');
+            } else {
+                document.querySelector(`[data-status="${status}"]`).classList.add('active');
+            }
 
             // Filter
             if (status === 'all') {
@@ -833,7 +837,8 @@
         // Update cart count
         function updateCartCount() {
             const cart = JSON.parse(localStorage.getItem('cart') || '[]');
-            document.getElementById('cartCount').textContent = cart.length;
+            const count = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
+            document.getElementById('cartCount').textContent = count;
         }
 
         // Mobile menu toggle
