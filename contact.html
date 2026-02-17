@@ -903,19 +903,23 @@
 
         function sanitizeInput(input) {
             if (typeof input !== 'string') return '';
-            // Remove all dangerous patterns in a single pass
+            
             let sanitized = input;
             
             // Remove HTML special characters
             sanitized = sanitized.replace(/[<>"'`]/g, '');
             
             // Remove dangerous protocols
-            const dangerousProtocols = /\b(javascript|data|vbscript):/gi;
-            sanitized = sanitized.replace(dangerousProtocols, '');
+            sanitized = sanitized.replace(/\b(javascript|data|vbscript):/gi, '');
             
-            // Remove event handlers - handle both patterns together
-            const eventHandlers = /\bon\w+\s*[=(]/gi;
-            sanitized = sanitized.replace(eventHandlers, '');
+            // Remove event handlers - use multiple passes to ensure complete removal
+            // First pass: remove "on" + word + spaces + "=" or "("
+            while (/\bon\w+\s*[=(]/i.test(sanitized)) {
+                sanitized = sanitized.replace(/\bon\w+\s*[=(]/gi, '');
+            }
+            
+            // Second pass: remove any remaining onclick, onload, etc patterns
+            sanitized = sanitized.replace(/\b(on\w+)\b/gi, '');
             
             // Encode ampersands
             sanitized = sanitized.replace(/&/g, '&amp;');
