@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Order Details - View complete order information, tracking, and download invoice at Premium Hair Wigs & Extensions.">
+    <meta name="keywords" content="order details, order tracking, invoice, order information, South Africa">
+    <meta name="author" content="Premium Hair Wigs & Extensions Pty (Ltd)">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Order Details - Premium Hair Wigs & Extensions</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="components.css">
+    <link rel="stylesheet" href="responsive.css">
+    
+    <style>
+        body {
+            background: #f8f9fa;
+        }
+
+        .order-details-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1rem 3rem;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+            margin-bottom: 1.5rem;
+            transition: all 0.3s;
+        }
+
+        .back-link:hover {
+            gap: 0.75rem;
+        }
+
+        .order-header {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+        }
+
+        .order-info h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .order-meta {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+            color: #6c757d;
+            font-size: 0.95rem;
+        }
+
+        .order-meta span {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .status-badge.processing {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-badge.shipped {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+
+        .status-badge.delivered {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-badge.cancelled {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .order-actions {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-action {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: white;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-action:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .order-timeline {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 2rem;
+        }
+
+        .timeline-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+        }
+
+        .timeline {
+            position: relative;
+            padding-left: 3rem;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0.875rem;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: #e9ecef;
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-bottom: 2rem;
+        }
+
+        .timeline-item:last-child {
+            padding-bottom: 0;
+        }
+
+        .timeline-marker {
+            position: absolute;
+            left: -2.5rem;
+            width: 2rem;
+            height: 2rem;
+            border-radius: 50%;
+            background: white;
+            border: 3px solid #e9ecef;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            z-index: 1;
+        }
+
+        .timeline-item.completed .timeline-marker {
+            background: #28a745;
+            border-color: #28a745;
+            color: white;
+        }
+
+        .timeline-item.active .timeline-marker {
+            background: #ffc107;
+            border-color: #ffc107;
+            color: white;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(255, 193, 7, 0.4); }
+            50% { box-shadow: 0 0 0 10px rgba(255, 193, 7, 0); }
+        }
+
+        .timeline-content {
+            background: #f8f9fa;
+            padding: 1rem 1.25rem;
+            border-radius: 8px;
+        }
+
+        .timeline-content h4 {
+            margin: 0 0 0.25rem 0;
+            font-size: 1rem;
+            color: #333;
+        }
+
+        .timeline-content p {
+            margin: 0;
+            font-size: 0.875rem;
+            color: #6c757d;
+        }
+
+        .order-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .order-items {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .section-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+        }
+
+        .items-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .items-table th,
+        .items-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .items-table th {
+            font-weight: 600;
+            color: #6c757d;
+            font-size: 0.875rem;
+            text-transform: uppercase;
+        }
+
+        .item-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .item-image {
+            width: 60px;
+            height: 60px;
+            border-radius: 8px;
+            object-fit: cover;
+        }
+
+        .item-name {
+            font-weight: 500;
+            color: #333;
+        }
+
+        .item-sku {
+            font-size: 0.875rem;
+            color: #6c757d;
+        }
+
+        .order-sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .info-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .info-card h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.25rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .info-card p {
+            margin: 0.5rem 0;
+            font-size: 0.95rem;
+            color: #495057;
+            line-height: 1.6;
+        }
+
+        .info-card strong {
+            color: #333;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .summary-row:last-child {
+            border-bottom: none;
+        }
+
+        .summary-row.total {
+            font-weight: 600;
+            font-size: 1.25rem;
+            color: var(--primary);
+            padding-top: 1rem;
+            margin-top: 0.5rem;
+            border-top: 2px solid var(--primary);
+        }
+
+        .cancel-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .cancel-modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+        }
+
+        .modal-content h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.75rem;
+            margin-bottom: 1rem;
+            color: #333;
+        }
+
+        .modal-content p {
+            color: #6c757d;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        @media (max-width: 968px) {
+            .order-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .order-header {
+                flex-direction: column;
+            }
+
+            .order-actions {
+                width: 100%;
+            }
+
+            .btn-action {
+                flex: 1;
+                justify-content: center;
+            }
+
+            .items-table {
+                font-size: 0.875rem;
+            }
+
+            .item-image {
+                width: 50px;
+                height: 50px;
+            }
+        }
+
+        @media print {
+            .back-link,
+            .order-actions,
+            nav,
+            footer {
+                display: none !important;
+            }
+
+            .order-details-container {
+                max-width: 100%;
+                padding: 0;
+            }
+
+            body {
+                background: white;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="banner">
+        Free Shipping on Orders Above R1,500
+    </div>
+
+    <nav>
+        <div class="logo">
+            <img src="assets/images/logo.png" alt="Company Logo" class="logo-image" onerror="this.style.display='none';">
+        </div>
+
+        <div class="hamburger" id="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+
+        <ul class="nav-links" id="navLinks">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="shop.html">Shop</a></li>
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="sale.html">Sale</a></li>
+            <li><a href="contact.html">Contact</a></li>
+        </ul>
+
+        <div class="nav-actions">
+            <a href="cart.html" class="nav-icon">
+                <i class="fas fa-shopping-cart"></i>
+                <span class="cart-count" id="cartCount">0</span>
+            </a>
+            <a href="wishlist.html" class="nav-icon">
+                <i class="fas fa-heart"></i>
+            </a>
+            <a href="account.html" class="nav-icon">
+                <i class="fas fa-user"></i>
+            </a>
+        </div>
+    </nav>
+
+    <div class="order-details-container">
+        <a href="orders.html" class="back-link">
+            <i class="fas fa-arrow-left"></i>
+            Back to Orders
+        </a>
+
+        <div id="orderContent">
+            <div style="text-align: center; padding: 3rem;">
+                <i class="fas fa-spinner fa-spin" style="font-size: 3rem; color: var(--primary);"></i>
+                <p style="margin-top: 1rem; color: #6c757d;">Loading order details...</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="cancel-modal" id="cancelModal">
+        <div class="modal-content">
+            <h3>Cancel Order?</h3>
+            <p>Are you sure you want to cancel this order? This action cannot be undone.</p>
+            <div class="modal-actions">
+                <button class="btn-action btn-secondary" onclick="closeCancelModal()">
+                    No, Keep Order
+                </button>
+                <button class="btn-action btn-danger" onclick="confirmCancel()">
+                    Yes, Cancel Order
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Premium Hair Wigs & Extensions</h3>
+                <p>Premium Hair Wigs & Extensions Pty (Ltd)</p>
+                <p>CIPC & VAT Registered</p>
+                <p>POPIA Compliant</p>
+                <div class="social-links">
+                    <a href="https://facebook.com/premiumhairsa" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://instagram.com/premiumhairsa" target="_blank"><i class="fab fa-instagram"></i></a>
+                    <a href="https://twitter.com/premiumhairsa" target="_blank"><i class="fab fa-twitter"></i></a>
+                    <a href="https://wa.me/27715551234" target="_blank"><i class="fab fa-whatsapp"></i></a>
+                </div>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="shop.html">Shop All</a></li>
+                    <li><a href="sale.html">Sale</a></li>
+                    <li><a href="orders.html">My Orders</a></li>
+                    <li><a href="about.html">About Us</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Customer Service</h3>
+                <ul>
+                    <li><a href="#">Shipping Information</a></li>
+                    <li><a href="#">Returns & Exchanges</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Terms & Conditions</a></li>
+                    <li><a href="#">FAQ</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Contact Us</h3>
+                <p>📍 123 Luxury Lane, Protea Glen<br>Soweto, Johannesburg, Gauteng, 1818</p>
+                <p>📞 +27 71 555 1234</p>
+                <p>✉️ info@premiumhairsa.co.za</p>
+                <p><strong>Hours:</strong><br>Mon-Fri: 09:00-18:00<br>Sat: 09:00-14:00</p>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>&copy; 2024 Premium Hair Wigs & Extensions Pty (Ltd). All rights reserved. | CIPC Registered | VAT Registered | POPIA Compliant</p>
+        </div>
+    </footer>
+
+    <script src="js/config.js"></script>
+    <script src="js/security.js"></script>
+    <script src="js/utils.js"></script>
+    <script>
+        // Mock order data
+        const mockOrderDetails = {
+            'ORD-2024-001': {
+                id: 'ORD-2024-001',
+                date: '2024-02-15',
+                status: 'delivered',
+                items: [
+                    {
+                        name: 'Brazilian Curly Wig',
+                        sku: 'WIG-BCW-001',
+                        quantity: 1,
+                        price: 1500.00,
+                        image: 'assets/images/products/wig1.jpg'
+                    },
+                    {
+                        name: 'Silk Press Extensions',
+                        sku: 'EXT-SPE-002',
+                        quantity: 1,
+                        price: 850.00,
+                        image: 'assets/images/products/ext1.jpg'
+                    },
+                    {
+                        name: 'Wig Cap',
+                        sku: 'ACC-WC-001',
+                        quantity: 2,
+                        price: 50.00,
+                        image: 'assets/images/products/cap1.jpg'
+                    }
+                ],
+                shippingAddress: {
+                    name: 'Jane Smith',
+                    street: '456 Fashion Avenue',
+                    city: 'Johannesburg',
+                    province: 'Gauteng',
+                    postal: '2000',
+                    phone: '+27 71 555 5678'
+                },
+                billingAddress: {
+                    name: 'Jane Smith',
+                    street: '456 Fashion Avenue',
+                    city: 'Johannesburg',
+                    province: 'Gauteng',
+                    postal: '2000'
+                },
+                payment: {
+                    method: 'Credit Card',
+                    last4: '4242'
+                },
+                summary: {
+                    subtotal: 2450.00,
+                    shipping: 0.00,
+                    vat: 368.50,
+                    discount: 0.00,
+                    total: 2450.00
+                },
+                timeline: [
+                    { status: 'ordered', label: 'Order Placed', date: '2024-02-15 10:30', completed: true },
+                    { status: 'processing', label: 'Processing', date: '2024-02-15 14:20', completed: true },
+                    { status: 'shipped', label: 'Shipped', date: '2024-02-16 09:15', completed: true },
+                    { status: 'delivered', label: 'Delivered', date: '2024-02-18 15:45', completed: true, active: false }
+                ]
+            },
+            'ORD-2024-002': {
+                id: 'ORD-2024-002',
+                date: '2024-02-10',
+                status: 'shipped',
+                items: [
+                    {
+                        name: 'Lace Front Wig',
+                        sku: 'WIG-LFW-003',
+                        quantity: 1,
+                        price: 1750.00,
+                        image: 'assets/images/products/wig2.jpg'
+                    },
+                    {
+                        name: 'Wig Adhesive',
+                        sku: 'ACC-WA-002',
+                        quantity: 1,
+                        price: 100.00,
+                        image: 'assets/images/products/adhesive1.jpg'
+                    }
+                ],
+                shippingAddress: {
+                    name: 'Jane Smith',
+                    street: '456 Fashion Avenue',
+                    city: 'Johannesburg',
+                    province: 'Gauteng',
+                    postal: '2000',
+                    phone: '+27 71 555 5678'
+                },
+                billingAddress: null,
+                payment: {
+                    method: 'PayFast',
+                    last4: 'N/A'
+                },
+                summary: {
+                    subtotal: 1850.00,
+                    shipping: 0.00,
+                    vat: 278.25,
+                    discount: 0.00,
+                    total: 1850.00
+                },
+                timeline: [
+                    { status: 'ordered', label: 'Order Placed', date: '2024-02-10 14:15', completed: true },
+                    { status: 'processing', label: 'Processing', date: '2024-02-10 16:30', completed: true },
+                    { status: 'shipped', label: 'Shipped', date: '2024-02-12 10:00', completed: true, active: true },
+                    { status: 'delivered', label: 'Out for Delivery', date: 'Estimated: 2024-02-20', completed: false }
+                ]
+            },
+            'ORD-2024-003': {
+                id: 'ORD-2024-003',
+                date: '2024-02-05',
+                status: 'processing',
+                items: [
+                    {
+                        name: 'Clip-in Extensions',
+                        sku: 'EXT-CI-005',
+                        quantity: 1,
+                        price: 950.00,
+                        image: 'assets/images/products/ext2.jpg'
+                    }
+                ],
+                shippingAddress: {
+                    name: 'Jane Smith',
+                    street: '456 Fashion Avenue',
+                    city: 'Johannesburg',
+                    province: 'Gauteng',
+                    postal: '2000',
+                    phone: '+27 71 555 5678'
+                },
+                billingAddress: null,
+                payment: {
+                    method: 'EFT',
+                    last4: 'N/A'
+                },
+                summary: {
+                    subtotal: 950.00,
+                    shipping: 0.00,
+                    vat: 142.50,
+                    discount: 0.00,
+                    total: 950.00
+                },
+                timeline: [
+                    { status: 'ordered', label: 'Order Placed', date: '2024-02-05 11:20', completed: true },
+                    { status: 'processing', label: 'Processing', date: '2024-02-05 15:00', completed: true, active: true },
+                    { status: 'shipped', label: 'Awaiting Shipment', date: 'Estimated: 2024-02-22', completed: false },
+                    { status: 'delivered', label: 'Delivery', date: 'Estimated: 2024-02-25', completed: false }
+                ]
+            }
+        };
+
+        let currentOrder = null;
+
+        // Check authentication
+        function checkAuth() {
+            const user = JSON.parse(localStorage.getItem('user') || 'null');
+            if (!user) {
+                window.location.href = 'login.html?redirect=order-details';
+                return false;
+            }
+            return true;
+        }
+
+        // Get order ID from URL
+        function getOrderId() {
+            const params = new URLSearchParams(window.location.search);
+            return params.get('id');
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            if (!checkAuth()) return;
+
+            const orderId = getOrderId();
+            if (!orderId) {
+                window.location.href = 'orders.html';
+                return;
+            }
+
+            setTimeout(() => {
+                loadOrderDetails(orderId);
+            }, 1000);
+
+            updateCartCount();
+
+            // Check if should scroll to tracking
+            if (window.location.hash === '#tracking') {
+                setTimeout(() => {
+                    document.querySelector('.order-timeline')?.scrollIntoView({ behavior: 'smooth' });
+                }, 1500);
+            }
+        });
+
+        // Load order details
+        function loadOrderDetails(orderId) {
+            const order = mockOrderDetails[orderId];
+            
+            if (!order) {
+                document.getElementById('orderContent').innerHTML = `
+                    <div style="text-align: center; padding: 3rem;">
+                        <i class="fas fa-exclamation-triangle" style="font-size: 3rem; color: #dc3545;"></i>
+                        <h3 style="margin-top: 1rem;">Order Not Found</h3>
+                        <p style="color: #6c757d;">The order you're looking for doesn't exist.</p>
+                        <a href="orders.html" class="btn-action btn-primary" style="margin-top: 1rem; text-decoration: none;">
+                            View All Orders
+                        </a>
+                    </div>
+                `;
+                return;
+            }
+
+            currentOrder = order;
+            renderOrderDetails(order);
+        }
+
+        // Render order details
+        function renderOrderDetails(order) {
+            const canCancel = order.status === 'processing' || order.status === 'ordered';
+            const billingDifferent = order.billingAddress !== null;
+            
+            document.getElementById('orderContent').innerHTML = `
+                <div class="order-header">
+                    <div class="order-info">
+                        <h1>Order ${order.id}</h1>
+                        <div class="order-meta">
+                            <span><i class="fas fa-calendar"></i> ${formatDate(order.date)}</span>
+                            <span><i class="fas fa-box"></i> ${order.items.length} item${order.items.length > 1 ? 's' : ''}</span>
+                        </div>
+                    </div>
+                    <div>
+                        <span class="status-badge ${order.status}">${order.status}</span>
+                    </div>
+                </div>
+
+                <div class="order-actions">
+                    <button class="btn-action btn-primary" onclick="downloadInvoice()">
+                        <i class="fas fa-download"></i> Download Invoice
+                    </button>
+                    <button class="btn-action btn-secondary" onclick="printOrder()">
+                        <i class="fas fa-print"></i> Print
+                    </button>
+                    ${canCancel ? `
+                        <button class="btn-action btn-danger" onclick="showCancelModal()">
+                            <i class="fas fa-times"></i> Cancel Order
+                        </button>
+                    ` : ''}
+                </div>
+
+                <div class="order-timeline" id="tracking">
+                    <h2 class="timeline-title">Order Tracking</h2>
+                    <div class="timeline">
+                        ${order.timeline.map(item => `
+                            <div class="timeline-item ${item.completed ? 'completed' : ''} ${item.active ? 'active' : ''}">
+                                <div class="timeline-marker">
+                                    ${item.completed ? '<i class="fas fa-check"></i>' : ''}
+                                </div>
+                                <div class="timeline-content">
+                                    <h4>${item.label}</h4>
+                                    <p>${item.date}</p>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+
+                <div class="order-grid">
+                    <div class="order-items">
+                        <h2 class="section-title">Order Items</h2>
+                        <table class="items-table">
+                            <thead>
+                                <tr>
+                                    <th>Product</th>
+                                    <th>Quantity</th>
+                                    <th>Price</th>
+                                    <th>Subtotal</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${order.items.map(item => `
+                                    <tr>
+                                        <td>
+                                            <div class="item-info">
+                                                <img src="${item.image}" alt="${item.name}" class="item-image" onerror="this.src='assets/images/placeholder.jpg'">
+                                                <div>
+                                                    <div class="item-name">${item.name}</div>
+                                                    <div class="item-sku">SKU: ${item.sku}</div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>${item.quantity}</td>
+                                        <td>R${item.price.toFixed(2)}</td>
+                                        <td><strong>R${(item.price * item.quantity).toFixed(2)}</strong></td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="order-sidebar">
+                        <div class="info-card">
+                            <h3>Shipping Address</h3>
+                            <p><strong>${order.shippingAddress.name}</strong></p>
+                            <p>${order.shippingAddress.street}</p>
+                            <p>${order.shippingAddress.city}, ${order.shippingAddress.province}</p>
+                            <p>${order.shippingAddress.postal}</p>
+                            <p>${order.shippingAddress.phone}</p>
+                        </div>
+
+                        ${billingDifferent ? `
+                            <div class="info-card">
+                                <h3>Billing Address</h3>
+                                <p><strong>${order.billingAddress.name}</strong></p>
+                                <p>${order.billingAddress.street}</p>
+                                <p>${order.billingAddress.city}, ${order.billingAddress.province}</p>
+                                <p>${order.billingAddress.postal}</p>
+                            </div>
+                        ` : ''}
+
+                        <div class="info-card">
+                            <h3>Payment Method</h3>
+                            <p><strong>${order.payment.method}</strong></p>
+                            ${order.payment.last4 !== 'N/A' ? `<p>**** **** **** ${order.payment.last4}</p>` : ''}
+                        </div>
+
+                        <div class="info-card">
+                            <h3>Order Summary</h3>
+                            <div class="summary-row">
+                                <span>Subtotal:</span>
+                                <span>R${order.summary.subtotal.toFixed(2)}</span>
+                            </div>
+                            <div class="summary-row">
+                                <span>Shipping:</span>
+                                <span>${order.summary.shipping === 0 ? 'FREE' : 'R' + order.summary.shipping.toFixed(2)}</span>
+                            </div>
+                            <div class="summary-row">
+                                <span>VAT (15%):</span>
+                                <span>R${order.summary.vat.toFixed(2)}</span>
+                            </div>
+                            ${order.summary.discount > 0 ? `
+                                <div class="summary-row">
+                                    <span>Discount:</span>
+                                    <span style="color: #28a745;">-R${order.summary.discount.toFixed(2)}</span>
+                                </div>
+                            ` : ''}
+                            <div class="summary-row total">
+                                <span>Total:</span>
+                                <span>R${order.summary.total.toFixed(2)}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Format date
+        function formatDate(dateStr) {
+            const date = new Date(dateStr);
+            return date.toLocaleDateString('en-ZA', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+        }
+
+        // Download invoice
+        function downloadInvoice() {
+            alert('Invoice download will be available soon. This will generate a PDF of your order.');
+            // In production: Generate and download PDF
+        }
+
+        // Print order
+        function printOrder() {
+            window.print();
+        }
+
+        // Show cancel modal
+        function showCancelModal() {
+            document.getElementById('cancelModal').classList.add('show');
+        }
+
+        // Close cancel modal
+        function closeCancelModal() {
+            document.getElementById('cancelModal').classList.remove('show');
+        }
+
+        // Confirm cancel
+        function confirmCancel() {
+            if (currentOrder) {
+                currentOrder.status = 'cancelled';
+                renderOrderDetails(currentOrder);
+                closeCancelModal();
+                alert('Order cancelled successfully. A refund will be processed within 5-7 business days.');
+            }
+        }
+
+        // Update cart count
+        function updateCartCount() {
+            const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+            document.getElementById('cartCount').textContent = cart.length;
+        }
+
+        // Mobile menu toggle
+        document.getElementById('hamburger').addEventListener('click', () => {
+            document.getElementById('navLinks').classList.toggle('active');
+        });
+
+        // Close modal on outside click
+        document.getElementById('cancelModal').addEventListener('click', (e) => {
+            if (e.target.id === 'cancelModal') {
+                closeCancelModal();
+            }
+        });
+    </script>
+</body>
+</html>
