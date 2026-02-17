@@ -1142,6 +1142,7 @@
             if (typeof ProductService !== 'undefined') {
                 const apiService = new APIService();
                 const productService = new ProductService(apiService);
+                // TODO: Replace with actual API call - productService.checkStock(productId)
                 // For demo, show stock with random availability
                 const demoStock = Math.floor(Math.random() * 20);
                 productService.renderStockIndicator(demoStock, 'stockStatus');

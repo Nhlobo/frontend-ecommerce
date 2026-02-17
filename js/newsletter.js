@@ -297,15 +297,18 @@ if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => {
         newsletterService.initializeNewsletterForm();
         
-        // Only show modal on home page
-        if (window.location.pathname === '/' || window.location.pathname.includes('index.html')) {
+        // Only show modal on home page (handle various path formats)
+        const path = window.location.pathname;
+        if (path === '/' || path.endsWith('index.html') || path === '/index.html') {
             newsletterService.initializeModalTriggers();
         }
     });
 } else {
     newsletterService.initializeNewsletterForm();
     
-    if (window.location.pathname === '/' || window.location.pathname.includes('index.html')) {
+    // Only show modal on home page (handle various path formats)
+    const path = window.location.pathname;
+    if (path === '/' || path.endsWith('index.html') || path === '/index.html') {
         newsletterService.initializeModalTriggers();
     }
 }

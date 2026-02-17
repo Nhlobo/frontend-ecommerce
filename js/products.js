@@ -479,7 +479,9 @@ class ProductService {
                     <i class="fas fa-${stockInfo.icon}"></i>
                     ${stockInfo.text}
                 </span>
-                ${stockInfo.count && !stockInfo.urgent ? `<span class="stock-count">${stockInfo.count} available</span>` : ''}
+                ${stockInfo.count && stockInfo.available ? 
+                    `<span class="stock-count ${stockInfo.urgent ? 'urgent' : ''}">${stockInfo.count} available</span>` 
+                    : ''}
             </div>
             ${!stockInfo.available ? `
                 <div class="notify-back-in-stock">

@@ -1294,9 +1294,11 @@
                 return;
             }
 
+            // TODO: Replace with actual API call to validate cart stock
             // Check for low stock or out of stock items
             const stockWarnings = [];
             cart.forEach(item => {
+                // Simulated stock check - REPLACE WITH ACTUAL API CALL
                 const simulatedStock = Math.floor(Math.random() * 20);
                 if (simulatedStock === 0) {
                     stockWarnings.push(`${item.name} is out of stock`);

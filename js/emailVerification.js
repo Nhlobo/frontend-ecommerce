@@ -158,10 +158,10 @@ class EmailVerificationService {
     showToast(message, type = 'info') {
         // Check if toast utility exists
         if (typeof showToast === 'function') {
-            showToast(message, type);
+            showToast(type, message); // Fixed: correct parameter order
         } else {
-            // Fallback to alert
-            alert(message);
+            // Fallback to console
+            console.log(`[${type.toUpperCase()}] ${message}`);
         }
     }
 }

@@ -249,7 +249,8 @@ class ReviewsService {
      * Get review item template
      */
     getReviewItemTemplate(review) {
-        const initials = review.userName ? review.userName.substring(0, 1).toUpperCase() : 'U';
+        const userName = review.userName || 'Anonymous';
+        const initials = userName.charAt(0).toUpperCase();
         const isHelpful = this.isMarkedHelpful(review.id);
 
         return `
@@ -258,7 +259,7 @@ class ReviewsService {
                     <div class="reviewer-info">
                         <div class="reviewer-avatar">${initials}</div>
                         <div class="reviewer-details">
-                            <h4>${review.userName || 'Anonymous'}</h4>
+                            <h4>${userName}</h4>
                             <div class="review-meta">
                                 ${review.verifiedPurchase ? `
                                     <span class="verified-purchase">
