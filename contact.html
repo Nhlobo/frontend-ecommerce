@@ -903,10 +903,15 @@
 
         function sanitizeInput(input) {
             if (typeof input !== 'string') return '';
+            // Remove all dangerous patterns
             return input
-                .replace(/[<>]/g, '') // Remove < and >
+                .replace(/[<>"'`]/g, '') // Remove HTML special chars
                 .replace(/javascript:/gi, '') // Remove javascript: protocol
-                .replace(/on\w+=/gi, '') // Remove event handlers
+                .replace(/data:/gi, '') // Remove data: protocol
+                .replace(/vbscript:/gi, '') // Remove vbscript: protocol
+                .replace(/on\w+\s*=/gi, '') // Remove event handlers with =
+                .replace(/on\w+\s*\(/gi, '') // Remove event handlers with (
+                .replace(/&/g, '&amp;')
                 .trim();
         }
 
