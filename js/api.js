@@ -1,12 +1,17 @@
 /**
  * API Service Layer for Premium Hair Wigs & Extensions E-commerce
  * Handles all API communication with the backend
+ * Enhanced with retry logic, timeout handling, and request cancellation
  */
 
 class APIService {
     constructor(config) {
         this.config = config;
         this.token = localStorage.getItem('authToken');
+        this.requestTimeout = config.TIMEOUT || 30000;
+        this.retryAttempts = config.RETRY_ATTEMPTS || 3;
+        this.retryDelay = config.RETRY_DELAY || 1000;
+        this.activeRequests = new Map();
     }
 
     /**
@@ -37,6 +42,10 @@ class APIService {
         try {
             data = await response.json();
         } catch (e) {
+            // If response is not JSON, check status code
+            if (response.ok) {
+                return { success: true };
+            }
             throw new Error('Server response error. Please try again later.');
         }
         
@@ -49,7 +58,7 @@ class APIService {
                     // Session expired
                     localStorage.removeItem('authToken');
                     localStorage.removeItem('user');
-                    window.location.reload();
+                    // Don't reload immediately, let auth service handle it
                     throw new Error('Session expired. Please login again.');
                 case 403:
                     throw new Error('Access denied. You do not have permission.');
@@ -68,69 +77,132 @@ class APIService {
     }
 
     /**
-     * Generic GET request
+     * Create request with timeout
      */
-    async get(url, includeAuth = false) {
+    async fetchWithTimeout(url, options, timeout = this.requestTimeout) {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), timeout);
+        
         try {
             const response = await fetch(url, {
-                method: 'GET',
-                headers: this.getHeaders(includeAuth)
+                ...options,
+                signal: controller.signal
             });
-            return await this.handleResponse(response);
+            clearTimeout(timeoutId);
+            return response;
         } catch (error) {
-            console.error('GET request failed:', error);
+            clearTimeout(timeoutId);
+            if (error.name === 'AbortError') {
+                throw new Error('Request timeout. Please try again.');
+            }
             throw error;
         }
     }
 
     /**
-     * Generic POST request
+     * Retry request with exponential backoff
+     */
+    async retryRequest(requestFn, attempts = this.retryAttempts) {
+        let lastError;
+        
+        for (let i = 0; i < attempts; i++) {
+            try {
+                return await requestFn();
+            } catch (error) {
+                lastError = error;
+                
+                // Don't retry on 4xx errors (client errors)
+                if (error.message && (
+                    error.message.includes('Invalid request') ||
+                    error.message.includes('Session expired') ||
+                    error.message.includes('Access denied') ||
+                    error.message.includes('not found')
+                )) {
+                    throw error;
+                }
+                
+                // Wait before retrying (exponential backoff)
+                if (i < attempts - 1) {
+                    const delay = this.retryDelay * Math.pow(2, i);
+                    await new Promise(resolve => setTimeout(resolve, delay));
+                }
+            }
+        }
+        
+        throw lastError;
+    }
+
+    /**
+     * Cancel active request by key
+     */
+    cancelRequest(requestKey) {
+        const controller = this.activeRequests.get(requestKey);
+        if (controller) {
+            controller.abort();
+            this.activeRequests.delete(requestKey);
+        }
+    }
+
+    /**
+     * Cancel all active requests
+     */
+    cancelAllRequests() {
+        this.activeRequests.forEach(controller => controller.abort());
+        this.activeRequests.clear();
+    }
+
+    /**
+     * Generic GET request with retry and timeout
+     */
+    async get(url, includeAuth = false) {
+        return this.retryRequest(async () => {
+            const response = await this.fetchWithTimeout(url, {
+                method: 'GET',
+                headers: this.getHeaders(includeAuth)
+            });
+            return await this.handleResponse(response);
+        });
+    }
+
+    /**
+     * Generic POST request with retry and timeout
      */
     async post(url, data, includeAuth = false) {
-        try {
-            const response = await fetch(url, {
+        return this.retryRequest(async () => {
+            const response = await this.fetchWithTimeout(url, {
                 method: 'POST',
                 headers: this.getHeaders(includeAuth),
                 body: JSON.stringify(data)
             });
             return await this.handleResponse(response);
-        } catch (error) {
-            console.error('POST request failed:', error);
-            throw error;
-        }
+        });
     }
 
     /**
-     * Generic PUT request
+     * Generic PUT request with retry and timeout
      */
     async put(url, data, includeAuth = false) {
-        try {
-            const response = await fetch(url, {
+        return this.retryRequest(async () => {
+            const response = await this.fetchWithTimeout(url, {
                 method: 'PUT',
                 headers: this.getHeaders(includeAuth),
                 body: JSON.stringify(data)
             });
             return await this.handleResponse(response);
-        } catch (error) {
-            console.error('PUT request failed:', error);
-            throw error;
-        }
+        });
     }
 
     /**
-     * Generic DELETE request
+     * Generic DELETE request with retry and timeout
      */
     async delete(url, includeAuth = false) {
-        try {
-            const response = await fetch(url, {
+        return this.retryRequest(async () => {
+            const response = await this.fetchWithTimeout(url, {
                 method: 'DELETE',
                 headers: this.getHeaders(includeAuth)
             });
             return await this.handleResponse(response);
-        } catch (error) {
-            console.error('DELETE request failed:', error);
-            throw error;
-        }
+        });
     }
 
     // ========== Product APIs ==========
