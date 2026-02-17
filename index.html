@@ -219,11 +219,11 @@
                             <div class="option-group" id="colorOptionGroup">
                                 <label>Color</label>
                                 <div class="color-options" id="productColors">
-                                    <div class="color-swatch active" style="background:#1B1B1B;" data-color="Natural Black" title="Natural Black" onclick="selectColor(this)"></div>
-                                    <div class="color-swatch" style="background:#3B2314;" data-color="Dark Brown" title="Dark Brown" onclick="selectColor(this)"></div>
-                                    <div class="color-swatch" style="background:#8B4513;" data-color="Medium Brown" title="Medium Brown" onclick="selectColor(this)"></div>
-                                    <div class="color-swatch" style="background:#D4A76A;" data-color="Honey Blonde" title="Honey Blonde" onclick="selectColor(this)"></div>
-                                    <div class="color-swatch" style="background:#B22222;" data-color="Burgundy" title="Burgundy" onclick="selectColor(this)"></div>
+                                    <div class="color-swatch active" style="background:#1B1B1B;" data-color="Natural Black" title="Natural Black" aria-label="Natural Black" onclick="selectColor(this)"></div>
+                                    <div class="color-swatch" style="background:#3B2314;" data-color="Dark Brown" title="Dark Brown" aria-label="Dark Brown" onclick="selectColor(this)"></div>
+                                    <div class="color-swatch" style="background:#8B4513;" data-color="Medium Brown" title="Medium Brown" aria-label="Medium Brown" onclick="selectColor(this)"></div>
+                                    <div class="color-swatch" style="background:#D4A76A;" data-color="Honey Blonde" title="Honey Blonde" aria-label="Honey Blonde" onclick="selectColor(this)"></div>
+                                    <div class="color-swatch" style="background:#B22222;" data-color="Burgundy" title="Burgundy" aria-label="Burgundy" onclick="selectColor(this)"></div>
                                 </div>
                                 <span class="selected-option-label" id="selectedColorLabel">Natural Black</span>
                             </div>
@@ -587,7 +587,7 @@
                     <input type="email" id="registerEmail" placeholder="Enter your email" required>
                 </div>
                 <div class="form-group">
-                    <label for="registerPhone"><i class="fas fa-phone"></i> Phone Number</label>
+                    <label for="registerPhone"><i class="fas fa-phone"></i> Phone Number <span style="font-size:0.75rem;color:#999;">(optional)</span></label>
                     <input type="tel" id="registerPhone" placeholder="+27 71 555 1234">
                 </div>
                 <div class="form-group">
