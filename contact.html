@@ -903,16 +903,24 @@
 
         function sanitizeInput(input) {
             if (typeof input !== 'string') return '';
-            // Remove all dangerous patterns
-            return input
-                .replace(/[<>"'`]/g, '') // Remove HTML special chars
-                .replace(/javascript:/gi, '') // Remove javascript: protocol
-                .replace(/data:/gi, '') // Remove data: protocol
-                .replace(/vbscript:/gi, '') // Remove vbscript: protocol
-                .replace(/on\w+\s*=/gi, '') // Remove event handlers with =
-                .replace(/on\w+\s*\(/gi, '') // Remove event handlers with (
-                .replace(/&/g, '&amp;')
-                .trim();
+            // Remove all dangerous patterns in a single pass
+            let sanitized = input;
+            
+            // Remove HTML special characters
+            sanitized = sanitized.replace(/[<>"'`]/g, '');
+            
+            // Remove dangerous protocols
+            const dangerousProtocols = /\b(javascript|data|vbscript):/gi;
+            sanitized = sanitized.replace(dangerousProtocols, '');
+            
+            // Remove event handlers - handle both patterns together
+            const eventHandlers = /\bon\w+\s*[=(]/gi;
+            sanitized = sanitized.replace(eventHandlers, '');
+            
+            // Encode ampersands
+            sanitized = sanitized.replace(/&/g, '&amp;');
+            
+            return sanitized.trim();
         }
 
         function showError(message) {
