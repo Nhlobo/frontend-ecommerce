@@ -398,6 +398,134 @@
             outline: none;
             border-color: var(--primary);
         }
+
+        /* Toggle Switch */
+        .toggle-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: 0.4s;
+            border-radius: 34px;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: 0.4s;
+            border-radius: 50%;
+        }
+
+        .toggle-switch input:checked + .toggle-slider {
+            background-color: var(--primary);
+        }
+
+        .toggle-switch input:checked + .toggle-slider:before {
+            transform: translateX(26px);
+        }
+
+        /* Email Verification Status */
+        .verification-status {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .verification-status.verified {
+            background: #e8f5e9;
+            color: #2e7d32;
+            border: 1px solid #a5d6a7;
+        }
+
+        .verification-status.unverified {
+            background: #fff3e0;
+            color: #e65100;
+            border: 1px solid #ffcc80;
+        }
+
+        .verification-status i {
+            font-size: 1.5rem;
+        }
+
+        .verification-status .status-text {
+            flex: 1;
+        }
+
+        .verification-status .status-text h4 {
+            margin: 0 0 0.25rem 0;
+            font-weight: 600;
+        }
+
+        .verification-status .status-text p {
+            margin: 0;
+            font-size: 0.9rem;
+        }
+
+        /* Review History */
+        .review-history-item {
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .review-history-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .review-product-info {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .review-product-img {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 6px;
+        }
+
+        .review-product-details h4 {
+            margin: 0 0 0.5rem 0;
+            font-size: 1rem;
+        }
+
+        .review-rating {
+            display: flex;
+            gap: 0.25rem;
+            color: #ffc107;
+        }
     </style>
 </head>
 <body>
@@ -678,6 +806,37 @@
                                 <i class="fas fa-key"></i> Change Password
                             </button>
                         </div>
+
+                        <!-- Email Verification Status -->
+                        <div class="section-card" id="emailVerificationSection">
+                            <h2><i class="fas fa-envelope-circle-check"></i> Email Verification</h2>
+                            <div id="verificationStatusContent">
+                                <!-- Will be populated dynamically -->
+                            </div>
+                        </div>
+
+                        <!-- Newsletter Subscription -->
+                        <div class="section-card">
+                            <h2><i class="fas fa-newspaper"></i> Newsletter Preferences</h2>
+                            <p style="margin-bottom: 1.5rem;">Get exclusive offers, new product updates, and styling tips delivered to your inbox</p>
+                            <div class="toggle-container">
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="newsletterToggle">
+                                    <span class="toggle-slider"></span>
+                                </label>
+                                <span id="newsletterStatus">Subscribe to Newsletter</span>
+                            </div>
+                        </div>
+
+                        <!-- Review History -->
+                        <div class="section-card">
+                            <h2><i class="fas fa-star"></i> My Reviews</h2>
+                            <div id="reviewHistoryContainer">
+                                <p style="color: #666; text-align: center; padding: 2rem;">
+                                    You haven't written any reviews yet. Purchase a product and share your experience!
+                                </p>
+                            </div>
+                        </div>
                     </div>
                 </main>
             </div>
@@ -868,6 +1027,11 @@
             // Load user data
             loadUserData();
             loadOrders();
+            
+            // Initialize new account features
+            initializeEmailVerificationStatus();
+            initializeNewsletterToggle();
+            initializeReviewHistory();
             
             // Newsletter form
             const newsletterForm = document.getElementById('newsletterForm');
@@ -1131,6 +1295,150 @@
                 // Reset button state
                 submitBtn.disabled = false;
                 submitBtn.innerHTML = 'Change Password';
+            }
+        }
+
+        // Initialize Email Verification Status
+        function initializeEmailVerificationStatus() {
+            const container = document.getElementById('verificationStatusContent');
+            if (!container) return;
+
+            const user = JSON.parse(localStorage.getItem('user') || '{}');
+            const isVerified = user.emailVerified === true;
+
+            if (isVerified) {
+                container.innerHTML = `
+                    <div class="verification-status verified">
+                        <i class="fas fa-check-circle"></i>
+                        <div class="status-text">
+                            <h4>Email Verified</h4>
+                            <p>Your email address has been successfully verified.</p>
+                        </div>
+                    </div>
+                `;
+            } else {
+                container.innerHTML = `
+                    <div class="verification-status unverified">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <div class="status-text">
+                            <h4>Email Not Verified</h4>
+                            <p>Please verify your email address to enable all features.</p>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" id="resendVerificationAccountBtn">
+                        <i class="fas fa-envelope"></i> Resend Verification Email
+                    </button>
+                `;
+
+                // Add resend handler
+                const resendBtn = document.getElementById('resendVerificationAccountBtn');
+                if (resendBtn && typeof EmailVerificationService !== 'undefined') {
+                    resendBtn.addEventListener('click', async () => {
+                        resendBtn.disabled = true;
+                        resendBtn.textContent = 'Sending...';
+                        
+                        const service = new EmailVerificationService();
+                        const result = await service.resendVerification(user.email);
+                        
+                        if (result.success) {
+                            alert('Verification email sent! Please check your inbox.');
+                        } else {
+                            alert(result.message);
+                        }
+                        
+                        resendBtn.disabled = false;
+                        resendBtn.innerHTML = '<i class="fas fa-envelope"></i> Resend Verification Email';
+                    });
+                }
+            }
+        }
+
+        // Initialize Newsletter Toggle
+        function initializeNewsletterToggle() {
+            const toggle = document.getElementById('newsletterToggle');
+            const status = document.getElementById('newsletterStatus');
+            
+            if (!toggle || !status) return;
+
+            // Check current subscription status
+            const isSubscribed = localStorage.getItem('newsletter_subscribed') === 'true';
+            toggle.checked = isSubscribed;
+            updateNewsletterStatus(isSubscribed);
+
+            // Add change handler
+            toggle.addEventListener('change', async (e) => {
+                const shouldSubscribe = e.target.checked;
+                
+                if (typeof NewsletterService !== 'undefined') {
+                    const service = new NewsletterService();
+                    const user = JSON.parse(localStorage.getItem('user') || '{}');
+                    
+                    if (shouldSubscribe) {
+                        const result = await service.subscribe(user.email);
+                        if (result.success) {
+                            localStorage.setItem('newsletter_subscribed', 'true');
+                            updateNewsletterStatus(true);
+                            alert('Successfully subscribed to newsletter!');
+                        } else {
+                            toggle.checked = false;
+                            alert(result.message);
+                        }
+                    } else {
+                        const result = await service.unsubscribe(user.email);
+                        if (result.success) {
+                            localStorage.removeItem('newsletter_subscribed');
+                            updateNewsletterStatus(false);
+                            alert('Successfully unsubscribed from newsletter.');
+                        } else {
+                            toggle.checked = true;
+                            alert(result.message);
+                        }
+                    }
+                }
+            });
+        }
+
+        function updateNewsletterStatus(isSubscribed) {
+            const status = document.getElementById('newsletterStatus');
+            if (status) {
+                status.textContent = isSubscribed ? 'Subscribed to Newsletter' : 'Subscribe to Newsletter';
+            }
+        }
+
+        // Initialize Review History
+        function initializeReviewHistory() {
+            const container = document.getElementById('reviewHistoryContainer');
+            if (!container) return;
+
+            // For demo purposes, show placeholder
+            // In a real app, this would fetch user's reviews from API
+            const reviews = []; // Would come from API
+
+            if (reviews.length === 0) {
+                container.innerHTML = `
+                    <p style="color: #666; text-align: center; padding: 2rem;">
+                        You haven't written any reviews yet. Purchase a product and share your experience!
+                    </p>
+                `;
+            } else {
+                // Render reviews when they exist
+                container.innerHTML = reviews.map(review => `
+                    <div class="review-history-item">
+                        <div class="review-product-info">
+                            <img src="${review.productImage}" alt="${review.productName}" class="review-product-img">
+                            <div class="review-product-details">
+                                <h4>${review.productName}</h4>
+                                <div class="review-rating">
+                                    ${Array(5).fill(0).map((_, i) => `
+                                        <i class="fas fa-star${i < review.rating ? '' : ' empty'}"></i>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        </div>
+                        <p>${review.content}</p>
+                        <small style="color: #999;">${review.date}</small>
+                    </div>
+                `).join('');
             }
         }
     </script>
