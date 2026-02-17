@@ -17,6 +17,7 @@
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="components.css">
     <link rel="stylesheet" href="responsive.css">
+    <link rel="stylesheet" href="css/reviews.css">
     
     <style>
         .product-page {
@@ -1039,6 +1040,13 @@
                 </div>
             </div>
 
+            <!-- Reviews Section -->
+            <div class="product-container">
+                <div id="reviewsContainer">
+                    <!-- Reviews will be loaded here -->
+                </div>
+            </div>
+
             <!-- Related Products -->
             <div class="related-products">
                 <h2 class="section-title">You May Also Like</h2>
@@ -1107,6 +1115,7 @@
     <script src="js/products.js"></script>
     <script src="js/cart.js"></script>
     <script src="js/wishlist.js"></script>
+    <script src="js/reviews.js"></script>
     <script>
         let currentProduct = {
             id: 'prod-001',
@@ -1129,6 +1138,14 @@
             loadProductFromURL();
             loadRelatedProducts();
             updateCartCount();
+            
+            // Initialize reviews
+            if (typeof ReviewsService !== 'undefined') {
+                const reviewsService = new ReviewsService();
+                const urlParams = new URLSearchParams(window.location.search);
+                const productId = urlParams.get('id') || currentProduct.id;
+                reviewsService.renderReviews(productId, 'reviewsContainer');
+            }
             
             // Mobile menu toggle
             const hamburger = document.getElementById('hamburger');
