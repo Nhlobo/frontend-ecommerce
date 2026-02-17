@@ -273,6 +273,11 @@ function navigateTo(page) {
         'home': 'homePage',
         'shop': 'shopPage',
         'about': 'aboutPage',
+        'shipping': 'shippingPage',
+        'returns': 'returnsPage',
+        'privacy': 'privacyPage',
+        'terms': 'termsPage',
+        'faq': 'faqPage',
         'cart': 'cartPage',
         'checkout': 'checkoutPage',
         'orders': 'ordersPage',
@@ -284,22 +289,30 @@ function navigateTo(page) {
     };
     
     const pageId = pageMap[page];
-    if (pageId) {
-        const pageElement = document.getElementById(pageId);
-        if (pageElement) {
-            pageElement.classList.add('active');
-            state.currentPage = page;
-            
-            // Render page-specific content
-            if (page === 'cart') renderCart();
-            if (page === 'checkout') renderCheckout();
-            if (page === 'orders') renderOrders();
-            if (page === 'wishlist') renderWishlist();
-            
-            // Scroll to top
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
+    if (!pageId) {
+        showNotification('Page not found. Redirecting to home.', 'warning');
+        navigateTo('home');
+        return;
     }
+
+    const pageElement = document.getElementById(pageId);
+    if (!pageElement) {
+        showNotification('Requested page is unavailable right now.', 'error');
+        navigateTo('home');
+        return;
+    }
+
+    pageElement.classList.add('active');
+    state.currentPage = page;
+    
+    // Render page-specific content
+    if (page === 'cart') renderCart();
+    if (page === 'checkout') renderCheckout();
+    if (page === 'orders') renderOrders();
+    if (page === 'wishlist') renderWishlist();
+    
+    // Scroll to top
+    window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 // ========== Authentication ==========
