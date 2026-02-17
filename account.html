@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="My Account - Manage your orders, addresses, and account details at Premium Hair Wigs & Extensions.">
+    <meta name="keywords" content="my account, orders, dashboard, hair wigs, customer account">
+    <meta name="author" content="Premium Hair Wigs & Extensions Pty (Ltd)">
+    <title>My Account - Premium Hair Wigs & Extensions | Dashboard</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="responsive.css">
+    <link rel="stylesheet" href="components.css">
+    
+    <style>
+        .account-hero {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: var(--white);
+            padding: 3rem 0;
+        }
+        
+        .account-hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .account-hero p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .account-content {
+            padding: 3rem 0;
+        }
+        
+        .account-layout {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        @media (max-width: 968px) {
+            .account-layout {
+                grid-template-columns: 1fr;
+            }
+            
+            .account-sidebar {
+                order: 2;
+            }
+            
+            .account-main {
+                order: 1;
+            }
+        }
+        
+        .account-sidebar {
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+            height: fit-content;
+            position: sticky;
+            top: 20px;
+        }
+        
+        .sidebar-nav {
+            list-style: none;
+        }
+        
+        .sidebar-nav li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .sidebar-nav a {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.8rem 1rem;
+            color: var(--dark);
+            border-radius: 5px;
+            transition: all var(--transition-fast);
+        }
+        
+        .sidebar-nav a:hover,
+        .sidebar-nav a.active {
+            background: var(--accent);
+            color: var(--primary);
+        }
+        
+        .sidebar-nav i {
+            width: 20px;
+            text-align: center;
+        }
+        
+        .account-main {
+            min-height: 400px;
+        }
+        
+        .dashboard-section {
+            display: none;
+        }
+        
+        .dashboard-section.active {
+            display: block;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        
+        .stat-icon {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--secondary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-label {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .section-card {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .section-card h2 {
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+        
+        .action-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.8rem;
+            padding: 1rem;
+            background: var(--accent);
+            color: var(--secondary);
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all var(--transition-fast);
+        }
+        
+        .action-btn:hover {
+            background: var(--primary);
+            color: var(--white);
+            transform: translateY(-2px);
+        }
+        
+        .action-btn i {
+            font-size: 1.2rem;
+        }
+        
+        .orders-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+        
+        .orders-table th,
+        .orders-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--accent);
+        }
+        
+        .orders-table th {
+            background: var(--light);
+            color: var(--secondary);
+            font-weight: 600;
+        }
+        
+        .orders-table tr:hover {
+            background: var(--light);
+        }
+        
+        .order-status {
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+        
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .status-processing {
+            background: #cce5ff;
+            color: #004085;
+        }
+        
+        .status-shipped {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+        
+        .status-delivered {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .status-cancelled {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .order-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .btn-small {
+            padding: 0.4rem 0.8rem;
+            font-size: 0.85rem;
+            border-radius: 5px;
+        }
+        
+        .account-info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .info-item {
+            padding: 1rem;
+            background: var(--light);
+            border-radius: 8px;
+        }
+        
+        .info-item label {
+            display: block;
+            color: var(--secondary);
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+        }
+        
+        .info-item p {
+            color: var(--dark);
+        }
+        
+        .address-card {
+            background: var(--light);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            position: relative;
+        }
+        
+        .address-card h3 {
+            color: var(--secondary);
+            margin-bottom: 1rem;
+        }
+        
+        .address-card.default {
+            border: 2px solid var(--primary);
+        }
+        
+        .default-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: var(--primary);
+            color: var(--white);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+        }
+        
+        .loyalty-card {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: var(--white);
+            padding: 2rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+        }
+        
+        .loyalty-card h3 {
+            margin-bottom: 1rem;
+        }
+        
+        .loyalty-points {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin: 1rem 0;
+        }
+        
+        .loyalty-benefits {
+            display: flex;
+            gap: 2rem;
+            margin-top: 1.5rem;
+        }
+        
+        .benefit-item {
+            text-align: center;
+        }
+        
+        .benefit-item i {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: #666;
+        }
+        
+        .empty-state i {
+            font-size: 4rem;
+            color: var(--accent);
+            margin-bottom: 1rem;
+        }
+        
+        @media (max-width: 768px) {
+            .orders-table {
+                font-size: 0.85rem;
+            }
+            
+            .orders-table th,
+            .orders-table td {
+                padding: 0.7rem 0.5rem;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="page-loader" id="pageLoader">
+        <div class="loader-content">
+            <div class="loader-logo">
+                <img src="assets/images/logo.png" alt="Company Logo" style="max-width: 200px; height: auto;" onerror="this.style.display='none';">
+            </div>
+            <div class="loader-spinner"></div>
+            <p class="loader-text">Loading your account...</p>
+        </div>
+    </div>
+
+    <div class="banner">
+        Free Shipping on Orders Above R1,500
+    </div>
+
+    <nav>
+        <div class="logo">
+            <a href="index.html">
+                <img src="assets/images/logo.png" alt="Company Logo" class="logo-image" onerror="this.style.display='none';">
+            </a>
+        </div>
+
+        <div class="hamburger" id="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+
+        <ul class="nav-links" id="navLinks">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="shop.html">Shop</a></li>
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="contact.html">Contact</a></li>
+            <li><a href="account.html" class="active">My Account</a></li>
+        </ul>
+
+        <div class="nav-actions">
+            <a href="wishlist.html" class="icon-link">
+                <i class="fas fa-heart"></i>
+                <span class="badge" id="wishlistCount">0</span>
+            </a>
+            <a href="cart.html" class="icon-link">
+                <i class="fas fa-shopping-cart"></i>
+                <span class="badge" id="cartCount">0</span>
+            </a>
+            <div id="authArea"></div>
+        </div>
+    </nav>
+
+    <section class="account-hero">
+        <div class="container">
+            <h1>Welcome back, <span id="userName">Guest</span>!</h1>
+            <p>Manage your orders, addresses, and account settings</p>
+        </div>
+    </section>
+
+    <section class="account-content">
+        <div class="container">
+            <div class="account-layout">
+                <aside class="account-sidebar">
+                    <ul class="sidebar-nav">
+                        <li>
+                            <a href="#dashboard" class="nav-link active" data-section="dashboard">
+                                <i class="fas fa-th-large"></i>
+                                <span>Dashboard</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#orders" class="nav-link" data-section="orders">
+                                <i class="fas fa-shopping-bag"></i>
+                                <span>Orders</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#addresses" class="nav-link" data-section="addresses">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>Addresses</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#wishlist" class="nav-link" data-section="wishlist">
+                                <i class="fas fa-heart"></i>
+                                <span>Wishlist</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#details" class="nav-link" data-section="details">
+                                <i class="fas fa-user"></i>
+                                <span>Account Details</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="nav-link" id="logoutBtn">
+                                <i class="fas fa-sign-out-alt"></i>
+                                <span>Logout</span>
+                            </a>
+                        </li>
+                    </ul>
+                </aside>
+
+                <main class="account-main">
+                    <!-- Dashboard Section -->
+                    <div id="dashboard" class="dashboard-section active">
+                        <div class="stats-grid">
+                            <div class="stat-card">
+                                <div class="stat-icon"><i class="fas fa-shopping-bag"></i></div>
+                                <div class="stat-value" id="totalOrders">0</div>
+                                <div class="stat-label">Total Orders</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-icon"><i class="fas fa-dollar-sign"></i></div>
+                                <div class="stat-value" id="totalSpent">R0</div>
+                                <div class="stat-label">Total Spent</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-icon"><i class="fas fa-heart"></i></div>
+                                <div class="stat-value" id="wishlistItems">0</div>
+                                <div class="stat-label">Wishlist Items</div>
+                            </div>
+                        </div>
+
+                        <div class="section-card">
+                            <h2><i class="fas fa-bolt"></i> Quick Actions</h2>
+                            <div class="quick-actions">
+                                <a href="#orders" class="action-btn nav-link" data-section="orders">
+                                    <i class="fas fa-search"></i>
+                                    <span>Track Order</span>
+                                </a>
+                                <a href="shop.html" class="action-btn">
+                                    <i class="fas fa-shopping-cart"></i>
+                                    <span>Continue Shopping</span>
+                                </a>
+                                <a href="#wishlist" class="action-btn nav-link" data-section="wishlist">
+                                    <i class="fas fa-heart"></i>
+                                    <span>View Wishlist</span>
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="loyalty-card">
+                            <h3><i class="fas fa-star"></i> Loyalty Rewards</h3>
+                            <p>You're earning points with every purchase!</p>
+                            <div class="loyalty-points">
+                                <span id="loyaltyPoints">0</span> Points
+                            </div>
+                            <div class="loyalty-benefits">
+                                <div class="benefit-item">
+                                    <i class="fas fa-gift"></i>
+                                    <p>Exclusive Offers</p>
+                                </div>
+                                <div class="benefit-item">
+                                    <i class="fas fa-percent"></i>
+                                    <p>Special Discounts</p>
+                                </div>
+                                <div class="benefit-item">
+                                    <i class="fas fa-crown"></i>
+                                    <p>VIP Access</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="section-card">
+                            <h2><i class="fas fa-clock"></i> Recent Orders</h2>
+                            <div id="recentOrdersList">
+                                <div class="empty-state">
+                                    <i class="fas fa-shopping-bag"></i>
+                                    <h3>No orders yet</h3>
+                                    <p>Start shopping and your orders will appear here</p>
+                                    <a href="shop.html" class="btn btn-primary" style="margin-top: 1rem;">Start Shopping</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Orders Section -->
+                    <div id="orders" class="dashboard-section">
+                        <div class="section-card">
+                            <h2><i class="fas fa-shopping-bag"></i> All Orders</h2>
+                            <div id="allOrdersList">
+                                <table class="orders-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Order ID</th>
+                                            <th>Date</th>
+                                            <th>Total</th>
+                                            <th>Status</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="ordersTableBody">
+                                        <tr>
+                                            <td colspan="5" style="text-align: center; padding: 2rem;">
+                                                <div class="empty-state">
+                                                    <i class="fas fa-shopping-bag"></i>
+                                                    <p>No orders found</p>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Addresses Section -->
+                    <div id="addresses" class="dashboard-section">
+                        <div class="section-card">
+                            <h2><i class="fas fa-map-marker-alt"></i> Saved Addresses</h2>
+                            <div id="addressesList">
+                                <div class="address-card default">
+                                    <span class="default-badge">Default</span>
+                                    <h3>Home</h3>
+                                    <p><strong id="addressName">Guest User</strong></p>
+                                    <p id="addressStreet">123 Example Street</p>
+                                    <p><span id="addressCity">Johannesburg</span>, <span id="addressProvince">Gauteng</span></p>
+                                    <p id="addressPostal">2000</p>
+                                    <p>Phone: <span id="addressPhone">+27 XX XXX XXXX</span></p>
+                                    <div style="margin-top: 1rem; display: flex; gap: 0.5rem;">
+                                        <button class="btn btn-small btn-primary">Edit</button>
+                                        <button class="btn btn-small btn-secondary">Remove</button>
+                                    </div>
+                                </div>
+                                <button class="btn btn-primary" style="margin-top: 1rem;">
+                                    <i class="fas fa-plus"></i> Add New Address
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Wishlist Section -->
+                    <div id="wishlist" class="dashboard-section">
+                        <div class="section-card">
+                            <h2><i class="fas fa-heart"></i> My Wishlist</h2>
+                            <div id="wishlistContent">
+                                <div class="empty-state">
+                                    <i class="fas fa-heart"></i>
+                                    <h3>Your wishlist is empty</h3>
+                                    <p>Save your favorite items to buy them later</p>
+                                    <a href="shop.html" class="btn btn-primary" style="margin-top: 1rem;">Browse Products</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Account Details Section -->
+                    <div id="details" class="dashboard-section">
+                        <div class="section-card">
+                            <h2><i class="fas fa-user"></i> Account Information</h2>
+                            <div class="account-info-grid">
+                                <div class="info-item">
+                                    <label>Full Name</label>
+                                    <p id="accountName">Guest User</p>
+                                </div>
+                                <div class="info-item">
+                                    <label>Email Address</label>
+                                    <p id="accountEmail">guest@example.com</p>
+                                </div>
+                                <div class="info-item">
+                                    <label>Phone Number</label>
+                                    <p id="accountPhone">+27 XX XXX XXXX</p>
+                                </div>
+                                <div class="info-item">
+                                    <label>Member Since</label>
+                                    <p id="accountJoined">January 2024</p>
+                                </div>
+                            </div>
+                            <button class="btn btn-primary" style="margin-top: 2rem;">
+                                <i class="fas fa-edit"></i> Edit Account Details
+                            </button>
+                        </div>
+
+                        <div class="section-card">
+                            <h2><i class="fas fa-lock"></i> Password & Security</h2>
+                            <p style="margin-bottom: 1.5rem;">Keep your account secure by using a strong password</p>
+                            <button class="btn btn-secondary">
+                                <i class="fas fa-key"></i> Change Password
+                            </button>
+                        </div>
+                    </div>
+                </main>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Premium Hair Wigs & Extensions</h3>
+                <p>Premium Hair Wigs & Extensions Pty (Ltd)</p>
+                <p>CIPC & VAT Registered</p>
+                <p>POPIA Compliant</p>
+                <div class="social-links">
+                    <a href="https://facebook.com/premiumhairsa" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://instagram.com/premiumhairsa" target="_blank"><i class="fab fa-instagram"></i></a>
+                    <a href="https://twitter.com/premiumhairsa" target="_blank"><i class="fab fa-twitter"></i></a>
+                    <a href="https://wa.me/27715551234" target="_blank"><i class="fab fa-whatsapp"></i></a>
+                </div>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="shop.html">Shop All</a></li>
+                    <li><a href="index.html#sale">Sale</a></li>
+                    <li><a href="account.html">Track Order</a></li>
+                    <li><a href="about.html">About Us</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Customer Service</h3>
+                <ul>
+                    <li><a href="#">Shipping Information</a></li>
+                    <li><a href="#">Returns & Exchanges</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Terms & Conditions</a></li>
+                    <li><a href="#">FAQ</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Contact Us</h3>
+                <p>📍 123 Luxury Lane, Protea Glen<br>Soweto, Johannesburg, Gauteng, 1818</p>
+                <p>📞 +27 71 555 1234</p>
+                <p>✉️ info@premiumhairsa.co.za</p>
+                <p><strong>Hours:</strong><br>Mon-Fri: 09:00-18:00<br>Sat: 09:00-14:00</p>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Newsletter</h3>
+                <form class="newsletter-form" id="newsletterForm">
+                    <input type="email" id="newsletterEmail" placeholder="Your email" required>
+                    <button type="submit" class="btn btn-primary">Subscribe</button>
+                </form>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>&copy; 2024 Premium Hair Wigs & Extensions Pty (Ltd). All rights reserved. | CIPC Registered | VAT Registered | POPIA Compliant</p>
+        </div>
+    </footer>
+
+    <script src="js/config.js"></script>
+    <script src="js/security.js"></script>
+    <script src="js/validation.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/user.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check authentication
+            checkAuthentication();
+            
+            setTimeout(() => {
+                const loader = document.getElementById('pageLoader');
+                if (loader) loader.style.display = 'none';
+            }, 500);
+
+            const hamburger = document.getElementById('hamburger');
+            const navLinks = document.getElementById('navLinks');
+            
+            if (hamburger) {
+                hamburger.addEventListener('click', () => {
+                    navLinks.classList.toggle('active');
+                    hamburger.classList.toggle('active');
+                });
+            }
+
+            // Sidebar navigation
+            const navLinksElements = document.querySelectorAll('.nav-link');
+            navLinksElements.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    const section = this.dataset.section;
+                    if (!section) return;
+                    
+                    // Update active states
+                    navLinksElements.forEach(l => l.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Show/hide sections
+                    document.querySelectorAll('.dashboard-section').forEach(s => {
+                        s.classList.remove('active');
+                    });
+                    document.getElementById(section).classList.add('active');
+                });
+            });
+
+            // Logout
+            document.getElementById('logoutBtn').addEventListener('click', function(e) {
+                e.preventDefault();
+                if (confirm('Are you sure you want to logout?')) {
+                    logout();
+                }
+            });
+
+            // Load user data
+            loadUserData();
+            loadOrders();
+            
+            // Newsletter form
+            const newsletterForm = document.getElementById('newsletterForm');
+            if (newsletterForm) {
+                newsletterForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    alert('Thank you for subscribing!');
+                    newsletterForm.reset();
+                });
+            }
+        });
+
+        function checkAuthentication() {
+            const user = JSON.parse(localStorage.getItem('user') || '{}');
+            
+            if (!user.email) {
+                // Not logged in, redirect to login
+                if (confirm('Please login to access your account. Redirect to login page?')) {
+                    window.location.href = 'login.html?redirect=account';
+                } else {
+                    window.location.href = 'index.html';
+                }
+            }
+        }
+
+        function loadUserData() {
+            const user = JSON.parse(localStorage.getItem('user') || '{}');
+            
+            if (user.name) {
+                document.getElementById('userName').textContent = user.name;
+                document.getElementById('accountName').textContent = user.name;
+                document.getElementById('addressName').textContent = user.name;
+            }
+            
+            if (user.email) {
+                document.getElementById('accountEmail').textContent = user.email;
+            }
+            
+            if (user.phone) {
+                document.getElementById('accountPhone').textContent = user.phone;
+                document.getElementById('addressPhone').textContent = user.phone;
+            }
+            
+            if (user.joinDate) {
+                const date = new Date(user.joinDate);
+                document.getElementById('accountJoined').textContent = date.toLocaleDateString('en-US', { 
+                    month: 'long', 
+                    year: 'numeric' 
+                });
+            }
+            
+            // Load stats
+            const orders = JSON.parse(localStorage.getItem('orders') || '[]');
+            const wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
+            
+            document.getElementById('totalOrders').textContent = orders.length;
+            document.getElementById('wishlistItems').textContent = wishlist.length;
+            document.getElementById('wishlistCount').textContent = wishlist.length;
+            
+            // Calculate total spent
+            const totalSpent = orders.reduce((sum, order) => sum + (order.total || 0), 0);
+            document.getElementById('totalSpent').textContent = 'R' + totalSpent.toFixed(2);
+            
+            // Loyalty points (1 point per R10 spent)
+            const points = Math.floor(totalSpent / 10);
+            document.getElementById('loyaltyPoints').textContent = points;
+        }
+
+        function loadOrders() {
+            const orders = JSON.parse(localStorage.getItem('orders') || '[]');
+            
+            if (orders.length === 0) return;
+            
+            // Load recent orders (last 3)
+            const recentOrders = orders.slice(-3).reverse();
+            const recentOrdersList = document.getElementById('recentOrdersList');
+            
+            recentOrdersList.innerHTML = recentOrders.map(order => `
+                <div style="border-bottom: 1px solid var(--accent); padding: 1rem 0;">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <strong>Order #${order.id}</strong>
+                            <p style="color: #666; font-size: 0.9rem;">${new Date(order.date).toLocaleDateString()}</p>
+                        </div>
+                        <div style="text-align: right;">
+                            <p><strong>R${order.total.toFixed(2)}</strong></p>
+                            <span class="order-status status-${order.status.toLowerCase()}">${order.status}</span>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+            
+            // Load all orders
+            const ordersTableBody = document.getElementById('ordersTableBody');
+            ordersTableBody.innerHTML = orders.reverse().map(order => `
+                <tr>
+                    <td>#${order.id}</td>
+                    <td>${new Date(order.date).toLocaleDateString()}</td>
+                    <td>R${order.total.toFixed(2)}</td>
+                    <td><span class="order-status status-${order.status.toLowerCase()}">${order.status}</span></td>
+                    <td class="order-actions">
+                        <button class="btn btn-small btn-primary">View</button>
+                        ${order.status === 'Shipped' ? '<button class="btn btn-small btn-secondary">Track</button>' : ''}
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function logout() {
+            if (typeof performLogout === 'function') {
+                performLogout();
+            } else {
+                localStorage.removeItem('user');
+                localStorage.removeItem('authToken');
+                window.location.href = 'index.html';
+            }
+        }
+
+        // Mock data for demonstration (in production, this would come from API)
+        function generateMockOrders() {
+            const mockOrders = [
+                {
+                    id: 'ORD001',
+                    date: new Date('2024-01-15').toISOString(),
+                    total: 1299.99,
+                    status: 'Delivered'
+                },
+                {
+                    id: 'ORD002',
+                    date: new Date('2024-01-20').toISOString(),
+                    total: 899.00,
+                    status: 'Shipped'
+                },
+                {
+                    id: 'ORD003',
+                    date: new Date('2024-01-25').toISOString(),
+                    total: 1599.50,
+                    status: 'Processing'
+                }
+            ];
+            
+            // Only set if no orders exist
+            if (!localStorage.getItem('orders')) {
+                localStorage.setItem('orders', JSON.stringify(mockOrders));
+            }
+        }
+
+        // Uncomment to generate mock data for testing
+        // generateMockOrders();
+    </script>
+</body>
+</html>

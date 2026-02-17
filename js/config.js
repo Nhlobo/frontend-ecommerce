@@ -23,6 +23,9 @@ const BACKEND_URL = getBackendUrl();
 // API Configuration
 const API_CONFIG = {
     BASE_URL: BACKEND_URL,
+    TIMEOUT: 30000, // 30 seconds
+    RETRY_ATTEMPTS: 3,
+    RETRY_DELAY: 1000, // 1 second
     ENDPOINTS: {
         // Products
         products: `${BACKEND_URL}/api/products`,
@@ -35,6 +38,10 @@ const API_CONFIG = {
         login: `${BACKEND_URL}/api/auth/login`,
         logout: `${BACKEND_URL}/api/auth/logout`,
         user: `${BACKEND_URL}/api/auth/user`,
+        refreshToken: `${BACKEND_URL}/api/auth/refresh`,
+        forgotPassword: `${BACKEND_URL}/api/auth/forgot-password`,
+        resetPassword: `${BACKEND_URL}/api/auth/reset-password`,
+        changePassword: `${BACKEND_URL}/api/user/change-password`,
         
         // Orders
         orders: `${BACKEND_URL}/api/orders`,
@@ -44,6 +51,26 @@ const API_CONFIG = {
         // Wishlist
         wishlist: `${BACKEND_URL}/api/wishlist`,
         wishlistItem: (id) => `${BACKEND_URL}/api/wishlist/${id}`,
+        
+        // Cart
+        cart: `${BACKEND_URL}/api/cart`,
+        cartAdd: `${BACKEND_URL}/api/cart/add`,
+        cartUpdate: `${BACKEND_URL}/api/cart/update`,
+        cartRemove: `${BACKEND_URL}/api/cart/remove`,
+        
+        // Checkout
+        validateCheckout: `${BACKEND_URL}/api/checkout/validate`,
+        applyCoupon: `${BACKEND_URL}/api/checkout/coupon`,
+        calculateShipping: `${BACKEND_URL}/api/checkout/shipping`,
+        
+        // User
+        profile: `${BACKEND_URL}/api/user/profile`,
+        updateProfile: `${BACKEND_URL}/api/user/profile/update`,
+        addresses: `${BACKEND_URL}/api/user/addresses`,
+        
+        // Reviews
+        reviews: `${BACKEND_URL}/api/reviews`,
+        addReview: `${BACKEND_URL}/api/reviews/add`,
         
         // Contact & Newsletter
         contact: `${BACKEND_URL}/api/contact`,
@@ -110,7 +137,19 @@ const BUSINESS_INFO = {
     }
 };
 
+// Security Configuration
+const SECURITY_CONFIG = {
+    TOKEN_STORAGE_KEY: 'auth_token',
+    REFRESH_TOKEN_KEY: 'refresh_token',
+    CSRF_TOKEN_KEY: 'csrf_token',
+    SESSION_TIMEOUT: 3600000, // 1 hour in milliseconds
+    PASSWORD_MIN_LENGTH: 8,
+    MAX_LOGIN_ATTEMPTS: 5,
+    LOCKOUT_DURATION: 900000, // 15 minutes
+    ENABLE_CSRF: true
+};
+
 // Export configurations
 if (typeof module !== 'undefined' && module.exports) {
-    module.exports = { API_CONFIG, APP_CONFIG, BUSINESS_INFO };
+    module.exports = { API_CONFIG, APP_CONFIG, BUSINESS_INFO, SECURITY_CONFIG };
 }
