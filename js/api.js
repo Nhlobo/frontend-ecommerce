@@ -208,10 +208,12 @@ class APIService {
     // ========== Product APIs ==========
 
     /**
-     * Get all products
+     * Get all products with filters
      */
-    async getAllProducts() {
-        return this.get(this.config.API_CONFIG.ENDPOINTS.products);
+    async getAllProducts(params = {}) {
+        const query = new URLSearchParams(params).toString();
+        const url = query ? `${this.config.API_CONFIG.ENDPOINTS.products}?${query}` : this.config.API_CONFIG.ENDPOINTS.products;
+        return this.get(url);
     }
 
     /**
@@ -242,8 +244,9 @@ class APIService {
      */
     async register(userData) {
         const response = await this.post(this.config.API_CONFIG.ENDPOINTS.register, userData);
-        if (response.token) {
-            this.setToken(response.token);
+        if (response.token || (response.data && response.data.token)) {
+            const token = response.token || response.data.token;
+            this.setToken(token);
         }
         return response;
     }
@@ -253,8 +256,9 @@ class APIService {
      */
     async login(credentials) {
         const response = await this.post(this.config.API_CONFIG.ENDPOINTS.login, credentials);
-        if (response.token) {
-            this.setToken(response.token);
+        if (response.token || (response.data && response.data.token)) {
+            const token = response.token || response.data.token;
+            this.setToken(token);
         }
         return response;
     }
@@ -266,6 +270,8 @@ class APIService {
         this.token = null;
         localStorage.removeItem('authToken');
         localStorage.removeItem('user');
+        localStorage.removeItem('sessionId');
+        window.location.href = '/login.html';
     }
 
     /**
@@ -281,6 +287,81 @@ class APIService {
     setToken(token) {
         this.token = token;
         localStorage.setItem('authToken', token);
+    }
+
+    // ========== Cart APIs ==========
+
+    /**
+     * Get or create session ID for guest cart
+     */
+    getOrCreateSessionId() {
+        let sessionId = localStorage.getItem('sessionId');
+        if (!sessionId) {
+            sessionId = 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+            localStorage.setItem('sessionId', sessionId);
+        }
+        return sessionId;
+    }
+
+    /**
+     * Get cart
+     */
+    async getCart() {
+        const sessionId = this.getOrCreateSessionId();
+        return this.get(`${this.config.API_CONFIG.ENDPOINTS.cart}?sessionId=${sessionId}`, !!this.token);
+    }
+
+    /**
+     * Add item to cart
+     */
+    async addToCart(variantId, quantity) {
+        const sessionId = this.getOrCreateSessionId();
+        return this.post(`${this.config.API_CONFIG.ENDPOINTS.cart}/items`, {
+            variantId,
+            quantity,
+            sessionId
+        }, !!this.token);
+    }
+
+    /**
+     * Update cart item quantity
+     */
+    async updateCartItem(itemId, quantity) {
+        return this.put(`${this.config.API_CONFIG.ENDPOINTS.cart}/items/${itemId}`, {
+            quantity
+        }, !!this.token);
+    }
+
+    /**
+     * Remove item from cart
+     */
+    async removeCartItem(itemId) {
+        return this.delete(`${this.config.API_CONFIG.ENDPOINTS.cart}/items/${itemId}`, !!this.token);
+    }
+
+    /**
+     * Clear entire cart
+     */
+    async clearCart() {
+        return this.delete(this.config.API_CONFIG.ENDPOINTS.cart, !!this.token);
+    }
+
+    /**
+     * Merge guest cart with user cart after login
+     */
+    async mergeCart() {
+        const sessionId = localStorage.getItem('sessionId');
+        if (sessionId && this.token) {
+            try {
+                await this.post(`${this.config.API_CONFIG.ENDPOINTS.cart}/merge`, {
+                    sessionId
+                }, true);
+                localStorage.removeItem('sessionId');
+            } catch (error) {
+                console.error('Cart merge failed:', error);
+                // Don't throw - allow login to proceed even if merge fails
+            }
+        }
     }
 
     // ========== Order APIs ==========
@@ -356,4 +437,9 @@ class APIService {
 // Export for use in other modules
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = APIService;
+}
+
+// Create global API instance for direct use
+if (typeof window !== 'undefined' && typeof API_CONFIG !== 'undefined') {
+    window.api = new APIService({ API_CONFIG, APP_CONFIG, BUSINESS_INFO, TIMEOUT: 30000, RETRY_ATTEMPTS: 3, RETRY_DELAY: 1000 });
 }
