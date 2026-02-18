@@ -171,7 +171,11 @@ async function updateQuantity(itemId, newQuantity) {
         if (response.success || response.data) {
             showSuccess('Cart updated');
             await loadCart(); // Refresh cart
-            updateCartCount(); // Update badge
+            
+            // Update cart count badge if available
+            if (typeof updateCartCount === 'function') {
+                updateCartCount();
+            }
         } else {
             throw new Error(response.message || 'Failed to update cart');
         }
@@ -199,7 +203,11 @@ async function removeItem(itemId) {
         if (response.success || response.data) {
             showSuccess('Item removed from cart');
             await loadCart(); // Refresh cart
-            updateCartCount(); // Update badge
+            
+            // Update cart count badge if available
+            if (typeof updateCartCount === 'function') {
+                updateCartCount();
+            }
         } else {
             throw new Error(response.message || 'Failed to remove item');
         }
@@ -226,7 +234,11 @@ async function clearCart() {
         if (response.success || response.data) {
             showSuccess('Cart cleared');
             await loadCart(); // Refresh cart
-            updateCartCount(); // Update badge
+            
+            // Update cart count badge if available
+            if (typeof updateCartCount === 'function') {
+                updateCartCount();
+            }
         } else {
             throw new Error(response.message || 'Failed to clear cart');
         }

@@ -152,6 +152,9 @@ async function updateWishlistCount() {
     }
 }
 
+// Global interval ID for cart count updates
+let cartCountInterval = null;
+
 /**
  * Initialize auth state
  */
@@ -159,8 +162,13 @@ function initAuthState() {
     updateNavAuth();
     updateCartCount();
     
+    // Clear any existing interval
+    if (cartCountInterval) {
+        clearInterval(cartCountInterval);
+    }
+    
     // Update cart count periodically (every 30 seconds)
-    setInterval(updateCartCount, 30000);
+    cartCountInterval = setInterval(updateCartCount, 30000);
 }
 
 // Auto-initialize on page load
