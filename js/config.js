@@ -54,9 +54,10 @@ const API_CONFIG = {
         
         // Cart
         cart: `${BACKEND_URL}/api/cart`,
-        cartAdd: `${BACKEND_URL}/api/cart/add`,
-        cartUpdate: `${BACKEND_URL}/api/cart/update`,
-        cartRemove: `${BACKEND_URL}/api/cart/remove`,
+        cartAdd: `${BACKEND_URL}/api/cart/items`,
+        cartUpdate: (itemId) => `${BACKEND_URL}/api/cart/items/${itemId}`,
+        cartRemove: (itemId) => `${BACKEND_URL}/api/cart/items/${itemId}`,
+        cartMerge: `${BACKEND_URL}/api/cart/merge`,
         
         // Checkout
         validateCheckout: `${BACKEND_URL}/api/checkout/validate`,

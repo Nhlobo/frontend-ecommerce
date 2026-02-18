@@ -185,6 +185,25 @@ function getNotificationIcon(type) {
  * Show loading state
  */
 function showLoading(container, message = 'Loading...') {
+    // If no container provided, create global loading overlay
+    if (!container) {
+        let overlay = document.getElementById('globalLoadingOverlay');
+        if (!overlay) {
+            overlay = document.createElement('div');
+            overlay.id = 'globalLoadingOverlay';
+            overlay.className = 'loading-overlay global';
+            overlay.innerHTML = `
+                <div class="loading-content">
+                    <div class="loading-spinner"></div>
+                    <p class="loading-message">${message}</p>
+                </div>
+            `;
+            document.body.appendChild(overlay);
+        }
+        overlay.style.display = 'flex';
+        return overlay;
+    }
+    
     if (typeof container === 'string') {
         container = document.querySelector(container);
     }
@@ -210,6 +229,15 @@ function showLoading(container, message = 'Loading...') {
  * Hide loading state
  */
 function hideLoading(container) {
+    // If no container provided, hide global loading overlay
+    if (!container) {
+        const overlay = document.getElementById('globalLoadingOverlay');
+        if (overlay) {
+            overlay.style.display = 'none';
+        }
+        return;
+    }
+    
     if (typeof container === 'string') {
         container = document.querySelector(container);
     }
@@ -220,6 +248,34 @@ function hideLoading(container) {
     if (loader) {
         loader.remove();
     }
+}
+
+/**
+ * Show error notification (wrapper for showNotification)
+ */
+function showError(message, duration = 5000) {
+    return showNotification(message, 'error', duration);
+}
+
+/**
+ * Show success notification (wrapper for showNotification)
+ */
+function showSuccess(message, duration = 3000) {
+    return showNotification(message, 'success', duration);
+}
+
+/**
+ * Show info notification (wrapper for showNotification)
+ */
+function showInfo(message, duration = 3000) {
+    return showNotification(message, 'info', duration);
+}
+
+/**
+ * Show warning notification (wrapper for showNotification)
+ */
+function showWarning(message, duration = 4000) {
+    return showNotification(message, 'warning', duration);
 }
 
 /**
@@ -574,6 +630,10 @@ if (typeof module !== 'undefined' && module.exports) {
         closeNotification,
         showLoading,
         hideLoading,
+        showError,
+        showSuccess,
+        showInfo,
+        showWarning,
         showSkeletonLoader,
         generateUniqueId,
         copyToClipboard,
