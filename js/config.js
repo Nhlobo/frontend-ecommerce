@@ -14,8 +14,8 @@ const getBackendUrl = () => {
     }
     
     // For production (GitHub Pages), use your deployed backend URL
-    // Backend deployed at: https://backend-ecommerce-3-2jsk.onrender.com
-    return 'https://backend-ecommerce-3-2jsk.onrender.com';
+    // Backend deployed at: https://backend-ecommerce-5-42p4.onrender.com
+    return 'https://backend-ecommerce-5-42p4.onrender.com';
 };
 
 const BACKEND_URL = getBackendUrl();
