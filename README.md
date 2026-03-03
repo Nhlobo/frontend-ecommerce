@@ -37,7 +37,7 @@ frontend-ecommerce/
 The API configuration is in `js/config.js` and automatically detects the environment:
 
 - **Local Development**: `http://localhost:3000`
-- **Production**: `https://backend-ecommerce-3-2jsk.onrender.com`
+- **Production**: `https://backend-ecommerce-5-42p4.onrender.com`
 
 The configuration includes all API endpoints for products, authentication, orders, wishlist, and more.
 
@@ -158,7 +158,7 @@ The `netlify.toml` file is already configured for proper routing.
 ## 🔗 Backend API Connection
 
 The frontend connects to the backend API deployed at:
-**`https://backend-ecommerce-3-2jsk.onrender.com`**
+**`https://backend-ecommerce-5-42p4.onrender.com`**
 
 ### API Configuration
 
@@ -169,7 +169,7 @@ The API automatically switches between development and production:
 http://localhost:3000
 
 // Production (GitHub Pages, Vercel, Netlify, etc.)
-https://backend-ecommerce-3-2jsk.onrender.com
+https://backend-ecommerce-5-42p4.onrender.com
 ```
 
 ### CORS Configuration
