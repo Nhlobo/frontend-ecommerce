@@ -6,7 +6,7 @@
  * 3) Render production backend fallback
  */
 
-const DEFAULT_PRODUCTION_API_URL = 'https://backend-ecommerce-5-42p4.onrender.com';
+const DEFAULT_PRODUCTION_API_URL = 'https://backend-ecommerce-6-6ldj.onrender.com';
 
 const resolveApiUrl = () => {
     const runtimeUrl = typeof window !== 'undefined' ? (window.VITE_API_URL || window.__APP_ENV__?.VITE_API_URL) : '';
