@@ -1,38 +1,44 @@
 /**
- * Configuration for Premium Hair Wigs & Extensions E-commerce Platform
+ * Production runtime configuration for storefront.
+ * API URL resolution priority:
+ * 1) window.VITE_API_URL (injected at deploy time)
+ * 2) <meta name="vite-api-url" content="...">
+ * 3) Render production backend fallback
  */
 
-// Determine the backend URL based on environment
-// For development: http://localhost:3000
-// For production: https://your-backend-url.onrender.com
-const getBackendUrl = () => {
-    const hostname = window.location.hostname;
-    
-    // If running locally, use local backend
-    if (hostname === 'localhost' || hostname === '127.0.0.1') {
-        return 'http://localhost:3000';
+const DEFAULT_PRODUCTION_API_URL = 'https://backend-ecommerce-5-42p4.onrender.com';
+
+const resolveApiUrl = () => {
+    const runtimeUrl = typeof window !== 'undefined' ? (window.VITE_API_URL || window.__APP_ENV__?.VITE_API_URL) : '';
+    const metaUrl = typeof document !== 'undefined'
+        ? document.querySelector('meta[name="vite-api-url"]')?.getAttribute('content')
+        : '';
+
+    const resolved = (runtimeUrl || metaUrl || DEFAULT_PRODUCTION_API_URL || '').trim();
+
+    // Never allow localhost in production builds.
+    if (!resolved || /^https?:\/\/(localhost|127\.0\.0\.1)/i.test(resolved)) {
+        return DEFAULT_PRODUCTION_API_URL;
     }
-    
-    // For production (GitHub Pages), use your deployed backend URL
-    // Backend deployed at: https://backend-ecommerce-5-42p4.onrender.com
-    return 'https://backend-ecommerce-5-42p4.onrender.com';
+
+    return resolved.replace(/\/$/, '');
 };
 
-const BACKEND_URL = getBackendUrl();
+const BACKEND_URL = resolveApiUrl();
 
 // API Configuration
 const API_CONFIG = {
     BASE_URL: BACKEND_URL,
-    TIMEOUT: 30000, // 30 seconds
-    RETRY_ATTEMPTS: 3,
-    RETRY_DELAY: 1000, // 1 second
+    TIMEOUT: 15000,
+    RETRY_ATTEMPTS: 2,
+    RETRY_DELAY: 600,
     ENDPOINTS: {
         // Products
         products: `${BACKEND_URL}/api/products`,
         productById: (id) => `${BACKEND_URL}/api/products/${id}`,
         productsByCategory: (category) => `${BACKEND_URL}/api/products?category=${category}`,
         searchProducts: (query) => `${BACKEND_URL}/api/products/search?q=${query}`,
-        
+
         // Authentication
         register: `${BACKEND_URL}/api/auth/register`,
         login: `${BACKEND_URL}/api/auth/login`,
@@ -42,37 +48,37 @@ const API_CONFIG = {
         forgotPassword: `${BACKEND_URL}/api/auth/forgot-password`,
         resetPassword: `${BACKEND_URL}/api/auth/reset-password`,
         changePassword: `${BACKEND_URL}/api/user/change-password`,
-        
+
         // Orders
         orders: `${BACKEND_URL}/api/orders`,
         orderById: (id) => `${BACKEND_URL}/api/orders/${id}`,
         trackOrder: (orderNumber) => `${BACKEND_URL}/api/orders/track/${orderNumber}`,
-        
+
         // Wishlist
         wishlist: `${BACKEND_URL}/api/wishlist`,
         wishlistItem: (id) => `${BACKEND_URL}/api/wishlist/${id}`,
-        
+
         // Cart
         cart: `${BACKEND_URL}/api/cart`,
         cartAdd: `${BACKEND_URL}/api/cart/items`,
         cartUpdate: (itemId) => `${BACKEND_URL}/api/cart/items/${itemId}`,
         cartRemove: (itemId) => `${BACKEND_URL}/api/cart/items/${itemId}`,
         cartMerge: `${BACKEND_URL}/api/cart/merge`,
-        
+
         // Checkout
         validateCheckout: `${BACKEND_URL}/api/checkout/validate`,
         applyCoupon: `${BACKEND_URL}/api/checkout/coupon`,
         calculateShipping: `${BACKEND_URL}/api/checkout/shipping`,
-        
+
         // User
         profile: `${BACKEND_URL}/api/user/profile`,
         updateProfile: `${BACKEND_URL}/api/user/profile/update`,
         addresses: `${BACKEND_URL}/api/user/addresses`,
-        
+
         // Reviews
         reviews: `${BACKEND_URL}/api/reviews`,
         addReview: `${BACKEND_URL}/api/reviews/add`,
-        
+
         // Contact & Newsletter
         contact: `${BACKEND_URL}/api/contact`,
         newsletter: `${BACKEND_URL}/api/newsletter`
@@ -83,9 +89,9 @@ const API_CONFIG = {
 const APP_CONFIG = {
     currency: 'R',
     currencySymbol: 'R',
-    VAT_RATE: 0.15, // 15% VAT
+    VAT_RATE: 0.15,
     SHIPPING: {
-        FREE_THRESHOLD: 1500, // Free shipping on orders above R1,500
+        FREE_THRESHOLD: 1500,
         STANDARD_COST: 150,
         EXPRESS_COST: 250
     },
@@ -143,14 +149,13 @@ const SECURITY_CONFIG = {
     TOKEN_STORAGE_KEY: 'auth_token',
     REFRESH_TOKEN_KEY: 'refresh_token',
     CSRF_TOKEN_KEY: 'csrf_token',
-    SESSION_TIMEOUT: 3600000, // 1 hour in milliseconds
+    SESSION_TIMEOUT: 3600000,
     PASSWORD_MIN_LENGTH: 8,
     MAX_LOGIN_ATTEMPTS: 5,
-    LOCKOUT_DURATION: 900000, // 15 minutes
+    LOCKOUT_DURATION: 900000,
     ENABLE_CSRF: true
 };
 
-// Export configurations
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = { API_CONFIG, APP_CONFIG, BUSINESS_INFO, SECURITY_CONFIG };
 }

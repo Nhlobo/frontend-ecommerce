@@ -13,7 +13,8 @@ let state = {
     currentFilter: 'all',
     currentProduct: null,
     searchQuery: '',
-    isLoading: false
+    isLoading: false,
+    productsLoadError: false
 };
 
 // Initialize API Service
@@ -109,8 +110,45 @@ function showErrorWithRetry(message, retryFunctionName) {
     return container.innerHTML;
 }
 
+
+function escapeHtml(value = '') {
+    return String(value)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+}
+
+function sanitizeImageUrl(url = '') {
+    const parsed = String(url).trim();
+    if (!parsed || /^javascript:/i.test(parsed) || /^data:/i.test(parsed)) {
+        return 'https://via.placeholder.com/300x300?text=Product+Image';
+    }
+    return parsed;
+}
+
+function renderProductState(container, type = 'empty', message = 'No products available right now.') {
+    const icon = type === 'error' ? '⚠️' : '📦';
+    container.innerHTML = `
+        <div class="empty-state" role="status" aria-live="polite">
+            <p>${icon} ${escapeHtml(message)}</p>
+        </div>
+    `;
+}
+
 // ========== Initialization ==========
+function hidePageLoader() {
+    const pageLoader = document.getElementById('pageLoader');
+    if (pageLoader) {
+        pageLoader.classList.add('hidden');
+        setTimeout(() => pageLoader.remove(), 600);
+    }
+}
+
 function init() {
+    const loaderFailSafe = setTimeout(hidePageLoader, 8000);
+
     try {
         // Initialize API service
         apiService = new APIService({ API_CONFIG, APP_CONFIG, BUSINESS_INFO });
@@ -145,16 +183,13 @@ function init() {
         navigateTo('home');
         
         // Hide page loader after initialization
-        setTimeout(() => {
-            const pageLoader = document.getElementById('pageLoader');
-            if (pageLoader) {
-                pageLoader.classList.add('hidden');
-                setTimeout(() => pageLoader.remove(), 600);
-            }
-        }, 2000);
+        setTimeout(hidePageLoader, 1200);
+        clearTimeout(loaderFailSafe);
         
         console.log('App initialized successfully');
     } catch (error) {
+        clearTimeout(loaderFailSafe);
+        hidePageLoader();
         console.error('Initialization error:', error);
         showNotification('Failed to initialize app', 'error');
     }
@@ -237,12 +272,14 @@ async function loadProducts() {
         renderAllProducts();
         renderSaleProducts();
         
+        state.productsLoadError = false;
         const products = await apiService.getAllProducts();
-        state.products = products;
+        state.products = Array.isArray(products) ? products : (products?.data || []);
     } catch (error) {
         console.error('Failed to load products:', error);
         // Use fallback products if API fails
         state.products = getFallbackProducts();
+        state.productsLoadError = true;
     } finally {
         state.isLoading = false;
         renderFeaturedProducts();
@@ -488,6 +525,10 @@ function renderFeaturedProducts() {
     }
     
     const featured = state.products.slice(0, 4);
+    if (!featured.length) {
+        renderProductState(container, 'empty', 'Featured products will appear here soon.');
+        return;
+    }
     container.innerHTML = featured.map(product => createProductCard(product)).join('');
 }
 
@@ -517,7 +558,7 @@ function renderAllProducts() {
     }
     
     if (filtered.length === 0) {
-        container.innerHTML = '<div class="empty-state"><p>No products found</p></div>';
+        renderProductState(container, 'empty', state.searchQuery ? 'No products matched your search.' : 'No products found for this category.');
         return;
     }
     
@@ -538,8 +579,11 @@ function renderSaleProducts() {
     const saleProducts = state.products.filter(p => p.onSale || p.discount > 0).slice(0, 6);
     
     if (saleProducts.length === 0) {
-        // Show some products as sale items
         const products = state.products.slice(0, 6);
+        if (!products.length) {
+            renderProductState(container, 'empty', 'Promotions are being updated.');
+            return;
+        }
         container.innerHTML = products.map(product => createProductCard(product, true)).join('');
     } else {
         container.innerHTML = saleProducts.map(product => createProductCard(product, true)).join('');
@@ -548,20 +592,23 @@ function renderSaleProducts() {
 
 function createProductCard(product, showDiscount = false) {
     const discount = showDiscount ? 20 : (product.discount || 0);
-    const originalPrice = product.price;
+    const originalPrice = Number(product.price) || 0;
     const discountedPrice = discount > 0 ? originalPrice * (1 - discount / 100) : originalPrice;
-    
+    const safeId = Number(product.id);
+    const safeName = escapeHtml(product.name || 'Unnamed Product');
+    const safeImage = sanitizeImageUrl(product.image);
+
     return `
         <div class="product-card">
-            <img src="${product.image}" alt="${product.name}" onerror="this.src='https://via.placeholder.com/300x300?text=Product+Image'">
+            <img loading="lazy" src="${safeImage}" alt="${safeName}" onerror="this.src='https://via.placeholder.com/300x300?text=Product+Image'">
             ${discount > 0 ? `<span class="discount-badge">-${discount}%</span>` : ''}
-            <h3>${product.name}</h3>
+            <h3>${safeName}</h3>
             <p class="price">
                 ${discount > 0 ? `<span class="original-price">${APP_CONFIG.currency}${originalPrice.toFixed(2)}</span>` : ''}
                 ${APP_CONFIG.currency}${discountedPrice.toFixed(2)}
             </p>
-            <button class="btn btn-primary" onclick="viewProduct(${product.id})">View Details</button>
-            <button class="btn btn-secondary" onclick="addToCart(${product.id})">Add to Cart</button>
+            <button class="btn btn-primary" onclick="viewProduct(${safeId})">View Details</button>
+            <button class="btn btn-secondary" onclick="addToCart(${safeId})">Add to Cart</button>
         </div>
     `;
 }
