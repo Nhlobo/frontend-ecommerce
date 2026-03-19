@@ -38,7 +38,7 @@ The API configuration is in `js/config.js` and is production-first:
 
 - Reads `VITE_API_URL` from runtime (`window.VITE_API_URL` or `window.__APP_ENV__.VITE_API_URL`)
 - Optional HTML fallback: `<meta name="vite-api-url" content="https://backend-url.onrender.com">`
-- Safe default: `https://backend-ecommerce-5-42p4.onrender.com`
+- Safe default: `https://backend-ecommerce-6-6ldj.onrender.com`
 - Hard-blocks `localhost` / `127.0.0.1` values in production runtime
 
 The configuration includes all API endpoints for products, authentication, orders, wishlist, checkout, and contact flows.
@@ -160,7 +160,7 @@ The `netlify.toml` file is already configured for proper routing.
 ## 🔗 Backend API Connection
 
 The frontend connects to the backend API deployed at:
-**`https://backend-ecommerce-5-42p4.onrender.com`**
+**`https://backend-ecommerce-6-6ldj.onrender.com`**
 
 ### API Configuration
 
@@ -168,10 +168,10 @@ The API automatically switches between development and production:
 
 ```javascript
 // Production runtime variable
-VITE_API_URL=https://backend-ecommerce-5-42p4.onrender.com
+VITE_API_URL=https://backend-ecommerce-6-6ldj.onrender.com
 
 // Resolved API base URL fallback
-https://backend-ecommerce-5-42p4.onrender.com
+https://backend-ecommerce-6-6ldj.onrender.com
 ```
 
 ### CORS Configuration
