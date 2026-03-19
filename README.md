@@ -34,12 +34,14 @@ frontend-ecommerce/
 
 ## 🔧 Configuration
 
-The API configuration is in `js/config.js` and automatically detects the environment:
+The API configuration is in `js/config.js` and is production-first:
 
-- **Local Development**: `http://localhost:3000`
-- **Production**: `https://backend-ecommerce-5-42p4.onrender.com`
+- Reads `VITE_API_URL` from runtime (`window.VITE_API_URL` or `window.__APP_ENV__.VITE_API_URL`)
+- Optional HTML fallback: `<meta name="vite-api-url" content="https://backend-url.onrender.com">`
+- Safe default: `https://backend-ecommerce-5-42p4.onrender.com`
+- Hard-blocks `localhost` / `127.0.0.1` values in production runtime
 
-The configuration includes all API endpoints for products, authentication, orders, wishlist, and more.
+The configuration includes all API endpoints for products, authentication, orders, wishlist, checkout, and contact flows.
 
 ## 🌐 Deployment Options
 
@@ -150,7 +152,7 @@ The `netlify.toml` file is already configured for proper routing.
 
 2. **Configure**:
    - **Name**: `premium-hair-frontend`
-   - **Build Command**: Leave empty
+   - **Build Command**: `npm install && npm run build` (or `npm install` for current static setup)
    - **Publish Directory**: `.` (root)
 
 3. **Deploy**: Click "Create Static Site"
@@ -165,10 +167,10 @@ The frontend connects to the backend API deployed at:
 The API automatically switches between development and production:
 
 ```javascript
-// Development (localhost)
-http://localhost:3000
+// Production runtime variable
+VITE_API_URL=https://backend-ecommerce-5-42p4.onrender.com
 
-// Production (GitHub Pages, Vercel, Netlify, etc.)
+// Resolved API base URL fallback
 https://backend-ecommerce-5-42p4.onrender.com
 ```
 

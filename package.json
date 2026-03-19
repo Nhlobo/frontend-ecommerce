@@ -5,9 +5,15 @@
   "main": "index.html",
   "scripts": {
     "serve": "npx http-server -p 8000 -c-1",
-    "dev": "npx http-server -p 8000 -c-1 -o"
+    "dev": "npx http-server -p 8000 -c-1 -o",
+    "build": "echo \"Static frontend ready for deploy\""
   },
-  "keywords": ["ecommerce", "storefront", "frontend", "hair-wigs"],
+  "keywords": [
+    "ecommerce",
+    "storefront",
+    "frontend",
+    "hair-wigs"
+  ],
   "author": "Premium Hair Wigs & Extensions Pty (Ltd)",
   "license": "PROPRIETARY",
   "devDependencies": {
