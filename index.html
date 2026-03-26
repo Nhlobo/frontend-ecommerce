@@ -35,9 +35,8 @@
     </div>
 
     <!-- Navigation -->
-    <nav class="main-nav">
-        <!-- Logo (User will upload) -->
-        <div class="logo">
+    <nav class="main-nav" id="mainNav">
+        <div class="logo" aria-label="Luxury Hair Home">
             <img 
                 src="assets/images/logo.png" 
                 alt="Company Logo" 
@@ -45,32 +44,23 @@
                 onerror="this.style.display='none';">
         </div>
 
-        <!-- Mobile Menu Toggle -->
-        <div class="hamburger" id="hamburger">
+        <div class="hamburger" id="hamburger" aria-label="Toggle navigation" role="button" tabindex="0">
             <span></span>
             <span></span>
             <span></span>
         </div>
 
-        <!-- Navigation Links -->
         <ul class="nav-links" id="navLinks">
             <li><a href="#" onclick="navigateTo('home'); return false;">Home</a></li>
             <li><a href="#" onclick="navigateTo('shop'); return false;">Shop</a></li>
-            <li><a href="#" onclick="navigateTo('sale'); return false;">New In</a></li>
-            <li><a href="#" onclick="navigateTo('about'); return false;">About Us</a></li>
-            <li><a href="#" onclick="navigateTo('sale'); return false;">Sale</a></li>
+            <li><a href="#" onclick="navigateTo('sale'); return false;">Collections</a></li>
+            <li><a href="#" onclick="navigateTo('about'); return false;">About</a></li>
             <li><a href="#" onclick="navigateTo('contact'); return false;">Contact</a></li>
         </ul>
 
-        <!-- Auth Area (Login/Logout) -->
         <div class="nav-actions">
-            <div class="nav-security-pill" title="POPIA Compliant & Secure checkout">
-                <i class="fas fa-shield-alt"></i>
-                <span>Secure Checkout</span>
-            </div>
-            <a href="#" class="nav-icon-btn" onclick="navigateTo('wishlist'); return false;" title="Wishlist">
-                <i class="fas fa-heart"></i>
-                <span class="icon-badge" id="wishlistBadge" style="display:none;">0</span>
+            <a href="#" class="nav-icon-btn" onclick="navigateTo('shop'); return false;" title="Search">
+                <i class="fas fa-magnifying-glass"></i>
             </a>
             <a href="#" class="nav-icon-btn" onclick="navigateTo('cart'); return false;" title="Cart">
                 <i class="fas fa-shopping-bag"></i>
@@ -82,19 +72,43 @@
 
     <div id="homePage" class="page active">
         <section class="hero">
-            <div class="hero-content">
-                <p class="hero-kicker">South African Luxury Hair Brand</p>
-                <h1>Beautiful, Natural Hair Looks Crafted for Every Queen</h1>
-                <p>From Soweto to Cape Town, shop premium wigs and extensions with secure payments, trusted local delivery, and modern beauty styling.</p>
-                <div class="hero-actions">
-                    <button class="btn btn-primary" onclick="navigateTo('shop')">Shop New Collection</button>
-                    <button class="btn btn-outline hero-outline" onclick="navigateTo('about')">Why Choose Us</button>
+            <div class="hero-layout">
+                <div class="hero-content">
+                    <p class="hero-kicker">Luxury Hair Atelier</p>
+                    <h1>Transform Your Look with Premium Hair</h1>
+                    <p>Brazilian &amp; Peruvian weaves curated for modern elegance, crafted for flawless volume, natural movement, and all-day confidence.</p>
+                    <div class="hero-actions">
+                        <button class="btn btn-primary" onclick="navigateTo('shop')">Shop Now</button>
+                        <button class="btn btn-outline hero-outline" onclick="navigateTo('sale')">Explore Collections</button>
+                    </div>
+                    <div class="hero-assurance">
+                        <span><i class="fas fa-star"></i> 100% premium-grade bundles</span>
+                        <span><i class="fas fa-truck"></i> Fast tracked nationwide delivery</span>
+                        <span><i class="fas fa-lock"></i> Encrypted secure checkout</span>
+                    </div>
                 </div>
-                <div class="hero-assurance">
-                    <span><i class="fas fa-lock"></i> POPIA compliant data protection</span>
-                    <span><i class="fas fa-truck"></i> Nationwide SA shipping</span>
-                    <span><i class="fas fa-certificate"></i> 100% quality verified hair</span>
-                </div>
+
+                <aside class="hero-featured" aria-label="Top selling hair collections">
+                    <p class="featured-title">Top-Selling Collections</p>
+                    <div class="featured-carousel" id="featuredCarousel">
+                        <article class="featured-item active">
+                            <h3>Brazilian Body Wave</h3>
+                            <p>Silky texture with long-lasting fullness.</p>
+                            <span>From R1,799</span>
+                        </article>
+                        <article class="featured-item">
+                            <h3>Peruvian Straight Luxe</h3>
+                            <p>Polished, glossy finish for effortless styling.</p>
+                            <span>From R1,999</span>
+                        </article>
+                        <article class="featured-item">
+                            <h3>HD Lace Closure Set</h3>
+                            <p>Natural hairline blend with breathable comfort.</p>
+                            <span>From R2,299</span>
+                        </article>
+                    </div>
+                    <div class="carousel-dots" id="carouselDots" aria-label="Featured products navigation"></div>
+                </aside>
             </div>
         </section>
 

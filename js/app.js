@@ -210,6 +210,13 @@ function setupEventListeners() {
         hamburger.addEventListener('click', () => {
             navLinks.classList.toggle('active');
         });
+
+        hamburger.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                navLinks.classList.toggle('active');
+            }
+        });
         
         // Close mobile menu when clicking outside
         document.addEventListener('click', (e) => {
@@ -218,6 +225,10 @@ function setupEventListeners() {
             }
         });
     }
+
+    setupHeroCarousel();
+    handleNavScrollState();
+    window.addEventListener('scroll', handleNavScrollState);
     
     // Contact form
     const contactForm = document.getElementById('contactForm');
@@ -261,6 +272,42 @@ function setupEventListeners() {
             closeModal(e.target.id);
         }
     });
+}
+
+function handleNavScrollState() {
+    const mainNav = document.getElementById('mainNav');
+    if (!mainNav) return;
+    mainNav.classList.toggle('scrolled', window.scrollY > 40);
+}
+
+function setupHeroCarousel() {
+    const carousel = document.getElementById('featuredCarousel');
+    const dotsContainer = document.getElementById('carouselDots');
+    if (!carousel || !dotsContainer) return;
+
+    const items = Array.from(carousel.querySelectorAll('.featured-item'));
+    if (!items.length) return;
+
+    let activeIndex = 0;
+    const dots = items.map((_, index) => {
+        const dot = document.createElement('button');
+        dot.className = `carousel-dot${index === 0 ? ' active' : ''}`;
+        dot.setAttribute('aria-label', `View featured collection ${index + 1}`);
+        dot.addEventListener('click', () => activateSlide(index));
+        dotsContainer.appendChild(dot);
+        return dot;
+    });
+
+    function activateSlide(index) {
+        activeIndex = index;
+        items.forEach((item, idx) => item.classList.toggle('active', idx === index));
+        dots.forEach((dot, idx) => dot.classList.toggle('active', idx === index));
+    }
+
+    setInterval(() => {
+        const nextIndex = (activeIndex + 1) % items.length;
+        activateSlide(nextIndex);
+    }, 4200);
 }
 
 // ========== Data Loading ==========
@@ -389,8 +436,9 @@ function renderAuth() {
         // Show compact login/signup buttons
         authArea.innerHTML = `
             <div class="auth-buttons">
-                <button class="btn btn-outline" onclick="openModal('loginModal')"><i class="fas fa-sign-in-alt"></i> Login</button>
-                <button class="btn btn-primary" onclick="openModal('registerModal')">Sign Up</button>
+                <button class="nav-icon-btn" title="Account" onclick="openModal('loginModal')">
+                    <i class="fas fa-user"></i>
+                </button>
             </div>
         `;
     }
