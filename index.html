@@ -35,7 +35,7 @@
     </div>
 
     <!-- Navigation -->
-    <nav>
+    <nav class="main-nav">
         <!-- Logo (User will upload) -->
         <div class="logo">
             <img 
@@ -56,6 +56,7 @@
         <ul class="nav-links" id="navLinks">
             <li><a href="#" onclick="navigateTo('home'); return false;">Home</a></li>
             <li><a href="#" onclick="navigateTo('shop'); return false;">Shop</a></li>
+            <li><a href="#" onclick="navigateTo('sale'); return false;">New In</a></li>
             <li><a href="#" onclick="navigateTo('about'); return false;">About Us</a></li>
             <li><a href="#" onclick="navigateTo('sale'); return false;">Sale</a></li>
             <li><a href="#" onclick="navigateTo('contact'); return false;">Contact</a></li>
@@ -63,6 +64,10 @@
 
         <!-- Auth Area (Login/Logout) -->
         <div class="nav-actions">
+            <div class="nav-security-pill" title="POPIA Compliant & Secure checkout">
+                <i class="fas fa-shield-alt"></i>
+                <span>Secure Checkout</span>
+            </div>
             <a href="#" class="nav-icon-btn" onclick="navigateTo('wishlist'); return false;" title="Wishlist">
                 <i class="fas fa-heart"></i>
                 <span class="icon-badge" id="wishlistBadge" style="display:none;">0</span>
@@ -77,9 +82,40 @@
 
     <div id="homePage" class="page active">
         <section class="hero">
-            <h1>Transform Your Look with Premium Hair</h1>
-            <p>Discover our exclusive collection of luxury wigs and extensions</p>
-            <button class="btn btn-primary" onclick="navigateTo('shop')">Shop Now</button>
+            <div class="hero-content">
+                <p class="hero-kicker">South African Luxury Hair Brand</p>
+                <h1>Beautiful, Natural Hair Looks Crafted for Every Queen</h1>
+                <p>From Soweto to Cape Town, shop premium wigs and extensions with secure payments, trusted local delivery, and modern beauty styling.</p>
+                <div class="hero-actions">
+                    <button class="btn btn-primary" onclick="navigateTo('shop')">Shop New Collection</button>
+                    <button class="btn btn-outline hero-outline" onclick="navigateTo('about')">Why Choose Us</button>
+                </div>
+                <div class="hero-assurance">
+                    <span><i class="fas fa-lock"></i> POPIA compliant data protection</span>
+                    <span><i class="fas fa-truck"></i> Nationwide SA shipping</span>
+                    <span><i class="fas fa-certificate"></i> 100% quality verified hair</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="security-strip">
+            <div class="container security-grid">
+                <div class="security-card">
+                    <i class="fas fa-shield-alt"></i>
+                    <h3>Safe Payments</h3>
+                    <p>Encrypted checkout with trusted local payment rails.</p>
+                </div>
+                <div class="security-card">
+                    <i class="fas fa-user-shield"></i>
+                    <h3>Privacy First</h3>
+                    <p>Your personal data is secured under POPIA best practices.</p>
+                </div>
+                <div class="security-card">
+                    <i class="fas fa-store-alt"></i>
+                    <h3>South African Owned</h3>
+                    <p>Proudly serving customers across all 9 provinces.</p>
+                </div>
+            </div>
         </section>
 
         <section class="deals-banner">
